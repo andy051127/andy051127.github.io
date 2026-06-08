@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevFlow — WBS</title>
+<style>
+  :root {
+    --primary:      #2563eb;
+    --secondary:    #1e40af;
+    --accent:       #3b82f6;
+    --bg:           #f8fafc;
+    --card:         #ffffff;
+    --card-border:  #e2e8f0;
+    --text:         #1e293b;
+    --muted:        #64748b;
+    --green:        #16a34a;
+    --green-bg:     #dcfce7;
+    --green-border: #86efac;
+    --amber:        #b45309;
+    --amber-bg:     #fef3c7;
+    --amber-border: #fcd34d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', sans-serif;
+    padding: 48px 20px;
+    min-height: 100vh;
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+
+  /* 헤더 */
+  header { text-align: center; margin-bottom: 48px; }
+  header h1 {
+    color: var(--primary);
+    font-size: 1.9em;
+    font-weight: bold;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  header h1 span {
+    display: inline-block;
+    width: 4px;
+    height: 1em;
+    background: var(--accent);
+    border-radius: 2px;
+    vertical-align: middle;
+    margin-right: 10px;
+  }
+  header p { color: var(--muted); font-size: 0.9em; }
+
+  /* 요약 카드 */
+  .summary-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .summary-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    border-top: 3px solid var(--accent);
+  }
+  .summary-card.green { border-top-color: var(--green); }
+  .summary-card.amber { border-top-color: var(--amber); }
+  .summary-card .num { font-size: 2em; font-weight: bold; color: var(--primary); }
+  .summary-card.green .num { color: var(--green); }
+  .summary-card.amber .num { color: var(--amber); }
+  .summary-card .label { color: var(--muted); font-size: 0.82em; margin-top: 4px; }
+
+  /* 전체 진척률 */
+  .overall-progress {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 36px;
+  }
+  .overall-progress h3 {
+    color: var(--secondary);
+    margin-bottom: 10px;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .progress-bar {
+    background: #e2e8f0;
+    border-radius: 8px;
+    height: 14px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 8px;
+    background: linear-gradient(90deg, var(--secondary), var(--accent));
+    transition: width 0.8s ease;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 0.78em;
+    color: var(--muted);
+  }
+  .progress-label #overall-pct { color: var(--primary); font-weight: bold; }
+
+  /* 섹션 */
+  .section { margin-bottom: 28px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 10px 10px 0 0;
+    border-left: 4px solid var(--accent);
+    padding: 13px 18px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .section-header:hover { background: #f1f5f9; }
+  .section-title { font-weight: bold; font-size: 0.95em; color: var(--secondary); }
+  .section-meta { display: flex; align-items: center; gap: 12px; font-size: 0.78em; color: var(--muted); }
+  .section-progress { color: var(--primary); font-weight: bold; }
+  .chevron { transition: transform 0.2s; color: var(--muted); }
+  .section.collapsed .chevron { transform: rotate(-90deg); }
+
+  /* 태스크 목록 */
+  .task-list {
+    border: 1px solid var(--card-border);
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+  }
+  .section.collapsed .task-list { display: none; }
+
+  .task-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 18px;
+    border-bottom: 1px solid var(--card-border);
+    font-size: 0.85em;
+    background: var(--card);
+  }
+  .task-item:last-child { border-bottom: none; }
+  .task-item.done { background: #f0fdf4; }
+  .task-item.todo { background: #fffbeb; }
+
+  /* 상태 배지 */
+  .status-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.72em;
+    font-weight: bold;
+    flex-shrink: 0;
+    letter-spacing: 0.02em;
+  }
+  .status-badge.done {
+    background: var(--green-bg);
+    color: var(--green);
+    border: 1px solid var(--green-border);
+  }
+  .status-badge.todo {
+    background: var(--amber-bg);
+    color: var(--amber);
+    border: 1px solid var(--amber-border);
+  }
+
+  .task-name { flex: 1; color: var(--text); }
+  .task-name.done-text { color: var(--muted); text-decoration: line-through; }
+
+  .task-week {
+    background: #dbeafe;
+    color: var(--secondary);
+    border-radius: 10px;
+    padding: 2px 10px;
+    font-size: 0.72em;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+  .task-week.week-past {
+    background: var(--green-bg);
+    color: var(--green);
+  }
+
+  /* 푸터 */
+  footer {
+    text-align: center;
+    margin-top: 56px;
+    color: var(--muted);
+    font-size: 0.8em;
+    padding-top: 24px;
+    border-top: 1px solid var(--card-border);
+  }
+  footer a { color: var(--primary); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1><span></span>DevFlow — WBS</h1>
+    <p>Work Breakdown Structure &middot; 앱프로그래밍 기말 과제</p>
+  </header>
+
+  <div class="summary-bar">
+    <div class="summary-card green">
+      <div class="num" id="done-count">—</div>
+      <div class="label">완료 항목</div>
+    </div>
+    <div class="summary-card amber">
+      <div class="num" id="todo-count">—</div>
+      <div class="label">진행 예정</div>
+    </div>
+    <div class="summary-card">
+      <div class="num" id="total-count">—</div>
+      <div class="label">전체 항목</div>
+    </div>
+  </div>
+
+  <div class="overall-progress">
+    <h3>전체 진척률</h3>
+    <div class="progress-bar">
+      <div class="progress-fill" id="overall-fill" style="width:0%"></div>
+    </div>
+    <div class="progress-label">
+      <span>0%</span>
+      <span id="overall-pct">—</span>
+      <span>100%</span>
+    </div>
+  </div>
+
+  <div id="wbs-root"></div>
+
+  <footer>
+    <p>DevFlow &middot; 김찬희 &middot; 앱프로그래밍 2026 &nbsp;|&nbsp;
+      <a href="presentation/index.html">&larr; 발표 슬라이드로 돌아가기</a>
+    </p>
+  </footer>
+</div>
+
+<script>
+const WBS = [
+  {
+    id: 'infra',
+    title: '프로젝트 기반 설정',
+    color: '#3b82f6',
+    tasks: [
+      { name: 'Flutter 프로젝트 생성 및 패키지 설정', done: true, week: '12주차' },
+      { name: 'SQLite 스키마 정의 (routines, routine_logs, schedules)', done: true, week: '12주차' },
+      { name: '레이어드 아키텍처 디렉토리 구조 구성', done: true, week: '12주차' },
+      { name: 'Riverpod ProviderScope 초기화', done: true, week: '12주차' },
+      { name: '더미 시드 데이터 삽입 (30일 로그)', done: true, week: '12주차' },
+    ]
+  },
+  {
+    id: 'routine',
+    title: '루틴 관리 (M-01 ~ M-03)',
+    color: '#6366f1',
+    tasks: [
+      { name: '루틴 엔티티 모델 정의 (Routine)', done: true, week: '12주차' },
+      { name: 'RoutineRepository CRUD 구현', done: true, week: '12주차' },
+      { name: 'RoutineViewModel (StateNotifier) 구현', done: true, week: '12주차' },
+      { name: '홈 화면 — 오늘 루틴 카드 목록', done: true, week: '12주차' },
+      { name: '루틴 완료 체크 버튼 (토글)', done: true, week: '12주차' },
+      { name: '루틴 추가/수정/삭제 폼 화면', done: true, week: '12주차' },
+      { name: '반복 요일 선택 칩 UI', done: true, week: '12주차' },
+      { name: '진행률 바 (오늘 완료/전체)', done: true, week: '12주차' },
+    ]
+  },
+  {
+    id: 'streak',
+    title: '스트릭 & 통계 (M-04, M-05)',
+    color: '#f59e0b',
+    tasks: [
+      { name: 'StreakService.calculate() 구현', done: true, week: '12주차' },
+      { name: 'StreakService.buildHeatmap() 구현', done: true, week: '12주차' },
+      { name: '통계 화면 — 히트맵 그리드', done: true, week: '12주차' },
+      { name: '통계 화면 — 루틴별 스트릭 리스트', done: true, week: '12주차' },
+      { name: '홈 화면 루틴 카드에 스트릭 표시', done: true, week: '13주차' },
+    ]
+  },
+  {
+    id: 'schedule',
+    title: '일정 관리 (M-06, M-07)',
+    color: '#10b981',
+    tasks: [
+      { name: '일정 엔티티 모델 정의 (Schedule)', done: true, week: '12주차' },
+      { name: 'ScheduleRepository CRUD 구현', done: true, week: '12주차' },
+      { name: 'ScheduleViewModel (StateNotifier) 구현', done: true, week: '12주차' },
+      { name: '홈 화면 — 다가오는 일정 카드 (D-day)', done: true, week: '12주차' },
+      { name: '일정 추가/수정/삭제 폼 화면', done: true, week: '12주차' },
+      { name: '일정 완료 체크 UI', done: true, week: '13주차' },
+      { name: '전체 일정 목록 화면', done: true, week: '13주차' },
+      { name: '캘린더 뷰 (table_calendar)', done: true, week: '13주차' },
+    ]
+  },
+  {
+    id: 'notification',
+    title: '알림 (M-08)',
+    color: '#8b5cf6',
+    tasks: [
+      { name: 'flutter_local_notifications 패키지 연동', done: true, week: '13주차' },
+      { name: '루틴 알람 시간 설정 UI', done: true, week: '13주차' },
+      { name: '요일별 알림 스케줄 등록 로직', done: true, week: '13주차' },
+      { name: 'Android Core Library Desugaring 설정', done: true, week: '12주차' },
+      { name: '알림 전체 on/off 설정', done: true, week: '13주차' },
+    ]
+  },
+  {
+    id: 'achievement',
+    title: '업적 시스템 (S-01)',
+    color: '#ec4899',
+    tasks: [
+      { name: 'Achievement 엔티티 및 기본 업적 정의', done: true, week: '12주차' },
+      { name: 'AchievementService.evaluate() 구현', done: true, week: '12주차' },
+      { name: '업적 달성 알림 UI (다이얼로그)', done: true, week: '13주차' },
+      { name: '업적 목록 화면', done: true, week: '13주차' },
+    ]
+  },
+  {
+    id: 'could',
+    title: 'Could 기능',
+    color: '#06b6d4',
+    tasks: [
+      { name: '다크모드 (라이트/시스템/다크 전환)', done: true, week: '13주차' },
+      { name: '홈 화면 위젯 (Android AppWidget)', done: true, week: '13주차' },
+      { name: '로그인 기능', done: false, week: '미정' },
+      { name: '클라우드 동기화 (Firebase)', done: false, week: '미정' },
+    ]
+  },
+  {
+    id: 'docs',
+    title: '문서 & 발표',
+    color: '#0ea5e9',
+    tasks: [
+      { name: '기획 문서 (.planning/) 작성', done: true, week: '12주차' },
+      { name: 'ADR 3종 (플랫폼/상태관리/저장소)', done: true, week: '12주차' },
+      { name: 'README.md 완성', done: true, week: '12주차' },
+      { name: 'AGENTS.md (AI 협업 규칙)', done: true, week: '12주차' },
+      { name: 'AUTHORING.Chanhee.md', done: true, week: '12주차' },
+      { name: '중간발표 슬라이드 (reveal.js)', done: true, week: '12주차' },
+      { name: 'WBS 시각화 HTML', done: true, week: '12주차' },
+      { name: '테스트 코드 (StreakService 단위 테스트)', done: false, week: '14주차' },
+      { name: '최종 발표 자료', done: false, week: '15주차' },
+    ]
+  },
+];
+
+function renderWBS() {
+  const root = document.getElementById('wbs-root');
+  let totalDone = 0, totalAll = 0;
+
+  WBS.forEach(section => {
+    const done  = section.tasks.filter(t => t.done).length;
+    const total = section.tasks.length;
+    const pct   = Math.round((done / total) * 100);
+    totalDone += done;
+    totalAll  += total;
+
+    const el = document.createElement('div');
+    el.className = 'section';
+    el.innerHTML = `
+      <div class="section-header" style="border-left-color:${section.color}" onclick="toggleSection(this)">
+        <span class="section-title">${section.title}</span>
+        <span class="section-meta">
+          <span>${done}/${total}</span>
+          <span class="section-progress">${pct}%</span>
+          <span class="chevron">&#9662;</span>
+        </span>
+      </div>
+      <div class="task-list">
+        ${section.tasks.map(t => `
+          <div class="task-item ${t.done ? 'done' : 'todo'}">
+            <span class="status-badge ${t.done ? 'done' : 'todo'}">${t.done ? '완료' : '예정'}</span>
+            <span class="task-name ${t.done ? 'done-text' : ''}">${t.name}</span>
+            <span class="task-week ${t.done ? 'week-past' : ''}">${t.week}</span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    root.appendChild(el);
+  });
+
+  const pct = Math.round((totalDone / totalAll) * 100);
+  document.getElementById('done-count').textContent  = totalDone;
+  document.getElementById('todo-count').textContent  = totalAll - totalDone;
+  document.getElementById('total-count').textContent = totalAll;
+  document.getElementById('overall-fill').style.width = pct + '%';
+  document.getElementById('overall-pct').textContent  = pct + '%';
+}
+
+function toggleSection(header) {
+  header.parentElement.classList.toggle('collapsed');
+}
+
+renderWBS();
+</script>
+</body>
+</html>
