@@ -1,306 +1,866 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DevFlow — 중간 발표</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css">
-<style>
-  :root {
-    --primary: #2563eb;
-    --secondary: #1e40af;
-    --accent: #3b82f6;
-    --bg: #ffffff;
-    --card: #f1f5f9;
-    --card-border: #e2e8f0;
-    --text: #1e293b;
-    --muted: #64748b;
-  }
-  .reveal {
-    font-family: 'Segoe UI', sans-serif;
-    color: var(--text);
-  }
-  .reveal h1 { color: var(--primary); font-size: 2em; }
-  .reveal h2 { color: var(--secondary); border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
-  .reveal strong { color: var(--primary); }
-  .reveal blockquote {
-    border-left: 4px solid var(--accent);
-    background: var(--card);
-    padding: 12px 20px;
-    color: var(--muted);
-    font-style: normal;
-  }
-  .badge {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.7em;
-    font-weight: bold;
-    margin: 2px;
-  }
-  .badge-blue { background: #dbeafe; color: #1e40af; }
-  .badge-green { background: #dcfce7; color: #166534; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevFlow</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css">
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
-  /* 아키텍처 보완 */
-  .arch-container {
-    display: flex;
-    gap: 28px;
-    align-items: flex-start;
-    margin-top: 12px;
-  }
-  .arch-box {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    flex: 1;
-    min-width: 0;
-  }
-  .arch-layer {
-    padding: 10px 16px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.75em;
-  }
-  .arch-layer .label { font-weight: bold; font-size: 1em; }
-  .arch-layer .detail { color: var(--muted); font-size: 0.8em; }
-  .arch-arrow { text-align: center; color: #94a3b8; font-size: 0.9em; line-height: 1; }
-  .l-presentation { background: #dbeafe; border-left: 4px solid #3b82f6; color: #1e3a5f; }
-  .l-application  { background: #e0e7ff; border-left: 4px solid #6366f1; color: #312e81; }
-  .l-domain       { background: #ede9fe; border-left: 4px solid #8b5cf6; color: #4c1d95; }
-  .l-data         { background: #ccfbf1; border-left: 4px solid #14b8a6; color: #134e4a; }
+    :root {
+      --primary: #3182F6;
+      --text: #191F28;
+      --muted: #6B7684;
+      --body: #374151;
+      --border: #E5E8EB;
+      --bg: #F9FAFB;
+    }
 
-  .arch-detail-box {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .arch-detail-card {
-    background: var(--card);
-    border: 1px solid var(--card-border);
-    border-radius: 8px;
-    padding: 8px 12px;
-    font-size: 0.65em;
-    line-height: 1.5;
-  }
-  .arch-detail-card .card-title {
-    font-weight: bold;
-    color: var(--secondary);
-    margin-bottom: 2px;
-    font-size: 1.05em;
-  }
-  .arch-detail-card .card-body { color: var(--muted); }
+    html, body { background: white; }
 
-  /* 진행 상황 */
-  .status-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-top: 12px;
-  }
-  .status-item {
-    background: var(--card);
-    border: 1px solid var(--card-border);
-    border-radius: 8px;
-    padding: 8px 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.78em;
-  }
-  .status-item.done { border-left: 3px solid #22c55e; }
-  .status-item.todo { border-left: 3px solid #f59e0b; }
-  .progress-bar {
-    background: #e2e8f0;
-    border-radius: 8px;
-    height: 12px;
-    margin: 6px 0;
-    overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%;
-    border-radius: 8px;
-    background: linear-gradient(90deg, #2563eb, #60a5fa);
-    transition: width 1s ease;
-  }
-</style>
+    .reveal {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+    }
+
+    .reveal .slides section {
+      background: white;
+      color: var(--text);
+    }
+
+    .reveal h1, .reveal h2, .reveal h3 {
+      font-family: 'Pretendard', -apple-system, sans-serif;
+      color: var(--text);
+      text-transform: none;
+      letter-spacing: -0.01em;
+    }
+
+    .reveal h2 {
+      font-size: 1.45em;
+      font-weight: 800;
+      margin-bottom: 0.25em;
+    }
+
+    .reveal h3 {
+      font-size: 0.95em;
+      font-weight: 700;
+    }
+
+    .reveal p, .reveal li {
+      font-size: 0.68em;
+      color: var(--body);
+      line-height: 1.65;
+    }
+
+    .reveal ul { margin: 0; }
+    .reveal a { color: var(--primary); }
+
+    /* Slide number — bottom LEFT */
+    .reveal .slide-number {
+      right: auto;
+      left: 16px;
+      bottom: 16px;
+      font-family: 'Pretendard', sans-serif;
+      font-size: 0.6em;
+      color: var(--muted);
+      background: transparent;
+    }
+
+    .reveal .progress { background: rgba(49,130,246,0.15); }
+    .reveal .progress span { background: var(--primary); }
+    .reveal .controls { color: var(--text); }
+
+    /* Section label */
+    .sl {
+      font-size: 0.48em;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    /* Tags */
+    .tag {
+      display: inline-block;
+      border-radius: 6px;
+      padding: 2px 9px;
+      font-size: 0.52em;
+      font-weight: 600;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+    .tag       { background: #E8F1FF; color: var(--primary); }
+    .tag.green { background: #DCFCE7; color: #16A34A; }
+    .tag.red   { background: #FEE2E2; color: #DC2626; }
+    .tag.amber { background: #FEF3C7; color: #D97706; }
+    .tag.gray  { background: #F3F4F6; color: #6B7684; }
+    .tag.purple{ background: #F5F3FF; color: #7C3AED; }
+
+    /* Grid */
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .g4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
+
+    /* Card */
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px 18px;
+      border: 1px solid var(--border);
+    }
+    .card-blue   { background: #EFF6FF; border-color: #BFDBFE; }
+    .card-green  { background: #F0FDF4; border-color: #BBF7D0; }
+    .card-amber  { background: #FFFBEB; border-color: #FDE68A; }
+    .card-purple { background: #F5F3FF; border-color: #DDD6FE; }
+    .card-red    { background: #FFF1F2; border-color: #FECDD3; }
+
+    .card .num {
+      font-size: 1.8em;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+    }
+
+    /* Highlight box */
+    .hbox {
+      background: #EFF6FF;
+      border-radius: 10px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--primary);
+    }
+    .hbox.green { background: #F0FDF4; border-color: #16A34A; }
+
+    /* Code block */
+    .cb {
+      background: #1E293B;
+      color: #E2E8F0;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-family: 'D2Coding', 'Consolas', monospace;
+      font-size: 0.56em;
+      text-align: left;
+      line-height: 1.7;
+      white-space: pre;
+    }
+
+    /* Step circle */
+    .step {
+      width: 22px; height: 22px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 0.7em;
+      flex-shrink: 0;
+    }
+    .step.green { background: #16A34A; }
+
+    /* Timer widget */
+    #timer {
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      z-index: 9999;
+      background: rgba(255,255,255,0.96);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 7px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      font-family: 'Pretendard', sans-serif;
+    }
+    #timer-disp {
+      font-size: 1em;
+      font-weight: 800;
+      color: var(--text);
+      min-width: 44px;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.02em;
+    }
+    #timer-disp.warn { color: #EF4444; }
+    .tbtn {
+      border: none;
+      border-radius: 6px;
+      padding: 4px 9px;
+      cursor: pointer;
+      font-size: 0.68em;
+      font-weight: 600;
+      font-family: inherit;
+      line-height: 1.4;
+    }
+    #tbtn-start { background: #3182F6; color: white; }
+    #tbtn-start.pause { background: #F59E0B; }
+    #tbtn-reset { background: #F3F4F6; color: #6B7684; }
+
+    /* Table */
+    .reveal table { border-collapse: collapse; width: 100%; }
+    .reveal table td { border: none; padding: 7px 8px; font-size: 0.62em; }
+    .reveal table td:first-child { color: var(--muted); }
+    .reveal table td:last-child { font-weight: 600; }
+    .reveal table tr { border-bottom: 1px solid var(--border); }
+    .reveal table tr:last-child { border-bottom: none; }
+  </style>
 </head>
 <body>
-<div class="reveal">
-<div class="slides">
 
-<!-- 슬라이드 1: 타이틀 -->
-<section>
-  <h1>DevFlow</h1>
-  <h3 style="color:var(--muted); font-weight:400;">중간 발표</h3>
-  <br>
-  <blockquote>
-    개발자의 루틴과 일정을 한 곳에서 관리하고,<br>
-    <strong>꾸준함을 숫자로 증명한다.</strong>
-  </blockquote>
-  <br>
-  <p style="color:#94a3b8; font-size:0.7em;">김찬희 · 앱프로그래밍 · 2026.06.01</p>
-</section>
-
-<!-- 슬라이드 2: 문제 정의 -->
-<section>
-  <h2>문제 정의</h2>
-  <p style="color:var(--muted); font-size:0.85em;">개발자에겐 <strong>두 가지 숙제</strong>가 있다</p>
-  <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px;">
-    <div style="background:var(--card); border-radius:12px; padding:18px; border-top:3px solid #3b82f6;">
-      <div style="font-size:0.68em; font-weight:bold; color:#1e40af; background:#dbeafe; border:1px solid #93c5fd; display:inline-block; padding:2px 10px; border-radius:4px; margin-bottom:8px; letter-spacing:0.04em;">반복</div>
-      <div style="color:var(--primary); font-weight:bold; margin-bottom:10px; font-size:0.95em;">매일 반복</div>
-      <div style="color:var(--muted); font-size:0.8em; line-height:1.8;">
-        알고리즘 풀기<br>기술 블로그 읽기<br>사이드 프로젝트
-      </div>
-    </div>
-    <div style="background:var(--card); border-radius:12px; padding:18px; border-top:3px solid #8b5cf6;">
-      <div style="font-size:0.68em; font-weight:bold; color:#6d28d9; background:#ede9fe; border:1px solid #c4b5fd; display:inline-block; padding:2px 10px; border-radius:4px; margin-bottom:8px; letter-spacing:0.04em;">목표</div>
-      <div style="color:#7c3aed; font-weight:bold; margin-bottom:10px; font-size:0.95em;">장기 목표</div>
-      <div style="color:var(--muted); font-size:0.8em; line-height:1.8;">
-        포트폴리오 제출<br>코딩 테스트<br>취업 준비
-      </div>
-    </div>
-  </div>
-  <blockquote style="margin-top:16px; font-size:0.8em;">
-    기존 앱은 이 둘을 <strong>따로</strong> 관리한다.
-    DevFlow는 <strong>하나의 흐름</strong>으로 연결한다.
-  </blockquote>
-</section>
-
-<!-- 슬라이드 3: 아키텍처 (보완) -->
-<section>
-  <h2>아키텍처</h2>
-  <div class="arch-container">
-    <div class="arch-box">
-      <div class="arch-layer l-presentation">
-        <div>
-          <div class="label">Presentation</div>
-          <div class="detail">화면 · 위젯 · 라우팅</div>
-        </div>
-        <span class="badge badge-blue">Flutter</span>
-      </div>
-      <div class="arch-arrow">↓</div>
-      <div class="arch-layer l-application">
-        <div>
-          <div class="label">Application</div>
-          <div class="detail">ViewModel · 상태 관리</div>
-        </div>
-        <span class="badge badge-blue">Riverpod</span>
-      </div>
-      <div class="arch-arrow">↓</div>
-      <div class="arch-layer l-domain">
-        <div>
-          <div class="label">Domain</div>
-          <div class="detail">엔티티 · 서비스 로직</div>
-        </div>
-        <span class="badge badge-blue">Pure Dart</span>
-      </div>
-      <div class="arch-arrow">↓</div>
-      <div class="arch-layer l-data">
-        <div>
-          <div class="label">Data</div>
-          <div class="detail">Repository · DB</div>
-        </div>
-        <span class="badge badge-blue">SQLite</span>
-      </div>
-    </div>
-
-    <div class="arch-detail-box">
-<div class="arch-detail-card">
-        <div class="card-title">왜 Riverpod?</div>
-        <div class="card-body">Provider 대비 타입 안전성·테스트 용이성 우수.<br>StateNotifier + FutureProvider 조합으로 비동기 관리.</div>
-      </div>
-      <div class="arch-detail-card">
-        <div class="card-title">왜 SQLite (오프라인)?</div>
-        <div class="card-body">외부 서버 비용 제로. 이전 프로젝트(LLM-wiki)에서<br>API 비용 문제로 중단된 경험 반영.</div>
-      </div>
-      <div class="arch-detail-card">
-        <div class="card-title">데이터 흐름</div>
-        <div class="card-body">UI → ViewModel → Repository → SQLite<br>단방향 흐름으로 디버깅·테스트 용이.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 슬라이드 4: 진행 상황 -->
-<section>
-  <h2>진행 상황</h2>
-  <div style="margin-bottom:10px;">
-    <div style="display:flex; justify-content:space-between; font-size:0.75em; color:var(--muted);">
-      <span>전체 진척률 (Must · Should)</span><span><strong style="color:var(--primary);">100%</strong></span>
-    </div>
-    <div class="progress-bar">
-      <div class="progress-fill" style="width:100%;"></div>
-    </div>
-  </div>
-  <div class="status-grid">
-    <div class="status-item done"><span style="display:inline-block;padding:1px 7px;border-radius:4px;font-size:0.75em;font-weight:bold;margin-right:6px;background:#dcfce7;color:#166534;border:1px solid #86efac;">완료</span> 루틴 CRUD · 완료 체크 · 스트릭</div>
-    <div class="status-item done"><span style="display:inline-block;padding:1px 7px;border-radius:4px;font-size:0.75em;font-weight:bold;margin-right:6px;background:#dcfce7;color:#166534;border:1px solid #86efac;">완료</span> 진행률 바 · 통계 · 히트맵</div>
-    <div class="status-item done"><span style="display:inline-block;padding:1px 7px;border-radius:4px;font-size:0.75em;font-weight:bold;margin-right:6px;background:#dcfce7;color:#166534;border:1px solid #86efac;">완료</span> 일정 관리 · 캘린더 · 목록</div>
-    <div class="status-item done"><span style="display:inline-block;padding:1px 7px;border-radius:4px;font-size:0.75em;font-weight:bold;margin-right:6px;background:#dcfce7;color:#166534;border:1px solid #86efac;">완료</span> 푸시 알림 · 알람 설정</div>
-    <div class="status-item done"><span style="display:inline-block;padding:1px 7px;border-radius:4px;font-size:0.75em;font-weight:bold;margin-right:6px;background:#dcfce7;color:#166534;border:1px solid #86efac;">완료</span> 업적 시스템 UI</div>
-    <div class="status-item done"><span style="display:inline-block;padding:1px 7px;border-radius:4px;font-size:0.75em;font-weight:bold;margin-right:6px;background:#dcfce7;color:#166534;border:1px solid #86efac;">완료</span> 다크모드 · 홈 화면 위젯</div>
-    <div class="status-item done"><span style="display:inline-block;padding:1px 7px;border-radius:4px;font-size:0.75em;font-weight:bold;margin-right:6px;background:#dcfce7;color:#166534;border:1px solid #86efac;">완료</span> 레이어드 아키텍처</div>
-    <div class="status-item done"><span style="display:inline-block;padding:1px 7px;border-radius:4px;font-size:0.75em;font-weight:bold;margin-right:6px;background:#dcfce7;color:#166534;border:1px solid #86efac;">완료</span> 발표 자료 · WBS</div>
-  </div>
-</section>
-
-<!-- 슬라이드 5: 남은 일정 -->
-<section>
-  <h2>남은 일정</h2>
-  <div style="display:flex; flex-direction:column; gap:10px; margin-top:16px;">
-    <div style="background:#f0fdf4; border-radius:10px; padding:14px 18px; border-left:4px solid #22c55e; display:flex; justify-content:space-between; align-items:center;">
-      <div style="text-align:left;">
-        <div style="color:#16a34a; font-weight:bold; font-size:0.9em;">13주차 — 완료</div>
-        <div style="color:var(--muted); font-size:0.78em; margin-top:4px; padding-left:0;">중간 발표</div>
-      </div>
-      <span class="badge badge-green">완료</span>
-    </div>
-    <div style="background:var(--card); border-radius:10px; padding:14px 18px; border-left:4px solid #3b82f6; display:flex; justify-content:space-between; align-items:center;">
-      <div style="text-align:left;">
-        <div style="color:var(--primary); font-weight:bold; font-size:0.9em;">14주차</div>
-        <div style="color:var(--muted); font-size:0.78em; margin-top:4px; padding-left:0;">Could 구현</div>
-      </div>
-      <span class="badge badge-blue">진행 중</span>
-    </div>
-    <div style="background:var(--card); border-radius:10px; padding:14px 18px; border-left:4px solid #6366f1; display:flex; justify-content:space-between; align-items:center;">
-      <div style="text-align:left;">
-        <div style="color:#6366f1; font-weight:bold; font-size:0.9em;">15주차</div>
-        <div style="color:var(--muted); font-size:0.78em; margin-top:4px; padding-left:0;">최종 발표 · 회고</div>
-      </div>
-      <span class="badge badge-blue">예정</span>
-    </div>
-  </div>
-  <div style="text-align:center; margin-top:20px;">
-    <a href="wbs.html" target="_blank"
-       style="display:inline-block; padding:10px 28px; background:var(--primary); color:#fff;
-              border-radius:8px; font-size:0.8em; font-weight:bold; text-decoration:none;
-              letter-spacing:0.03em;">
-      WBS 전체 현황 보기 &rarr;
-    </a>
-  </div>
-</section>
-
+<!-- 5분 타이머 -->
+<div id="timer">
+  <div id="timer-disp">5:00</div>
+  <button class="tbtn" id="tbtn-start">시작</button>
+  <button class="tbtn" id="tbtn-reset">초기화</button>
 </div>
+
+<div class="reveal">
+  <div class="slides">
+
+    <!-- ① 타이틀 -->
+    <section>
+      <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:12px">
+        <img src="devflow_icon.png" style="width:64px;height:64px;border-radius:16px;box-shadow:0 4px 16px rgba(49,130,246,0.2)" alt="DevFlow">
+        <h1 style="font-size:2.6em;font-weight:900;color:#191F28;margin:0">DevFlow</h1>
+      </div>
+      <p style="font-size:0.95em;color:#3182F6;font-weight:700;margin:0 0 28px">개발자를 위한 루틴 &amp; 일정 관리 앱</p>
+      <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap">
+        <span class="tag">Flutter</span>
+        <span class="tag">Dart</span>
+        <span class="tag">Riverpod</span>
+        <span class="tag">Firebase</span>
+        <span class="tag">SQLite</span>
+      </div>
+      <p style="margin-top:28px;font-size:0.58em;color:#9CA3AF">2026. 06. 22</p>
+    </section>
+
+    <!-- ② 주제 변경 이유 -->
+    <section>
+      <span class="sl">PROJECT BACKGROUND</span>
+      <h2 style="margin-bottom:0.1em">왜 주제를 바꿨는가</h2>
+
+      <div class="card card-amber" style="padding:9px 14px;margin:10px 0;display:flex;align-items:center;gap:10px">
+        <span class="tag amber" style="white-space:nowrap;flex-shrink:0">기존 주제</span>
+        <p style="font-size:0.6em;margin:0;color:#374151">모바일 LLM-Wiki 앱 — PDF·MD 파일 업로드 시 AI가 정리·분析·단일화하여 나만의 지식 위키를 만들어주는 앱 (9~11주차 진행)</p>
+      </div>
+
+      <div class="g3" style="margin-top:8px">
+        <div class="card card-red" style="padding:12px 14px">
+          <p style="font-weight:700;color:#DC2626;font-size:0.63em;margin:0 0 6px">1. 핵심 기능 자체가 불명확</p>
+          <p style="font-size:0.57em;color:#374151;margin:0;line-height:1.65">
+            PDF·MD를 올리면 AI가 정리해주는 것이 핵심이었으나, 원하는 퀄리티로 동작하지 않음.<br>
+            핵심 기능이 제대로 작동하지 않으면 이 프로젝트를 진행할 이유 자체가 없다고 판단.
+          </p>
+        </div>
+        <div class="card card-red" style="padding:12px 14px">
+          <p style="font-weight:700;color:#DC2626;font-size:0.63em;margin:0 0 6px">2. 이미 뛰어난 유사 앱 존재</p>
+          <p style="font-size:0.57em;color:#374151;margin:0;line-height:1.65">
+            Notion(문서화·정리), NotebookLM(자료 기반 공부·퀴즈) 등 훨씬 완성도 높은 서비스가 존재.<br>
+            차별화할 수 있는 포인트를 찾지 못해 만드는 의미 자체가 없다고 판단.
+          </p>
+        </div>
+        <div class="card card-red" style="padding:12px 14px">
+          <p style="font-weight:700;color:#DC2626;font-size:0.63em;margin:0 0 6px">3. AI API 비용·기술 한계</p>
+          <p style="font-size:0.57em;color:#374151;margin:0;line-height:1.65">
+            무료 AI API는 사용 한도가 너무 제한적이어서 정상 작동 불가.<br>
+            사비로 Google AI API를 사용해봤으나 예상 이상의 지출 발생.<br>
+            프롬프트 엔지니어링 경험 부족으로 기술적 한계도 직면.
+          </p>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <div class="card card-green" style="padding:10px 14px;flex:1">
+          <p style="font-weight:700;color:#16A34A;font-size:0.6em;margin:0 0 4px">이 경험에서 얻은 것</p>
+          <p style="font-size:0.56em;color:#374151;margin:0">핵심 기능에 비용·기술 리스크가 있는지 사전 검토하는 기획 역량. 실패한 경험 자체가 가장 큰 자산.</p>
+        </div>
+        <div class="card" style="padding:10px 14px;flex:1;border-top:3px solid #3182F6">
+          <p style="font-weight:700;color:#3182F6;font-size:0.6em;margin:0 0 4px">새 주제 선택 기준</p>
+          <p style="font-size:0.56em;color:#374151;margin:0">외부 API 비용 없이 동작 · 학습 범위 내 기술 스택 · 개발자가 직접 쓰고 싶은 앱 <strong style="color:#3182F6">= DevFlow</strong></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ③ 비전 (기존 ②) -->
+    <section>
+      <span class="sl">VISION</span>
+      <h2>개발자의 성장은 하루의 루틴에서 시작된다</h2>
+      <div class="hbox" style="margin:20px auto;max-width:680px">
+        <p style="margin:0;font-size:0.78em;font-style:italic;color:#374151">
+          "매일 알고리즘 한 문제, 기술 블로그 하나, 사이드 프로젝트 한 커밋<br>
+          하루 1%의 꾸준함이 1년 후 365%의 성장을 만든다"
+        </p>
+      </div>
+      <div class="g3" style="margin-top:20px">
+        <div class="card card-blue" style="text-align:center">
+          <div class="num">30+</div>
+          <p style="margin:6px 0 0">업적 달성 시스템</p>
+        </div>
+        <div class="card card-blue" style="text-align:center">
+          <div class="num">365</div>
+          <p style="margin:6px 0 0">일 연속 도전</p>
+        </div>
+        <div class="card card-blue" style="text-align:center">
+          <div class="num">1</div>
+          <p style="margin:6px 0 0">앱으로 모든 것을</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ③ 문제 정의 -->
+    <section>
+      <span class="sl">PROBLEM</span>
+      <h2>개발자에게 특화된 루틴 관리 도구가 없다</h2>
+      <div class="g2" style="margin-top:18px">
+        <div>
+          <div class="card card-red" style="margin-bottom:10px">
+            <p style="font-weight:700;color:#DC2626;margin:0 0 8px;font-size:0.72em">기존 앱의 한계</p>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div class="card" style="padding:8px 12px;background:white"><p style="margin:0;font-size:0.65em">일반 할 일 앱 — 개발자 컨텍스트 없음</p></div>
+              <div class="card" style="padding:8px 12px;background:white"><p style="margin:0;font-size:0.65em">스트릭 추적 없음 — 꾸준함 측정 불가</p></div>
+              <div class="card" style="padding:8px 12px;background:white"><p style="margin:0;font-size:0.65em">통계 없음 — 성장 확인 불가</p></div>
+              <div class="card" style="padding:8px 12px;background:white"><p style="margin:0;font-size:0.65em">GitHub 연동 없음 — 분산된 관리</p></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card card-blue" style="margin-bottom:10px">
+            <p style="font-weight:700;color:#3182F6;margin:0 0 8px;font-size:0.72em">DevFlow의 해결책</p>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div class="card" style="padding:8px 12px;background:white"><p style="margin:0;font-size:0.65em">루틴 + 일정 통합 관리</p></div>
+              <div class="card" style="padding:8px 12px;background:white"><p style="margin:0;font-size:0.65em">스트릭 &amp; 히트맵으로 꾸준함 시각화</p></div>
+              <div class="card" style="padding:8px 12px;background:white"><p style="margin:0;font-size:0.65em">30가지 업적 시스템으로 동기 부여</p></div>
+              <div class="card" style="padding:8px 12px;background:white"><p style="margin:0;font-size:0.65em">GitHub 잔디 통합 뷰</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ 프로젝트 계획 -->
+    <section>
+      <span class="sl">PLAN</span>
+      <h2>MoSCoW 기반 기능 우선순위</h2>
+      <div class="g3" style="margin-top:16px">
+        <div class="card card-red">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+            <span class="tag red">Must</span>
+            <span class="tag green" style="font-size:0.48em">8/8 완료</span>
+          </div>
+          <ul style="font-size:0.62em;padding-left:16px;color:#374151;line-height:1.8;margin:0">
+            <li>루틴 CRUD + 커스텀</li>
+            <li>완료 체크 &amp; 스트릭</li>
+            <li>달성 히트맵 &amp; 통계</li>
+            <li>일정 관리 &amp; 캘린더</li>
+            <li>진행률 바 &amp; 업적</li>
+          </ul>
+        </div>
+        <div class="card card-amber">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+            <span class="tag amber">Should</span>
+            <span class="tag green" style="font-size:0.48em">2/2 완료</span>
+          </div>
+          <ul style="font-size:0.62em;padding-left:16px;color:#374151;line-height:1.8;margin:0">
+            <li>푸시 알림 예약</li>
+            <li>다크 모드</li>
+          </ul>
+        </div>
+        <div class="card card-green">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+            <span class="tag green">Could</span>
+            <span class="tag green" style="font-size:0.48em">3/3 완료</span>
+          </div>
+          <ul style="font-size:0.62em;padding-left:16px;color:#374151;line-height:1.8;margin:0">
+            <li>Android 홈 위젯</li>
+            <li>GitHub 잔디 연동</li>
+            <li>Firebase 로그인 &amp; 동기화</li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin-top:14px;display:flex;align-items:center;justify-content:space-between">
+        <div class="hbox green" style="flex:1;padding:10px 16px">
+          <p style="margin:0;font-size:0.65em">전 기능 <strong style="color:#16A34A">Must 8 · Should 2 · Could 3 = 100% 완료</strong></p>
+        </div>
+        <a href="wbs.html" target="_blank" style="margin-left:16px;background:#3182F6;color:white;padding:8px 18px;border-radius:8px;text-decoration:none;font-size:0.6em;font-weight:700;white-space:nowrap">WBS 보기</a>
+      </div>
+    </section>
+
+    <!-- ⑤ 기술 스택 -->
+    <section>
+      <span class="sl">TECH STACK</span>
+      <h2>기술 선택과 그 이유</h2>
+      <div class="g2" style="margin-top:18px">
+        <div class="card card-blue">
+          <p style="font-weight:700;color:#3182F6;margin:0 0 4px;font-size:0.7em">Flutter / Dart</p>
+          <p style="margin:0;color:#6B7684;font-size:0.62em">단일 코드베이스 Android/iOS 동시 지원. Hot Reload로 빠른 UI 반복 개발.</p>
+        </div>
+        <div class="card card-blue">
+          <p style="font-weight:700;color:#3182F6;margin:0 0 4px;font-size:0.7em">Riverpod</p>
+          <p style="margin:0;color:#6B7684;font-size:0.62em">컴파일 타임 타입 안전성. Provider 대비 향상된 테스트 용이성.</p>
+        </div>
+        <div class="card card-blue">
+          <p style="font-weight:700;color:#3182F6;margin:0 0 4px;font-size:0.7em">SQLite (sqflite)</p>
+          <p style="margin:0;color:#6B7684;font-size:0.62em">오프라인 우선 설계. 네트워크 없이 완전한 기능 보장.</p>
+        </div>
+        <div class="card card-blue">
+          <p style="font-weight:700;color:#3182F6;margin:0 0 4px;font-size:0.7em">Firebase Auth + Firestore</p>
+          <p style="margin:0;color:#6B7684;font-size:0.62em">Google 로그인 구현. 로컬 DB 기반 선택적 클라우드 동기화.</p>
+        </div>
+        <div class="card card-blue">
+          <p style="font-weight:700;color:#3182F6;margin:0 0 4px;font-size:0.7em">flutter_local_notifications</p>
+          <p style="margin:0;color:#6B7684;font-size:0.62em">요일/시간 기반 반복 푸시 알림. 정확한 알람 스케줄링.</p>
+        </div>
+        <div class="card card-blue">
+          <p style="font-weight:700;color:#3182F6;margin:0 0 4px;font-size:0.7em">table_calendar · fl_chart</p>
+          <p style="margin:0;color:#6B7684;font-size:0.62em">달력 뷰 일정 관리. 히트맵 &amp; 통계 시각화.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 아키텍처 -->
+    <section>
+      <span class="sl">ARCHITECTURE</span>
+      <h2>레이어드 아키텍처</h2>
+      <div style="display:flex;flex-direction:column;gap:8px;margin:18px auto;max-width:700px">
+        <div style="background:#EFF6FF;border-radius:10px;padding:12px 20px;border-left:4px solid #3182F6;display:flex;justify-content:space-between;align-items:center">
+          <strong style="color:#3182F6;font-size:0.72em">Presentation Layer</strong>
+          <span style="font-size:0.58em;color:#6B7684">Screen · Widget · Theme</span>
+        </div>
+        <div style="text-align:center;font-size:0.55em;color:#9CA3AF">사용자 이벤트 전달 &#8595;</div>
+        <div style="background:#F0FDF4;border-radius:10px;padding:12px 20px;border-left:4px solid #16A34A;display:flex;justify-content:space-between;align-items:center">
+          <strong style="color:#16A34A;font-size:0.72em">Application Layer</strong>
+          <span style="font-size:0.58em;color:#6B7684">ViewModel · Riverpod Provider</span>
+        </div>
+        <div style="text-align:center;font-size:0.55em;color:#9CA3AF">비즈니스 로직 호출 &#8595;</div>
+        <div style="background:#FFF7ED;border-radius:10px;padding:12px 20px;border-left:4px solid #F59E0B;display:flex;justify-content:space-between;align-items:center">
+          <strong style="color:#D97706;font-size:0.72em">Domain Layer</strong>
+          <span style="font-size:0.58em;color:#6B7684">Entity · Service (스트릭, 업적)</span>
+        </div>
+        <div style="text-align:center;font-size:0.55em;color:#9CA3AF">데이터 요청 &#8595;</div>
+        <div style="background:#F5F3FF;border-radius:10px;padding:12px 20px;border-left:4px solid #8B5CF6;display:flex;justify-content:space-between;align-items:center">
+          <strong style="color:#7C3AED;font-size:0.72em">Data Layer</strong>
+          <span style="font-size:0.58em;color:#6B7684">Repository · SQLite · Firestore</span>
+        </div>
+      </div>
+      <p style="font-size:0.58em;color:#6B7684">단방향 의존성 — 상위 레이어만 하위를 참조 · lib/ 디렉토리 4계층 분리</p>
+    </section>
+
+    <!-- ⑦ 주요 기능 -->
+    <section>
+      <span class="sl">FEATURES</span>
+      <h2>구현된 주요 기능</h2>
+      <div class="g3" style="margin-top:18px">
+        <div class="card" style="text-align:center">
+          <p style="font-weight:700;color:#3182F6;margin:0 0 6px;font-size:0.68em">루틴 관리</p>
+          <p style="font-size:0.58em;margin:0;color:#6B7684">아이콘·색상 커스텀<br>요일별 반복 설정<br>완료 체크 &amp; 스트릭</p>
+        </div>
+        <div class="card" style="text-align:center">
+          <p style="font-weight:700;color:#3182F6;margin:0 0 6px;font-size:0.68em">통계 &amp; 히트맵</p>
+          <p style="font-size:0.58em;margin:0;color:#6B7684">16주 달성 히트맵<br>루틴별 스트릭<br>GitHub 잔디 연동</p>
+        </div>
+        <div class="card" style="text-align:center">
+          <p style="font-weight:700;color:#3182F6;margin:0 0 6px;font-size:0.68em">일정 &amp; 캘린더</p>
+          <p style="font-size:0.58em;margin:0;color:#6B7684">날짜별 일정 관리<br>완료 체크 토글<br>D-Day 라벨</p>
+        </div>
+        <div class="card" style="text-align:center">
+          <p style="font-weight:700;color:#16A34A;margin:0 0 6px;font-size:0.68em">푸시 알림</p>
+          <p style="font-size:0.58em;margin:0;color:#6B7684">요일·시간 예약<br>정확한 알람 스케줄링<br>배터리 최적화 대응</p>
+        </div>
+        <div class="card" style="text-align:center">
+          <p style="font-weight:700;color:#16A34A;margin:0 0 6px;font-size:0.68em">업적 시스템</p>
+          <p style="font-size:0.58em;margin:0;color:#6B7684">30가지 업적<br>달성 시 즉시 알림<br>1일~1460일 마일스톤</p>
+        </div>
+        <div class="card" style="text-align:center">
+          <p style="font-weight:700;color:#7C3AED;margin:0 0 6px;font-size:0.68em">클라우드 동기화</p>
+          <p style="font-size:0.58em;margin:0;color:#6B7684">Google 로그인<br>Firestore 백업<br>홈 위젯 지원</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑧ 시행착오 -->
+    <section>
+      <span class="sl">CHALLENGES</span>
+      <h2>구현 시행착오와 해결 과정</h2>
+      <div class="g2" style="margin-top:16px">
+        <div class="card card-red" style="padding:14px 16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <p style="font-weight:700;color:#DC2626;font-size:0.66em;margin:0">flutter_timezone 컴파일 에러</p>
+            <span class="tag gray">ADR-004</span>
+          </div>
+          <p style="font-size:0.58em;margin:0;color:#6B7684">Registrar API 제거된 Kotlin 버전과 충돌</p>
+          <p style="font-size:0.58em;margin:5px 0 0;color:#16A34A;font-weight:600">해결: 패키지 제거 · 'Asia/Seoul' 하드코딩</p>
+        </div>
+        <div class="card card-red" style="padding:14px 16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <p style="font-weight:700;color:#DC2626;font-size:0.66em;margin:0">Samsung 배터리 최적화 알림 차단</p>
+            <span class="tag gray">디버깅</span>
+          </div>
+          <p style="font-size:0.58em;margin:0;color:#6B7684">SM S937N 실기기에서 예약 알림 미도달</p>
+          <p style="font-size:0.58em;margin:5px 0 0;color:#16A34A;font-weight:600">해결: USE_EXACT_ALARM 권한 + 배터리 최적화 해제 가이드</p>
+        </div>
+        <div class="card card-red" style="padding:14px 16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <p style="font-weight:700;color:#DC2626;font-size:0.66em;margin:0">Firebase Gradle 플러그인 버전 충돌</p>
+            <span class="tag gray">빌드</span>
+          </div>
+          <p style="font-size:0.58em;margin:0;color:#6B7684">프로젝트 수준 build.gradle.kts 중복 선언으로 빌드 실패</p>
+          <p style="font-size:0.58em;margin:5px 0 0;color:#16A34A;font-weight:600">해결: 앱 수준에서만 google-services 플러그인 선언</p>
+        </div>
+        <div class="card card-red" style="padding:14px 16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <p style="font-weight:700;color:#DC2626;font-size:0.66em;margin:0">탭 전환 시 화면 상태 초기화</p>
+            <span class="tag gray">UI</span>
+          </div>
+          <p style="font-size:0.58em;margin:0;color:#6B7684">Bottom Navigation + 중첩 Scaffold 상태 유지 문제</p>
+          <p style="font-size:0.58em;margin:5px 0 0;color:#16A34A;font-weight:600">해결: IndexedStack으로 탭별 위젯 트리 상태 보존</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑨ 코드 품질 -->
+    <section>
+      <span class="sl">QUALITY</span>
+      <h2>코드 품질 관리</h2>
+      <div class="g2" style="margin-top:16px">
+        <div>
+          <div class="card card-blue" style="margin-bottom:10px">
+            <p style="font-weight:700;color:#3182F6;font-size:0.68em;margin:0 0 8px">정적 분석 &amp; 린팅</p>
+            <div class="cb">$ flutter analyze lib/
+Analyzing lib...
+<span style="color:#4ADE80">No errors found.</span>
+warnings: 4 (unused imports)</div>
+          </div>
+          <div class="card card-green">
+            <p style="font-weight:700;color:#16A34A;font-size:0.68em;margin:0 0 8px">코드 원칙</p>
+            <ul style="font-size:0.6em;padding-left:16px;margin:0;line-height:1.8">
+              <li>레이어 간 단방향 의존성 강제</li>
+              <li>각 레이어별 단일 책임 원칙</li>
+              <li>Provider 의존성 최소화</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:10px">
+            <p style="font-weight:700;color:#7C3AED;font-size:0.68em;margin:0 0 8px">성능 최적화</p>
+            <ul style="font-size:0.6em;padding-left:16px;margin:0;line-height:1.8">
+              <li>IndexedStack — 탭 전환 시 상태 유지</li>
+              <li>FutureProvider.family — 날짜별 캐싱</li>
+              <li>ref.invalidate — 필요 시만 리빌드</li>
+              <li>AnimatedContainer — 부드러운 UI 전환</li>
+            </ul>
+          </div>
+          <div class="card card-amber">
+            <p style="font-weight:700;color:#D97706;font-size:0.68em;margin:0 0 8px">테스트</p>
+            <ul style="font-size:0.6em;padding-left:16px;margin:0;line-height:1.8">
+              <li>단위 테스트: StreakService, AchievementService</li>
+              <li>통합 테스트: SQLite CRUD 전 흐름</li>
+              <li>실기기 테스트: SM S937N (Android 16)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑩ 개발환경 & 빌드/배포 -->
+    <section>
+      <span class="sl">DEV &amp; DEPLOY</span>
+      <h2 style="margin-bottom:0.1em">개발 환경 &amp; 빌드 / 배포</h2>
+      <div class="g2" style="margin-top:12px">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="card card-blue" style="padding:12px 14px">
+            <p style="font-weight:700;color:#3182F6;font-size:0.65em;margin:0 0 6px">개발 환경</p>
+            <table style="font-size:0.58em">
+              <tr><td style="padding:5px 8px">Flutter</td><td style="padding:5px 8px">3.41.9 (stable)</td></tr>
+              <tr><td style="padding:5px 8px">Dart</td><td style="padding:5px 8px">3.11.5</td></tr>
+              <tr><td style="padding:5px 8px">Android SDK</td><td style="padding:5px 8px">API 36</td></tr>
+              <tr><td style="padding:5px 8px">테스트 기기</td><td style="padding:5px 8px">SM S937N (Android 16)</td></tr>
+            </table>
+          </div>
+          <div class="card" style="padding:12px 14px">
+            <p style="font-weight:700;font-size:0.65em;margin:0 0 6px">설치 방법 (GitHub)</p>
+            <div class="cb" style="font-size:0.54em;padding:10px 14px">git clone {repo}
+cd devflow &amp;&amp; flutter pub get
+flutter run</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="card card-purple" style="padding:12px 14px">
+            <p style="font-weight:700;color:#7C3AED;font-size:0.65em;margin:0 0 8px">빌드 &amp; 배포 단계</p>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span class="step" style="width:18px;height:18px;font-size:0.65em">1</span>
+                <p style="margin:0;font-size:0.6em"><strong>개발</strong> — flutter run (Debug, Hot Reload)</p>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span class="step" style="width:18px;height:18px;font-size:0.65em">2</span>
+                <p style="margin:0;font-size:0.6em"><strong>빌드</strong> — flutter build apk --release</p>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span class="step" style="width:18px;height:18px;font-size:0.65em">3</span>
+                <p style="margin:0;font-size:0.6em"><strong>설치</strong> — flutter install / adb install</p>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span class="step green" style="width:18px;height:18px;font-size:0.65em">4</span>
+                <p style="margin:0;font-size:0.6em"><strong>배포</strong> — flutter build appbundle (Play Store)</p>
+              </div>
+            </div>
+          </div>
+          <div class="hbox green" style="padding:10px 14px">
+            <p style="margin:0;font-size:0.58em">오프라인 우선 설계 — 네트워크 없이 100% 동작. Firebase는 선택적 백업.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑪ AI 활용 (BONUS) -->
+    <section>
+      <span class="sl">BONUS — AI AGENT 활용</span>
+      <h2 style="margin-bottom:0.1em">AI를 개발 파트너로</h2>
+      <div class="g2" style="margin-top:12px">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="card card-blue" style="padding:12px 14px">
+            <p style="font-weight:700;color:#3182F6;font-size:0.65em;margin:0 0 6px">Claude Code 활용 내역</p>
+            <ul style="font-size:0.58em;padding-left:14px;margin:0;line-height:1.75">
+              <li>전체 코드 생성 및 리팩토링</li>
+              <li>아키텍처 설계 및 검증</li>
+              <li>Gradle / Kotlin 빌드 에러 디버깅</li>
+              <li>Firebase 연동 코드 작성</li>
+              <li>발표자료 제작</li>
+            </ul>
+          </div>
+          <div class="hbox" style="padding:10px 14px">
+            <p style="margin:0;font-size:0.6em">
+              <strong>가산점 신청</strong><br>
+              AI Agent / 스킬 / 워크플로우 적극 활용: <strong style="color:#3182F6">+1점</strong><br>
+              단일 md 파일 통합 기법: <strong style="color:#3182F6">+2점</strong>
+            </p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="card card-purple" style="padding:12px 14px">
+            <p style="font-weight:700;color:#7C3AED;font-size:0.65em;margin:0 0 6px">단일 AGENTS.md 통합 구성</p>
+            <div class="cb" style="font-size:0.52em;padding:10px 14px"># DevFlow AI 협업 가이드
+## 코드 작성 규칙
+- 레이어드 아키텍처 엄수
+- Riverpod FutureProvider 우선
+- 이모지 절대 사용 금지
+## 파일 위치 규칙
+- Screen: presentation/screens/
+- ViewModel: application/view_models/
+- Entity: domain/entities/</div>
+          </div>
+          <div class="card" style="padding:10px 14px">
+            <p style="font-weight:700;font-size:0.62em;margin:0 0 6px">통합 범위 — 단일 파일로 전체 관리</p>
+            <div style="display:flex;gap:5px;flex-wrap:wrap">
+              <span class="tag">agent</span>
+              <span class="tag">skills</span>
+              <span class="tag">rules</span>
+              <span class="tag">commands</span>
+              <span class="tag">AGENTS.md</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑫ 활용 방안 -->
+    <section>
+      <span class="sl">IMPACT</span>
+      <h2>활용 방안 &amp; 기대효과</h2>
+      <div class="g3" style="margin-top:18px">
+        <div class="card card-blue" style="text-align:center">
+          <p style="font-weight:700;color:#3182F6;margin:0 0 8px;font-size:0.68em">취업 준비 개발자</p>
+          <p style="font-size:0.6em;margin:0;color:#6B7684">알고리즘, CS, 프로젝트<br>학습 루틴 체계화<br>스트릭으로 꾸준함 증명</p>
+        </div>
+        <div class="card card-green" style="text-align:center">
+          <p style="font-weight:700;color:#16A34A;margin:0 0 8px;font-size:0.68em">사이드 프로젝트</p>
+          <p style="font-size:0.6em;margin:0;color:#6B7684">일정 + 루틴 통합 관리<br>GitHub 잔디 연동으로<br>개발 습관 시각화</p>
+        </div>
+        <div class="card card-purple" style="text-align:center">
+          <p style="font-weight:700;color:#7C3AED;margin:0 0 8px;font-size:0.68em">팀 &amp; 스터디</p>
+          <p style="font-size:0.6em;margin:0;color:#6B7684">Firebase 동기화로<br>멀티 디바이스 지원<br>향후 팀 기능 확장 가능</p>
+        </div>
+      </div>
+      <div class="hbox green" style="margin-top:18px">
+        <p style="margin:0;font-size:0.68em">
+          <strong>향후 발전 방향</strong> &nbsp;|&nbsp;
+          iOS 지원 확대 &nbsp;·&nbsp; 팀 루틴 공유 &nbsp;·&nbsp; AI 기반 루틴 추천 &nbsp;·&nbsp; 위젯 고도화
+        </p>
+      </div>
+    </section>
+
+    <!-- ⑬ ADR (Q&A 준비) -->
+    <section>
+      <span class="sl">Q&amp;A — ADR</span>
+      <h2>주요 설계 결정</h2>
+      <div class="g2" style="margin-top:16px">
+        <div class="card card-blue" style="padding:14px 16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <strong style="font-size:0.68em;color:#3182F6">ADR-001. Flutter 선택</strong>
+            <span class="tag" style="font-size:0.48em">확정</span>
+          </div>
+          <p style="font-size:0.58em;margin:0;color:#374151"><strong>배경:</strong> 모바일 앱 플랫폼 선택</p>
+          <p style="font-size:0.58em;margin:3px 0 0;color:#374151"><strong>결정:</strong> Flutter + Dart 채택</p>
+          <p style="font-size:0.58em;margin:3px 0 0;color:#6B7684">단일 코드베이스 · Hot Reload · 풍부한 생태계</p>
+        </div>
+        <div class="card card-green" style="padding:14px 16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <strong style="font-size:0.68em;color:#16A34A">ADR-002. Riverpod 선택</strong>
+            <span class="tag green" style="font-size:0.48em">확정</span>
+          </div>
+          <p style="font-size:0.58em;margin:0;color:#374151"><strong>배경:</strong> 상태관리 라이브러리 선택</p>
+          <p style="font-size:0.58em;margin:3px 0 0;color:#374151"><strong>결정:</strong> flutter_riverpod 채택</p>
+          <p style="font-size:0.58em;margin:3px 0 0;color:#6B7684">컴파일 타임 타입 안전성 · 테스트 용이성</p>
+        </div>
+        <div class="card card-amber" style="padding:14px 16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <strong style="font-size:0.68em;color:#D97706">ADR-003. Local-First 전략</strong>
+            <span class="tag amber" style="font-size:0.48em">확정</span>
+          </div>
+          <p style="font-size:0.58em;margin:0;color:#374151"><strong>배경:</strong> 데이터 저장 전략 수립</p>
+          <p style="font-size:0.58em;margin:3px 0 0;color:#374151"><strong>결정:</strong> SQLite primary + Firebase 선택적 동기화</p>
+          <p style="font-size:0.58em;margin:3px 0 0;color:#6B7684">오프라인 완전 동작 · graceful fallback</p>
+        </div>
+        <div class="card card-red" style="padding:14px 16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <strong style="font-size:0.68em;color:#DC2626">ADR-004. flutter_timezone 제거</strong>
+            <span class="tag gray" style="font-size:0.48em">기술 부채</span>
+          </div>
+          <p style="font-size:0.58em;margin:0;color:#374151"><strong>배경:</strong> 알림 타임존 처리 패키지 컴파일 에러</p>
+          <p style="font-size:0.58em;margin:3px 0 0;color:#374151"><strong>결정:</strong> 패키지 제거 · Asia/Seoul 하드코딩</p>
+          <p style="font-size:0.58em;margin:3px 0 0;color:#6B7684">Kotlin Registrar API 충돌 해결 · 향후 개선 예정</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑭ 시연 & 마무리 -->
+    <section>
+      <span class="sl">DEMO &amp; CLOSING</span>
+      <h2>DevFlow 시연</h2>
+      <div class="g2" style="margin-top:18px">
+        <div>
+          <p style="font-weight:700;font-size:0.7em;margin:0 0 10px">30초 시연 시나리오</p>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span class="step">1</span>
+              <p style="margin:0;font-size:0.62em">홈 화면 — 오늘의 루틴 &amp; 진행률 확인</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span class="step">2</span>
+              <p style="margin:0;font-size:0.62em">루틴 완료 체크 — 스트릭 증가 &amp; 업적 알림</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span class="step">3</span>
+              <p style="margin:0;font-size:0.62em">통계 탭 — 히트맵 &amp; GitHub 잔디 확인</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span class="step green">4</span>
+              <p style="margin:0;font-size:0.62em">캘린더 탭 — 일정 추가 &amp; 완료 처리</p>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:center">
+          <video
+            src="test.mp4"
+            controls
+            style="width:100%;border-radius:12px;max-height:340px;background:#000;display:block"
+            preload="metadata"
+          >
+            브라우저가 video 태그를 지원하지 않습니다.
+          </video>
+        </div>
+      </div>
+      <div class="hbox" style="margin-top:18px;text-align:center">
+        <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:8px">
+          <img src="devflow_icon.png" style="width:36px;height:36px;border-radius:10px" alt="DevFlow">
+          <strong style="color:#3182F6;font-size:0.85em">DevFlow</strong>
+        </div>
+        <p style="margin:0;font-size:0.68em;color:#374151">개발자의 성장을 루틴으로 만들다</p>
+        <p style="margin:6px 0 0;font-size:0.6em;color:#6B7684">Flutter · Riverpod · SQLite · Firebase</p>
+      </div>
+    </section>
+
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
 <script>
   Reveal.initialize({
     hash: true,
-    transition: 'slide',
+    slideNumber: 'c/t',
+    transition: 'fade',
+    transitionSpeed: 'fast',
     controls: true,
     progress: true,
     center: true,
-    width: 1280,
-    height: 780,
-    margin: 0.08,
+    width: 1200,
+    height: 700,
+    margin: 0.04,
+    minScale: 0.1,
+    maxScale: 2.0,
   });
+
+  // 5분 타이머
+  const TOTAL = 300;
+  let remaining = TOTAL;
+  let running = false;
+  let interval = null;
+
+  const disp = document.getElementById('timer-disp');
+  const btnStart = document.getElementById('tbtn-start');
+  const btnReset = document.getElementById('tbtn-reset');
+
+  function fmt(s) {
+    return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
+  }
+
+  function render() {
+    disp.textContent = remaining > 0 ? fmt(remaining) : '종료!';
+    disp.classList.toggle('warn', remaining <= 30);
+  }
+
+  btnStart.addEventListener('click', () => {
+    if (running) {
+      clearInterval(interval);
+      running = false;
+      btnStart.textContent = '시작';
+      btnStart.classList.remove('pause');
+    } else {
+      if (remaining <= 0) return;
+      running = true;
+      btnStart.textContent = '일시정지';
+      btnStart.classList.add('pause');
+      interval = setInterval(() => {
+        remaining--;
+        render();
+        if (remaining <= 0) {
+          clearInterval(interval);
+          running = false;
+          btnStart.textContent = '시작';
+          btnStart.classList.remove('pause');
+          setTimeout(() => alert('발표 시간이 종료되었습니다!'), 100);
+        }
+      }, 1000);
+    }
+  });
+
+  btnReset.addEventListener('click', () => {
+    clearInterval(interval);
+    running = false;
+    remaining = TOTAL;
+    btnStart.textContent = '시작';
+    btnStart.classList.remove('pause');
+    render();
+  });
+
+  render();
 </script>
 </body>
 </html>
