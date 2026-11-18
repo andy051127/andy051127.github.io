@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
+<title>찬희 | Backend &amp; Cloud Developer</title>
+<meta name="description" content="Spring Boot와 AWS로 설계부터 배포까지 동작하는 서버를 만듭니다. 리눅스 터미널로 둘러보는 포트폴리오.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+<!-- 링크 공유 카드 (OG) -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="chanhee.dev">
+<meta property="og:title" content="찬희 | Backend &amp; Cloud Developer">
+<meta property="og:description" content="Spring Boot와 AWS로 설계부터 배포까지 동작하는 서버를 만듭니다. 리눅스 터미널로 둘러보는 포트폴리오.">
+<meta property="og:url" content="https://andy051127.github.io/">
+<meta property="og:image" content="https://andy051127.github.io/images/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="CHANHEE-LINUX 터미널 화면에 찬희, Backend & Cloud Developer가 적힌 이미지">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&amp;family=Noto+Sans+KR:wght@400;500;700&amp;family=VT323&amp;display=swap">
+<link rel="stylesheet" href="style.css">
+<noscript><style>#top, #gui, .vim, .imgview { display: none !important; }</style></noscript>
+<script src="script.js" defer></script>
+</head>
+<body class="crt-on">
+
+<!-- ===================== JS가 꺼져 있을 때 ===================== -->
+<noscript>
+  <div class="nojs">
+    <p class="nojs-warn">[ !! ] JavaScript가 꺼져 있어 터미널을 켤 수 없습니다. 요약본을 보여드려요.</p>
+    <img src="images/profile.jpg" alt="찬희 증명사진" width="160" height="200">
+    <h1>찬희 — Backend &amp; Cloud Developer</h1>
+    <p>신구대학교 컴퓨터소프트웨어과 · Spring Boot · AWS · 서버 검증과 폴백으로 끝까지 동작하는 서버를 만듭니다.</p>
+    <h2>projects</h2>
+    <ul>
+      <li><b>HA`WE</b> — 그룹마다 매일 미션이 열리는 모바일 그룹 앱 · KAICTS 학술대회 논문</li>
+      <li><b>Pik-Cha!</b> — DSLR 촬영부터 인화·문자까지 이어지는 서버리스 포토부스 · 학교 EXPO</li>
+      <li><b>Ridely</b> — 공공데이터로 자전거 코스를 설계하는 AI 코치 · 2026 관광데이터 활용 공모전</li>
+      <li><b>Watchman</b> — 브라우저 얼굴 인식으로 집중도를 재는 스터디 웹 서비스 · 캡스톤</li>
+      <li><b>ORCA Workflow</b> — Claude Code와 Codex의 역할을 나눈 AI 개발환경 설계</li>
+    </ul>
+    <h2>certs</h2>
+    <ul>
+      <li>AWS Certified AI Practitioner (AIF-C01) — 취득</li>
+      <li>리눅스마스터 2급 — 1차 합격 · 2차 준비 중</li>
+      <li>SQLD — 준비 중</li>
+    </ul>
+    <h2>contact</h2>
+    <p><a href="https://github.com/andy051127">github.com/andy051127</a> · <a href="mailto:[EMAIL]">[EMAIL]</a></p>
+  </div>
+</noscript>
+
+<!-- ===================== 1. 풀스크린 터미널 ===================== -->
+<section id="top" class="term crt-power-a" aria-label="터미널">
+  <div class="term-titlebar">
+    <span>CHANHEE-LINUX 2.0</span>
+    <span class="term-title">tty1 · <span class="js-cwd">~</span></span>
+    <button type="button" id="skip-btn" class="skip-btn">ESC 건너뛰기</button>
+  </div>
+
+  <div id="term-out" class="term-out">
+    <div id="prompt-row" class="prompt-row">
+      <label for="cmd-input" class="prompt"><span class="k-accent">guest@shingu</span><span class="k-out">:</span><span class="k-path js-cwd">~</span><span class="k-out">$ </span></label>
+      <div class="cmdwrap">
+        <span id="cmd-mirror" class="cmd-mirror" aria-hidden="true"></span><span class="cur" aria-hidden="true"></span>
+        <input id="cmd-input" class="term-in" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="명령어 입력">
+      </div>
+    </div>
+  </div>
+
+  <a href="#gui" id="scroll-hint" class="scroll-hint" aria-label="아래로 스크롤해 GUI 모드로 보기" hidden>
+    <span>scroll  ·  startx</span>
+    <svg class="bob" width="28" height="20" viewBox="0 0 28 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l10 10 10-10"/></svg>
+  </a>
+
+  <div id="proj-menu-pop" class="menu-pop" hidden>
+    <div id="proj-menu" class="menu" role="menu" aria-label="프로젝트 바로 열기">
+      <span class="menu-cap">~/projects — 눌러서 vi 로 열기</span>
+    </div>
+  </div>
+
+  <div class="statusbar sb-scroll">
+    <span id="tabs-left" class="sb-group"></span>
+    <div id="proj-menu-wrap" class="menu-wrap">
+      <button type="button" id="proj-menu-btn" class="fkey" aria-haspopup="true" aria-expanded="false" aria-controls="proj-menu"><span class="fk-n">3</span><span class="fk-l">Projects ▴</span></button>
+    </div>
+    <span id="tabs-right" class="sb-group"></span>
+    <span class="sb-help">Tab 자동완성 · ↑↓ 기록</span>
+  </div>
+
+  <div class="crt" aria-hidden="true"></div>
+</section>
+
+<!-- ===================== 2. GUI 모드 ===================== -->
+<div id="gui">
+  <header class="nav-wrap">
+    <nav class="nav container">
+      <a href="#gui" class="logo">chanhee<span class="k-accent">.dev</span></a>
+      <div class="nav-links">
+        <a href="#stack">Stack</a>
+        <a href="#projects">Projects</a>
+        <a href="#certs">Certifications</a>
+        <a href="#timeline">Timeline</a>
+        <a href="#contact">Contact</a>
+        <a href="#top" class="mono k-accent">↑ terminal</a>
+      </div>
+    </nav>
+  </header>
+
+  <section class="container intro reveal" data-rv>
+    <div class="intro-text">
+      <p class="eyebrow"><span class="eyebrow-type" style="--tn: 25">Backend &amp; Cloud Developer</span><span class="cur-sm" aria-hidden="true"></span></p>
+      <h1>설계부터 배포까지,<br>끝까지 동작하는 서버를 만듭니다.</h1>
+      <p class="lead">신구대학교 컴퓨터소프트웨어과 찬희입니다. Spring Boot와 AWS로 서비스를 만들고, LLM처럼 불확실한 부품은 서버 검증과 폴백으로 감싸 끝까지 동작하게 설계합니다.</p>
+      <div class="btn-row">
+        <a href="#projects" class="btn btn-primary">프로젝트 보기</a>
+        <a href="https://github.com/andy051127" class="btn btn-outline">GitHub</a>
+      </div>
+    </div>
+    <figure class="photo glow">
+      <div class="photo-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="photo-name">chanhee.jpg — 640×800</span></div>
+      <img src="images/profile.jpg" alt="찬희 증명사진" width="640" height="800">
+      <figcaption><span class="k-accent">$</span> file chanhee.jpg → JPEG image, 1 backend developer</figcaption>
+    </figure>
+  </section>
+
+  <section id="stack" class="sec reveal" data-rv>
+    <div class="container sec-inner">
+      <div class="sec-head">
+        <p class="eyebrow"><span class="eyebrow-type" style="--tn: 10">01 / stack</span><span class="cur-sm" aria-hidden="true"></span></p>
+        <h2>기술 스택</h2>
+      </div>
+      <div id="stack-grid" class="grid grid-240"></div>
+    </div>
+  </section>
+
+  <section id="projects" class="sec reveal" data-rv>
+    <div class="container sec-inner">
+      <div class="sec-head">
+        <p class="eyebrow"><span class="eyebrow-type" style="--tn: 13">02 / projects</span><span class="cur-sm" aria-hidden="true"></span></p>
+        <h2>프로젝트</h2>
+        <p class="sub">자세히 보기를 누르면 아키텍처와 트러블슈팅을 vim 화면으로 볼 수 있습니다.</p>
+      </div>
+      <div id="project-grid" class="grid grid-320"></div>
+    </div>
+  </section>
+
+  <section id="certs" class="sec reveal" data-rv>
+    <div class="container sec-inner">
+      <div class="sec-head">
+        <p class="eyebrow"><span class="eyebrow-type" style="--tn: 19">03 / certifications</span><span class="cur-sm" aria-hidden="true"></span></p>
+        <h2>자격증</h2>
+        <p class="sub">저를 데이터베이스로 설계해봤습니다. 오른쪽 테이블을 누르면 쿼리가 실행됩니다.</p>
+      </div>
+      <div class="erd mono">
+        <div class="erd-owner">
+          <div class="erd-head">CHANHEE</div>
+          <div id="owner-cols"></div>
+        </div>
+        <div class="erd-link" aria-hidden="true"></div>
+        <div class="erd-right">
+          <div class="erd-spine" aria-hidden="true"></div>
+          <div id="erd-tables" class="erd-tables"></div>
+        </div>
+      </div>
+      <div class="query mono">
+        <div class="query-sql"><span class="k-accent">mysql&gt; </span><span id="query-sql" class="q-sql"></span></div>
+        <div class="query-body">
+          <table class="result"><thead><tr id="query-head"></tr></thead><tbody id="query-rows"></tbody></table>
+          <p id="query-foot" class="query-foot"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="timeline" class="sec reveal" data-rv>
+    <div class="container sec-inner">
+      <div class="sec-head">
+        <p class="eyebrow"><span class="eyebrow-type" style="--tn: 13">04 / timeline</span><span class="cur-sm" aria-hidden="true"></span></p>
+        <h2>활동 타임라인</h2>
+      </div>
+      <ol id="timeline-list" class="timeline"></ol>
+    </div>
+  </section>
+
+  <section id="contact" class="sec reveal" data-rv>
+    <div class="container sec-inner contact">
+      <p class="eyebrow"><span class="eyebrow-type" style="--tn: 12">05 / contact</span><span class="cur-sm" aria-hidden="true"></span></p>
+      <h2>함께 만들 것이 있다면 연락주세요.</h2>
+      <div class="btn-row">
+        <a href="mailto:[EMAIL]" class="btn btn-primary">[EMAIL]</a>
+        <a href="https://github.com/andy051127" class="btn btn-outline">GitHub</a>
+        <a href="#top" class="btn btn-outline mono k-accent">↑ 터미널로 돌아가기</a>
+      </div>
+      <p class="footer mono">© 2026 chanhee · deployed on github.io</p>
+    </div>
+  </section>
+</div>
+
+<!-- ===================== vim 뷰어 ===================== -->
+<div id="vim" class="vim" role="dialog" aria-modal="true" aria-labelledby="vim-title" hidden>
+  <div class="vim-top">
+    <span id="vim-title" class="vim-title">vim</span>
+    <button type="button" id="vim-close" class="btn-ghost-sm">닫기 ✕</button>
+  </div>
+  <div id="vim-body" class="vim-body"></div>
+  <div class="vim-status">
+    <span class="vim-mode">NORMAL</span>
+    <span id="vim-name" class="vim-name"></span>
+    <span class="vim-ro">[readonly]</span>
+    <span id="vim-pos" class="vim-pos"></span>
+  </div>
+  <div class="vim-cmdline">
+    <label for="vim-cmd">:</label>
+    <input id="vim-cmd" type="text" autocomplete="off" spellcheck="false" placeholder="q 입력 후 Enter 로 닫기">
+    <span id="vim-msg" class="vim-msg"></span>
+  </div>
+  <div class="crt crt-soft" aria-hidden="true"></div>
+</div>
+
+<!-- ===================== 이미지 뷰어 ===================== -->
+<div id="imgview" class="imgview" role="dialog" aria-modal="true" aria-label="chanhee.jpg 이미지 보기" hidden>
+  <div class="vim-top">
+    <span class="vim-title">display — chanhee.jpg  (Esc 또는 닫기)</span>
+    <button type="button" id="img-close" class="btn-ghost-sm">닫기 ✕</button>
+  </div>
+  <div class="imgview-body"><img src="images/profile.jpg" alt="찬희 증명사진" width="640" height="800"></div>
+  <div class="vim-status">
+    <span class="vim-mode img-mode">IMAGE</span>
+    <span class="vim-name">chanhee.jpg</span>
+    <span class="vim-pos">JPEG · 640×800 · 43KB</span>
+  </div>
+</div>
+
+</body>
+</html>
