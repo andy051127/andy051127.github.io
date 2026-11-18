@@ -25,7 +25,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&amp;family=Noto+Sans+KR:wght@400;500;700&amp;family=VT323&amp;display=swap">
 <link rel="stylesheet" href="style.css">
-<noscript><style>#top, #gui, .vim, .imgview, .man { display: none !important; }</style></noscript>
+<noscript><style>#top, #gui, .vim, .imgview, .man, .secview { display: none !important; }</style></noscript>
 <script src="script.js" defer></script>
 </head>
 <body class="crt-on">
@@ -67,7 +67,7 @@
 
   <div id="term-out" class="term-out">
     <div id="prompt-row" class="prompt-row">
-      <label for="cmd-input" class="prompt"><span class="k-accent">guest@shingu</span><span class="k-out">:</span><span class="k-path js-cwd">~</span><span class="k-out">$ </span></label>
+      <label for="cmd-input" class="prompt"><span id="p-user" class="k-accent">guest@chanhee</span><span id="p-colon" class="k-out">:</span><span id="p-cwd" class="k-path">~</span><span id="p-sign" class="k-out">$ </span></label>
       <div class="cmdwrap">
         <span id="cmd-mirror" class="cmd-mirror" aria-hidden="true"></span><span class="cur" aria-hidden="true"></span>
         <input id="cmd-input" class="term-in" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="명령어 입력">
@@ -276,6 +276,23 @@
     <input id="man-cmd" type="text" autocomplete="off" spellcheck="false" aria-label="명령 입력 (q 로 닫기)" placeholder="q">
     <span id="man-msg" class="man-msg"></span>
   </div>
+  <div class="crt crt-soft" aria-hidden="true"></div>
+</div>
+
+<!-- ===================== ~/.secrets ===================== -->
+<div id="secview" class="secview" role="dialog" aria-modal="true" aria-label="~/.secrets — Hello World" hidden>
+  <div class="sec-hdr"><span class="sec-title">~/.secrets</span><button type="button" id="sec-close" class="sec-close">q 닫기</button></div>
+  <div class="sec-stage">
+    <pre class="hw" aria-label="Hello World"><span class="hw-line" style="animation-delay: 0.00s"> _   _      _ _        __        __         _     _ </span>
+<span class="hw-line" style="animation-delay: 0.15s">| | | | ___| | | ___   \ \      / /__  _ __| | __| |</span>
+<span class="hw-line" style="animation-delay: 0.30s">| |_| |/ _ \ | |/ _ \   \ \ /\ / / _ \| &#x27;__| |/ _` |</span>
+<span class="hw-line" style="animation-delay: 0.45s">|  _  |  __/ | | (_) |   \ V  V / (_) | |  | | (_| |</span>
+<span class="hw-line" style="animation-delay: 0.60s">|_| |_|\___|_|_|\___/     \_/\_/ \___/|_|  |_|\__,_|</span>
+</pre>
+    <div class="globe" aria-hidden="true"><pre id="g-sky" class="g-sky"></pre><pre id="g-sea" class="g-sea"></pre><pre id="g-land" class="g-land"></pre></div>
+    <p class="sec-msg">guest@chanhee:~$ <span>여기까지 찾아오셨네요. 반가워요!</span></p>
+  </div>
+  <div class="sec-foot">q · Esc · 화면을 누르면 닫혀요</div>
   <div class="crt crt-soft" aria-hidden="true"></div>
 </div>
 
