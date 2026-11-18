@@ -25,7 +25,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&amp;family=Noto+Sans+KR:wght@400;500;700&amp;family=VT323&amp;display=swap">
 <link rel="stylesheet" href="style.css">
-<noscript><style>#top, #gui, .vim, .imgview { display: none !important; }</style></noscript>
+<noscript><style>#top, #gui, .vim, .imgview, .man { display: none !important; }</style></noscript>
 <script src="script.js" defer></script>
 </head>
 <body class="crt-on">
@@ -43,16 +43,17 @@
       <li><b>Pik-Cha!</b> — DSLR 촬영부터 인화·문자까지 이어지는 서버리스 포토부스 · 학교 EXPO</li>
       <li><b>Ridely</b> — 공공데이터로 자전거 코스를 설계하는 AI 코치 · 2026 관광데이터 활용 공모전</li>
       <li><b>Watchman</b> — 브라우저 얼굴 인식으로 집중도를 재는 스터디 웹 서비스 · 캡스톤</li>
-      <li><b>ORCA Workflow</b> — Claude Code와 Codex의 역할을 나눈 AI 개발환경 설계</li>
     </ul>
+    <h2>engineering workflow</h2>
+    <p>ORCA 터미널로 Claude Code와 Codex의 역할을 나눈 AI 협업 개발환경 설계</p>
     <h2>certs</h2>
     <ul>
-      <li>AWS Certified AI Practitioner (AIF-C01) — 취득</li>
-      <li>리눅스마스터 2급 — 1차 합격 · 2차 준비 중</li>
-      <li>SQLD — 준비 중</li>
+      <li>AWS Certified AI Practitioner (AIF-C01) — 2026.07 취득</li>
+      <li>리눅스마스터 2급 — 1차 합격 · 2차 2027.01 응시 예정</li>
+      <li>SQLD — 2027.02 응시 예정</li>
     </ul>
     <h2>contact</h2>
-    <p><a href="https://github.com/andy051127">github.com/andy051127</a> · <a href="mailto:[EMAIL]">[EMAIL]</a></p>
+    <p><a href="https://github.com/andy051127">github.com/andy051127</a> · <a href="mailto:andy051127@gmail.com">andy051127@gmail.com</a></p>
   </div>
 </noscript>
 
@@ -105,6 +106,7 @@
       <div class="nav-links">
         <a href="#stack">Stack</a>
         <a href="#projects">Projects</a>
+        <a href="#workflow">Workflow</a>
         <a href="#certs">Certifications</a>
         <a href="#timeline">Timeline</a>
         <a href="#contact">Contact</a>
@@ -136,7 +138,7 @@
         <p class="eyebrow"><span class="eyebrow-type" style="--tn: 10">01 / stack</span><span class="cur-sm" aria-hidden="true"></span></p>
         <h2>기술 스택</h2>
       </div>
-      <div id="stack-grid" class="grid grid-240"></div>
+      <div id="stack-grid" class="row-stack"></div>
     </div>
   </section>
 
@@ -147,14 +149,47 @@
         <h2>프로젝트</h2>
         <p class="sub">자세히 보기를 누르면 아키텍처와 트러블슈팅을 vim 화면으로 볼 수 있습니다.</p>
       </div>
-      <div id="project-grid" class="grid grid-320"></div>
+      <div id="project-grid" class="row-proj"></div>
+    </div>
+  </section>
+
+  <section id="workflow" class="sec reveal" data-rv>
+    <div class="container sec-inner">
+      <div class="sec-head">
+        <p class="eyebrow"><span class="eyebrow-type" style="--tn: 25">03 / engineering workflow</span><span class="cur-sm" aria-hidden="true"></span></p>
+        <h2>엔지니어링 워크플로</h2>
+        <p class="sub wf-sub">만든 것이 아니라 만드는 방식입니다. ORCA 터미널로 Claude Code와 Codex의 역할을 나눠, 계획 → 구현 → 리뷰 → 재검증을 문서로 주고받는 AI 협업 개발 환경을 설계했습니다.</p>
+      </div>
+      <div class="wf-card glow">
+        <div class="wf-text">
+          <div class="tags">
+            <span class="tag">설계 · 구성</span>
+            <span class="tag">지침 2종 + Quick Command 6종</span>
+          </div>
+          <ul class="wf-list">
+            <li>세션끼리 대화가 공유되지 않으니, <code>.agent/*.md</code> 파일을 작업 계약으로 사용</li>
+            <li>완료 기준은 AI의 말이 아니라 실제 git diff와 테스트·빌드 결과</li>
+            <li>리뷰는 P0/P1/P2로 분류하고, 병합은 사람이 결정</li>
+          </ul>
+          <button type="button" id="wf-open" class="btn-vi">자세히 보기  $ man workflow</button>
+        </div>
+        <div class="wf-flow mono" role="img" aria-label="개발자에서 Claude Code, .agent 문서, Codex로 이어지는 흐름">
+          <div class="wf-node"><span>개발자</span><small>요구사항 · 승인</small></div>
+          <span class="wf-arrow" aria-hidden="true">→</span>
+          <div class="wf-node wf-ai"><span>Claude Code</span><small>탐색 · 설계 · 리뷰</small></div>
+          <span class="wf-arrow" aria-hidden="true">⇄</span>
+          <div class="wf-node wf-doc"><span>.agent/</span><small>plan · report · review</small></div>
+          <span class="wf-arrow" aria-hidden="true">⇄</span>
+          <div class="wf-node wf-ai"><span>Codex</span><small>구현 · 테스트 · 검증</small></div>
+        </div>
+      </div>
     </div>
   </section>
 
   <section id="certs" class="sec reveal" data-rv>
     <div class="container sec-inner">
       <div class="sec-head">
-        <p class="eyebrow"><span class="eyebrow-type" style="--tn: 19">03 / certifications</span><span class="cur-sm" aria-hidden="true"></span></p>
+        <p class="eyebrow"><span class="eyebrow-type" style="--tn: 19">04 / certifications</span><span class="cur-sm" aria-hidden="true"></span></p>
         <h2>자격증</h2>
         <p class="sub">저를 데이터베이스로 설계해봤습니다. 오른쪽 테이블을 누르면 쿼리가 실행됩니다.</p>
       </div>
@@ -182,7 +217,7 @@
   <section id="timeline" class="sec reveal" data-rv>
     <div class="container sec-inner">
       <div class="sec-head">
-        <p class="eyebrow"><span class="eyebrow-type" style="--tn: 13">04 / timeline</span><span class="cur-sm" aria-hidden="true"></span></p>
+        <p class="eyebrow"><span class="eyebrow-type" style="--tn: 13">05 / timeline</span><span class="cur-sm" aria-hidden="true"></span></p>
         <h2>활동 타임라인</h2>
       </div>
       <ol id="timeline-list" class="timeline"></ol>
@@ -191,10 +226,10 @@
 
   <section id="contact" class="sec reveal" data-rv>
     <div class="container sec-inner contact">
-      <p class="eyebrow"><span class="eyebrow-type" style="--tn: 12">05 / contact</span><span class="cur-sm" aria-hidden="true"></span></p>
+      <p class="eyebrow"><span class="eyebrow-type" style="--tn: 12">06 / contact</span><span class="cur-sm" aria-hidden="true"></span></p>
       <h2>함께 만들 것이 있다면 연락주세요.</h2>
       <div class="btn-row">
-        <a href="mailto:[EMAIL]" class="btn btn-primary">[EMAIL]</a>
+        <a href="mailto:andy051127@gmail.com" class="btn btn-primary">andy051127@gmail.com</a>
         <a href="https://github.com/andy051127" class="btn btn-outline">GitHub</a>
         <a href="#top" class="btn btn-outline mono k-accent">↑ 터미널로 돌아가기</a>
       </div>
@@ -220,6 +255,26 @@
     <label for="vim-cmd">:</label>
     <input id="vim-cmd" type="text" autocomplete="off" spellcheck="false" placeholder="q 입력 후 Enter 로 닫기">
     <span id="vim-msg" class="vim-msg"></span>
+  </div>
+  <div class="crt crt-soft" aria-hidden="true"></div>
+</div>
+
+<!-- ===================== man 상세 페이지 ===================== -->
+<div id="man" class="man" role="dialog" aria-modal="true" aria-labelledby="man-hdr-l" hidden>
+  <div class="man-hdr">
+    <span id="man-hdr-l"></span>
+    <span class="man-hdr-c">Chanhee Projects Manual</span>
+    <span id="man-hdr-r" class="man-hdr-r"></span>
+    <button type="button" id="man-close" class="man-close">q 닫기</button>
+  </div>
+  <div id="man-scroll" class="man-scroll">
+    <div id="man-body" class="man-pad man-body"></div>
+  </div>
+  <div class="man-foot">
+    <span id="man-foot-l"></span>
+    <label for="man-cmd" class="man-foot-label">:</label>
+    <input id="man-cmd" type="text" autocomplete="off" spellcheck="false" aria-label="명령 입력 (q 로 닫기)" placeholder="q">
+    <span id="man-msg" class="man-msg"></span>
   </div>
   <div class="crt crt-soft" aria-hidden="true"></div>
 </div>
