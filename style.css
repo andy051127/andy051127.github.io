@@ -487,6 +487,18 @@ button.man-link { padding: 0; border: none; background: transparent; font-family
 @media (max-width: 640px) { .hw { font-size: 10px; } .globe pre { font-size: 11px; } }
 @media (prefers-reduced-motion: reduce) { .hw-line { animation: none; max-width: none; } }
 
+.man-dl-db { grid-template-columns: minmax(0, 120px) minmax(0, 1fr); gap: 8px 24px; }
+.man-dl dt.db-k { color: #FFFF55; }
+.man-dl dt.db-p { font-family: 'Noto Sans KR', sans-serif; font-size: 15px; color: #55FFFF; }
+.man-erd { display: flex; flex-direction: column; gap: 8px; }
+.man-erd-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; }
+.man-erd-bar .man-lbl { font-size: 20px; }
+.man-erd-legend { font-size: 12px; color: #8A8A8A; }
+.man-erd-btn { min-height: 36px; display: inline-flex; align-items: center; padding: 0 10px; border: none; background: transparent; color: #55FFFF; font-family: 'VT323', 'TermKR', monospace; font-size: 19px; cursor: pointer; text-decoration: none; }
+.man-erd-btn:first-of-type { margin-left: auto; }
+.man-erd-btn:hover, .man-erd-btn:focus-visible { color: #FFFFFF; }
+.man-erd-frame { border: 1px solid #333333; background: #050505; overflow: auto; max-height: 78vh; }
+
 /* =====================================================================
  * 모바일 (640px 이하)
  * ===================================================================== */

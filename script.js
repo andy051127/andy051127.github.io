@@ -930,6 +930,190 @@
     }
   };
 
+  /* man 상세 페이지의 DATABASE 섹션 (ERD 그림: images/erd/) */
+  const DB = {
+    "hawe": {
+      "img": "images/erd/hawe.png",
+      "w": 2064,
+      "h": 1045,
+      "meta": [
+        [
+          "DBMS",
+          "MariaDB"
+        ],
+        [
+          "접근",
+          "MyBatis (Controller → Service → DAO)"
+        ],
+        [
+          "스키마",
+          "Flyway V1~V4 — 적용된 파일은 수정 금지, 변경은 새 버전으로"
+        ],
+        [
+          "규모",
+          "테이블 14개 · 사용자·그룹·미션·제출·소통·AI 영역"
+        ]
+      ],
+      "points": [
+        [
+          "하이브리드 답 저장",
+          "집계하는 값(별점·밸런스 게임)은 컬럼, 미션 틀마다 모양이 다른 답은 JSON(answer_data). 새 틀이 생겨도 마이그레이션이 필요 없어요."
+        ],
+        [
+          "규칙을 UNIQUE로 보장",
+          "(group_id, mission_date, slot_no)로 중복 발행, (mission_id, user_id)로 중복 제출, 리액션은 (제출, 사용자, 스티커)로 중복을 DB가 막아요."
+        ],
+        [
+          "시각을 미션에 고정",
+          "발행·마감 시각을 미션 행에 저장해서, 그룹 설정이 바뀌어도 이미 열린 미션의 지각 판정은 그대로예요."
+        ],
+        [
+          "계산으로 대신한 테이블",
+          "도장(참잘했어요·지각)은 별도 테이블 없이 제출 여부와 is_late로 계산하고, token_version으로 비밀번호 변경 시 기존 JWT를 끊어요."
+        ]
+      ]
+    },
+    "pikcha": {
+      "img": "images/erd/pikcha.png",
+      "w": 1617,
+      "h": 445,
+      "meta": [
+        [
+          "DBMS",
+          "Amazon DynamoDB (테이블 2개) + S3 사진 버킷"
+        ],
+        [
+          "접근",
+          "Lambda(Python · boto3) — update_item · get_item · scan"
+        ],
+        [
+          "키 설계",
+          "파티션 키 + 정렬 키(인쇄 작업) · GSI(status + ticket_number) · TTL"
+        ],
+        [
+          "규모",
+          "웨이팅 티켓 · 촬영 세션 + 예약 키 아이템(카운터, 통계) · 인쇄 작업 아이템"
+        ]
+      ],
+      "points": [
+        [
+          "원자적 번호 발급",
+          "카운터 아이템을 if_not_exists(counter, 0) + 1 로 올려서, 번호가 비는 일은 있어도 중복은 생기지 않아요."
+        ],
+        [
+          "나눠서 쓰는 세션",
+          "presign·logger Lambda가 같은 세션 아이템을 update_item + if_not_exists로 나눠 채워서, 어느 쪽이 먼저 와도 값이 덮이지 않아요."
+        ],
+        [
+          "한 번만 성공하는 상태 전환",
+          "입장 처리를 ConditionExpression으로 걸어 같은 번호를 다시 넣어도 다음 팀이 두 번 호출되지 않아요."
+        ],
+        [
+          "경쟁 없는 인쇄 대기열",
+          "인쇄 작업을 리스트 하나가 아니라 __PRINT__ + session_id 정렬 키의 개별 아이템으로 둬서, 동시에 추가·삭제해도 유실이 없어요. URL은 저장하지 않고 가져갈 때마다 presigned URL을 만들어요."
+        ],
+        [
+          "scan 대신 query",
+          "status + ticket_number GSI로 대기 팀과 다음 호출 팀을 바로 찾아요."
+        ],
+        [
+          "양방향 연결 · 개인정보 자동 삭제",
+          "입장 시 티켓에 session_id, 세션에 ticketNumber를 함께 기록하고, 이름·전화번호는 TTL로 행사 후 자동 삭제돼요. 날짜 기준은 KST로 통일했어요."
+        ]
+      ]
+    },
+    "ridely": {
+      "img": "images/erd/ridely.png",
+      "w": 1245,
+      "h": 1627,
+      "meta": [
+        [
+          "DBMS",
+          "PostgreSQL 16 + PostGIS (공간) · pgvector (RAG 벡터 검색)"
+        ],
+        [
+          "접근",
+          "MyBatis(단순 CRUD) + JdbcClient 원시 SQL(공간·벡터 연산)"
+        ],
+        [
+          "스키마",
+          "Flyway V1~V4 · 좌표계 SRID 4326"
+        ],
+        [
+          "규모",
+          "테이블 17개 (공공데이터 9 + 서비스 8) · 공공데이터 7종 — 관광지 710 · 따릉이 3,239 · 보관소 2,698 · 사고다발지 202 · 편의시설 1,024 등"
+        ]
+      ],
+      "points": [
+        [
+          "공공데이터와 서비스 분리",
+          "두 영역 사이에 FK가 없어요. 추천은 ST_DWithin으로 근처 장소를 읽고, 결과는 waypoints_json(JSONB)에 스냅샷으로 남겨요."
+        ],
+        [
+          "다시 넣어도 안전한 적재",
+          "고유키가 있는 소스는 UPSERT, 고유키를 믿을 수 없는 소스는 (이름, 좌표) 자연키 + ON CONFLICT DO NOTHING."
+        ],
+        [
+          "위험 구간 회피",
+          "사고다발지 폴리곤(MultiPolygon)을 경로 API의 avoid_polygons로 넘기고, 통과 여부는 ST_Intersects로 판정해요."
+        ],
+        [
+          "멱등성 저장소",
+          "recommendation_cache는 Idempotency-Key 해시로 같은 요청의 재전송을 한 번만 처리해요."
+        ],
+        [
+          "취향 기반 추천 (RAG)",
+          "라이딩 기록을 768차원 벡터로 저장하고 HNSW 코사인 유사도로 비슷한 코스를 찾아 추천에 반영해요."
+        ]
+      ]
+    },
+    "watchman": {
+      "img": "images/erd/watchman.png",
+      "w": 969,
+      "h": 871,
+      "meta": [
+        [
+          "DBMS",
+          "MySQL (InnoDB · utf8mb4)"
+        ],
+        [
+          "접근",
+          "ORM 없이 JdbcTemplate + BeanPropertyRowMapper"
+        ],
+        [
+          "스키마",
+          "schema.sql (IF NOT EXISTS, 시작마다 실행) + DataInitializer 마이그레이션·시드"
+        ],
+        [
+          "규모",
+          "테이블 12개 · 업적 시드 30개"
+        ]
+      ],
+      "points": [
+        [
+          "탈퇴 한 번에 정리",
+          "사용자 데이터는 모두 users에 ON DELETE CASCADE로 묶여 있어요."
+        ],
+        [
+          "중복을 DB가 차단",
+          "group_members는 복합 PK (group_id, user_id)로 중복 가입을, user_achievements는 UNIQUE로 같은 업적 재획득을 막아요."
+        ],
+        [
+          "솔로·그룹 세션 한 테이블",
+          "sessions.group_id는 FK 없는 논리 참조라 솔로 세션은 NULL이에요."
+        ],
+        [
+          "집중률 계산",
+          "DB에는 DOUBLE로 두고, 서비스에서 BigDecimal(HALF_UP, 소수 2자리)로 계산해요."
+        ],
+        [
+          "조회 패턴에 맞춘 인덱스",
+          "sessions(user_id, started_at), todos(user_id, todo_date) 보조 인덱스로 기간별 통계와 날짜별 할 일을 바로 찾아요."
+        ]
+      ]
+    }
+  };
+
   const MENU_ORDER = ['hawe', 'watchman', 'ridely', 'pikcha'];
   const ABOUT = ["찬희 — Backend & Cloud Developer","신구대학교 컴퓨터소프트웨어과","","Spring Boot와 AWS로 설계부터 배포까지 동작하는 서버를 만듭니다.","LLM처럼 불확실한 부품은 서버 검증과 폴백으로 감싸고,","보안 정책·사설망 같은 현장 제약은 구조로 풉니다."];
 
@@ -1295,6 +1479,55 @@
           ] };
     }
     docs() { return this.projects().concat([this.workflow()]); }
+    /* 프로젝트별 DB 정보 + ERD 이미지 (Graphviz로 그린 PNG, 2배 해상도) */
+    dbData() {
+      return {
+        hawe: {
+          img: '/_blob/818e7ba080f66dcc4aa810220bcbc632', w: 2064, h: 1045,
+          meta: [['DBMS', 'MariaDB'], ['접근', 'MyBatis (Controller → Service → DAO)'], ['스키마', 'Flyway V1~V4 — 적용된 파일은 수정 금지, 변경은 새 버전으로'], ['규모', '테이블 14개 · 사용자·그룹·미션·제출·소통·AI 영역']],
+          points: [
+            ['하이브리드 답 저장', '집계하는 값(별점·밸런스 게임)은 컬럼, 미션 틀마다 모양이 다른 답은 JSON(answer_data). 새 틀이 생겨도 마이그레이션이 필요 없어요.'],
+            ['규칙을 UNIQUE로 보장', '(group_id, mission_date, slot_no)로 중복 발행, (mission_id, user_id)로 중복 제출, 리액션은 (제출, 사용자, 스티커)로 중복을 DB가 막아요.'],
+            ['시각을 미션에 고정', '발행·마감 시각을 미션 행에 저장해서, 그룹 설정이 바뀌어도 이미 열린 미션의 지각 판정은 그대로예요.'],
+            ['계산으로 대신한 테이블', '도장(참잘했어요·지각)은 별도 테이블 없이 제출 여부와 is_late로 계산하고, token_version으로 비밀번호 변경 시 기존 JWT를 끊어요.']
+          ]
+        },
+        pikcha: {
+          img: '/_blob/6b3beec9d56e6cf7d812dd7135de5f58', w: 1617, h: 445,
+          meta: [['DBMS', 'Amazon DynamoDB (테이블 2개) + S3 사진 버킷'], ['접근', 'Lambda(Python · boto3) — update_item · get_item · scan'], ['키 설계', '파티션 키 + 정렬 키(인쇄 작업) · GSI(status + ticket_number) · TTL'], ['규모', '웨이팅 티켓 · 촬영 세션 + 예약 키 아이템(카운터, 통계) · 인쇄 작업 아이템']],
+          points: [
+            ['원자적 번호 발급', '카운터 아이템을 if_not_exists(counter, 0) + 1 로 올려서, 번호가 비는 일은 있어도 중복은 생기지 않아요.'],
+            ['나눠서 쓰는 세션', 'presign·logger Lambda가 같은 세션 아이템을 update_item + if_not_exists로 나눠 채워서, 어느 쪽이 먼저 와도 값이 덮이지 않아요.'],
+            ['한 번만 성공하는 상태 전환', '입장 처리를 ConditionExpression으로 걸어 같은 번호를 다시 넣어도 다음 팀이 두 번 호출되지 않아요.'],
+            ['경쟁 없는 인쇄 대기열', '인쇄 작업을 리스트 하나가 아니라 __PRINT__ + session_id 정렬 키의 개별 아이템으로 둬서, 동시에 추가·삭제해도 유실이 없어요. URL은 저장하지 않고 가져갈 때마다 presigned URL을 만들어요.'],
+            ['scan 대신 query', 'status + ticket_number GSI로 대기 팀과 다음 호출 팀을 바로 찾아요.'],
+            ['양방향 연결 · 개인정보 자동 삭제', '입장 시 티켓에 session_id, 세션에 ticketNumber를 함께 기록하고, 이름·전화번호는 TTL로 행사 후 자동 삭제돼요. 날짜 기준은 KST로 통일했어요.']
+          ]
+        },
+        ridely: {
+          img: '/_blob/dce48ba36c898b13c9079d43ad030fab', w: 1245, h: 1627,
+          meta: [['DBMS', 'PostgreSQL 16 + PostGIS (공간) · pgvector (RAG 벡터 검색)'], ['접근', 'MyBatis(단순 CRUD) + JdbcClient 원시 SQL(공간·벡터 연산)'], ['스키마', 'Flyway V1~V4 · 좌표계 SRID 4326'], ['규모', '테이블 17개 (공공데이터 9 + 서비스 8) · 공공데이터 7종 — 관광지 710 · 따릉이 3,239 · 보관소 2,698 · 사고다발지 202 · 편의시설 1,024 등']],
+          points: [
+            ['공공데이터와 서비스 분리', '두 영역 사이에 FK가 없어요. 추천은 ST_DWithin으로 근처 장소를 읽고, 결과는 waypoints_json(JSONB)에 스냅샷으로 남겨요.'],
+            ['다시 넣어도 안전한 적재', '고유키가 있는 소스는 UPSERT, 고유키를 믿을 수 없는 소스는 (이름, 좌표) 자연키 + ON CONFLICT DO NOTHING.'],
+            ['위험 구간 회피', '사고다발지 폴리곤(MultiPolygon)을 경로 API의 avoid_polygons로 넘기고, 통과 여부는 ST_Intersects로 판정해요.'],
+            ['멱등성 저장소', 'recommendation_cache는 Idempotency-Key 해시로 같은 요청의 재전송을 한 번만 처리해요.'],
+            ['취향 기반 추천 (RAG)', '라이딩 기록을 768차원 벡터로 저장하고 HNSW 코사인 유사도로 비슷한 코스를 찾아 추천에 반영해요.']
+          ]
+        },
+        watchman: {
+          img: '/_blob/fa6ae1d89a053f59a0686ff40bb0a536', w: 969, h: 871,
+          meta: [['DBMS', 'MySQL (InnoDB · utf8mb4)'], ['접근', 'ORM 없이 JdbcTemplate + BeanPropertyRowMapper'], ['스키마', 'schema.sql (IF NOT EXISTS, 시작마다 실행) + DataInitializer 마이그레이션·시드'], ['규모', '테이블 12개 · 업적 시드 30개']],
+          points: [
+            ['탈퇴 한 번에 정리', '사용자 데이터는 모두 users에 ON DELETE CASCADE로 묶여 있어요.'],
+            ['중복을 DB가 차단', 'group_members는 복합 PK (group_id, user_id)로 중복 가입을, user_achievements는 UNIQUE로 같은 업적 재획득을 막아요.'],
+            ['솔로·그룹 세션 한 테이블', 'sessions.group_id는 FK 없는 논리 참조라 솔로 세션은 NULL이에요.'],
+            ['집중률 계산', 'DB에는 DOUBLE로 두고, 서비스에서 BigDecimal(HALF_UP, 소수 2자리)로 계산해요.'],
+            ['조회 패턴에 맞춘 인덱스', 'sessions(user_id, started_at), todos(user_id, todo_date) 보조 인덱스로 기간별 통계와 날짜별 할 일을 바로 찾아요.']
+          ]
+        }
+      };
+    }
     manData() {
       return {
         "hawe": {"summary": "그룹마다 매일 미션이 열리고, 내가 먼저 답해야 그룹원의 답이 보이는 모바일 그룹 앱", "synopsis": "hawe --group <초대코드> --mission daily --submit-to-unlock", "meta": "팀 Sapphire Developers (4인) · 2026.09 ~ · 역할: 백엔드 아키텍처 설계, ERD 설계, API 구조 설계, 백엔드 API 구현, 비전 서비스 Lambda 구조 설계 · KAICTS 학술대회 논문", "desc": ["소규모 그룹은 연락이 뜸해지고, 일상을 먼저 올리기가 부담스럽다.", "서버가 정해진 시각에 가벼운 미션을 열고, 제출해야만 서로의 답이 보이게 했다."], "arch": [{"label": "CLIENT", "hl": false, "items": [["iOS · SwiftUI", ""], ["Android · Compose", "그림 분류는 기기 안"]]}, {"label": "API", "hl": true, "items": [["Spring Boot", "REST + JWT · MyBatis"], ["@Scheduled", "미션 자동 발행"]]}, {"label": "AI", "hl": true, "items": [["LLM", "미션 문장 · 서버가 검증"], ["비전 서비스", "CLIP + ONNX"]]}, {"label": "STORAGE", "hl": false, "items": [["MySQL (RDS)", "Flyway"], ["S3", "presigned URL"]]}], "extra": null, "options": [["--server-driven-llm", "틀·시각은 서버가 정하고 LLM은 문장만 채움. 길이·형식·유사도 재검증, 실패 시 고정 문장 폴백"], ["--locked", "\"제출해야 열람\"을 앱의 블러가 아니라 서버 423 Locked로 강제"], ["--async-ai", "AI 작업은 커밋 이후 별도 스레드로 분리 → 제출 응답이 AI를 기다리지 않음"], ["--privacy", "LLM에는 닉네임·제출 내용을 보내지 않음"]], "results": ["그림 모델: Quick, Draw! 테스트셋 top-1 93.1% · int8 모델 158KB", "사진–주제 적합도: ROC-AUC 0.958 (사진 177장 기준)", "ONNX fp16 전환: 설치 2.3GB → 0.7GB, 시작 36초 → 2초, 판정 변화 0"], "bugs": [{"code": "HTTP-400", "title": "비전 서비스 호출 실패", "cause": "Java HTTP 클라이언트의 h2c 업그레이드 요청을 uvicorn이 거절", "fix": "HTTP/1.1로 고정하고, 실제 클라이언트로 재현하는 회귀 테스트 추가"}], "notes": ["실사용자 데이터가 없어 참여율 향상은 주장하지 않음"], "links": [["github(1)", "https://github.com/Maenghansoo1/Sapphire"]]},
@@ -2977,10 +3210,16 @@
         man: (() => {
           const p = s.man ? this.docs().find((x) => x.id === s.man) : null;
           const m = p ? this.manData()[p.id] : null;
-          if (!m) return { id: '', upper: '', summary: '', synopsis: '', meta: '', desc: [], cols: [], hasExtra: false, hasExtraNote: false, extraLabel: '', extraNote: '', chain: [], options: [], hasResults: false, results: [], hasBugs: false, bugs: [], hasNotes: false, notes: [], links: [] };
+          const db = p ? this.dbData()[p.id] : null;
+          const erdFull = !!s.manErdFull;
+          if (!m) return { hasDb: false, dbMeta: [], dbPoints: [], dbImg: '', dbImgStyle: '', dbAlt: '', dbToggle: () => {}, dbToggleLabel: '', id: '', upper: '', summary: '', synopsis: '', meta: '', desc: [], cols: [], hasExtra: false, hasExtraNote: false, extraLabel: '', extraNote: '', chain: [], options: [], hasResults: false, results: [], hasBugs: false, bugs: [], hasNotes: false, notes: [], links: [] };
           const ob = s.manBug ?? 0;
           return {
             id: p.id, upper: p.id.toUpperCase(), summary: m.summary, synopsis: m.synopsis, meta: m.meta,
+            hasDb: !!db, dbMeta: db ? db.meta.map((x) => ({ k: x[0], v: x[1] })) : [], dbPoints: db ? db.points.map((x) => ({ k: x[0], v: x[1] })) : [],
+            dbImg: db ? db.img : '', dbAlt: db ? p.name + ' ERD — 테이블 관계도' : '',
+            dbImgStyle: db ? (erdFull ? 'display: block; width: ' + db.w + 'px; max-width: none; height: auto' : 'display: block; width: 100%; height: auto') : '',
+            dbToggle: () => this.setState({ manErdFull: !erdFull }), dbToggleLabel: erdFull ? '[ 화면에 맞추기 ]' : '[ 실제 크기로 보기 ]',
             desc: m.desc.map((x) => ({ t: x })),
             cols: m.arch.map((c, i) => ({ label: c.label, notFirst: i > 0, delay: (i * 0.6) + 's', items: c.items.map((it) => ({ name: it[0], sub: it[1], hasSub: !!it[1], border: c.hl ? '#55FF55' : '#555555' })) })),
             hasExtra: !!m.extra, hasExtraNote: !!(m.extra && m.extra.note), extraLabel: m.extra ? m.extra.label : '', extraNote: m.extra ? m.extra.note : '',
@@ -3306,6 +3545,7 @@
   const manClose = $('man-close');
   let manId = null;
   let manBug = 0;
+  let manErdFull = false;
   let manReturn = null;
   let pushed = false;
   let backTimer = null;
@@ -3392,6 +3632,41 @@
       ar.appendChild(ch);
     }
     s.appendChild(ar); manBody.appendChild(s);
+
+    const db = DB[id];
+    if (db) {
+      s = sec('DATABASE');
+      const dl0 = el('dl', 'man-ind man-dl man-dl-db');
+      db.meta.forEach((x) => { dl0.appendChild(el('dt', 'db-k', x[0])); dl0.appendChild(el('dd', null, x[1])); });
+      s.appendChild(dl0);
+      const box = el('div', 'man-ind man-erd');
+      const bar = el('div', 'man-erd-bar');
+      bar.appendChild(el('span', 'man-lbl', 'ERD'));
+      const lg = el('span', 'man-erd-legend');
+      lg.innerHTML = '<span style="color:#FFFF55">PK</span> · <span style="color:#55FFFF">FK</span> · <span style="color:#55FF55">UK</span> · ┤├ 하나 · ○&lt; 0개 이상';
+      bar.appendChild(lg);
+      const tg = el('button', 'man-erd-btn', manErdFull ? '[ 화면에 맞추기 ]' : '[ 실제 크기로 보기 ]');
+      tg.type = 'button';
+      tg.addEventListener('click', () => { manErdFull = !manErdFull; const top = $('man-scroll').scrollTop; renderMan(); $('man-scroll').scrollTop = top; const b2 = manBody.querySelector('.man-erd-btn'); if (b2) b2.focus({ preventScroll: true }); });
+      bar.appendChild(tg);
+      const nw = el('a', 'man-erd-btn', '[ 새 탭에서 열기 ]');
+      nw.href = db.img; nw.target = '_blank'; nw.rel = 'noopener';
+      bar.appendChild(nw);
+      box.appendChild(bar);
+      const fr = el('div', 'man-erd-frame');
+      const im = el('img');
+      im.src = db.img; im.alt = (DOCS.find((p) => p.id === id) || { name: id }).name + ' ERD — 테이블 관계도'; im.loading = 'lazy';
+      im.width = db.w; im.height = db.h;
+      im.style.cssText = manErdFull ? 'display:block;width:' + db.w + 'px;max-width:none;height:auto' : 'display:block;width:100%;height:auto';
+      fr.appendChild(im);
+      box.appendChild(fr);
+      s.appendChild(box);
+      s.appendChild(el('p', 'man-ind man-gray', '설계 포인트'));
+      const dl1 = el('dl', 'man-ind man-dl');
+      db.points.forEach((x) => { dl1.appendChild(el('dt', 'db-p', x[0])); dl1.appendChild(el('dd', null, x[1])); });
+      s.appendChild(dl1);
+      manBody.appendChild(s);
+    }
 
     s = sec('OPTIONS');
     s.appendChild(el('p', 'man-ind man-gray', '핵심 설계'));
