@@ -82,7 +82,7 @@
 
   <div id="proj-menu-pop" class="menu-pop" hidden>
     <div id="proj-menu" class="menu" role="menu" aria-label="프로젝트 바로 열기">
-      <span class="menu-cap">~/projects — 눌러서 vi 로 열기</span>
+      <span class="menu-cap">~/projects</span>
     </div>
   </div>
 
@@ -92,7 +92,7 @@
       <button type="button" id="proj-menu-btn" class="fkey" aria-haspopup="true" aria-expanded="false" aria-controls="proj-menu"><span class="fk-n">3</span><span class="fk-l">Projects ▴</span></button>
     </div>
     <span id="tabs-right" class="sb-group"></span>
-    <span class="sb-help">Tab 자동완성 · ↑↓ 기록</span>
+    <span class="sb-help">↑↓ 기록</span>
   </div>
 
   <div class="crt" aria-hidden="true"></div>
@@ -106,6 +106,7 @@
       <div class="nav-links">
         <a href="#stack">Stack</a>
         <a href="#projects">Projects</a>
+        <a href="#paper">Paper</a>
         <a href="#workflow">Workflow</a>
         <a href="#certs">Certifications</a>
         <a href="#timeline">Timeline</a>
@@ -118,18 +119,14 @@
   <section class="container intro reveal" data-rv>
     <div class="intro-text">
       <p class="eyebrow"><span class="eyebrow-type" style="--tn: 25">Backend &amp; Cloud Developer</span><span class="cur-sm" aria-hidden="true"></span></p>
-      <h1>설계부터 배포까지,<br>끝까지 동작하는 서버를 만듭니다.</h1>
-      <p class="lead">신구대학교 컴퓨터소프트웨어과 찬희입니다. Spring Boot와 AWS로 서비스를 만들고, LLM처럼 불확실한 부품은 서버 검증과 폴백으로 감싸 끝까지 동작하게 설계합니다.</p>
+      <h1>설계부터 배포까지,<br>서버 제작과 운영까지.</h1>
+      <p class="lead">저는 김찬희 입니다. 여러가지 도구를 사용해 데이터베이스/서버를 설계하고 클라우드 서비스를 통해 운영까지 합니다.</p>
       <div class="btn-row">
         <a href="#projects" class="btn btn-primary">프로젝트 보기</a>
         <a href="https://github.com/andy051127" class="btn btn-outline">GitHub</a>
       </div>
     </div>
-    <figure class="photo glow">
-      <div class="photo-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="photo-name">chanhee.jpg — 640×800</span></div>
-      <img src="images/profile.jpg" alt="찬희 증명사진" width="640" height="800">
-      <figcaption><span class="k-accent">$</span> file chanhee.jpg → JPEG image, 1 backend developer</figcaption>
-    </figure>
+    <canvas id="portrait" class="portrait" role="img" aria-label="김찬희 사진을 점으로 표현한 이미지"></canvas>
   </section>
 
   <section id="stack" class="sec reveal" data-rv>
@@ -138,7 +135,7 @@
         <p class="eyebrow"><span class="eyebrow-type" style="--tn: 10">01 / stack</span><span class="cur-sm" aria-hidden="true"></span></p>
         <h2>기술 스택</h2>
       </div>
-      <div id="stack-grid" class="row-stack"></div>
+      <div id="stack-grid" class="list"></div>
     </div>
   </section>
 
@@ -147,41 +144,42 @@
       <div class="sec-head">
         <p class="eyebrow"><span class="eyebrow-type" style="--tn: 13">02 / projects</span><span class="cur-sm" aria-hidden="true"></span></p>
         <h2>프로젝트</h2>
-        <p class="sub">자세히 보기를 누르면 아키텍처와 트러블슈팅을 vim 화면으로 볼 수 있습니다.</p>
+        <p class="sub">누르면 아키텍처와 트러블슈팅을 볼 수 있습니다.</p>
       </div>
-      <div id="project-grid" class="row-proj"></div>
+      <div id="project-grid" class="list"></div>
+    </div>
+  </section>
+
+  <section id="paper" class="sec reveal" data-rv>
+    <div class="container sec-inner">
+      <div class="sec-head">
+        <p class="eyebrow"><span class="eyebrow-type" style="--tn: 10">03 / paper</span><span class="cur-sm" aria-hidden="true"></span></p>
+        <h2>논문</h2>
+      </div>
+      <article id="paper-card" class="paper"></article>
     </div>
   </section>
 
   <section id="workflow" class="sec reveal" data-rv>
     <div class="container sec-inner">
       <div class="sec-head">
-        <p class="eyebrow"><span class="eyebrow-type" style="--tn: 25">03 / engineering workflow</span><span class="cur-sm" aria-hidden="true"></span></p>
-        <h2>엔지니어링 워크플로</h2>
-        <p class="sub wf-sub">만든 것이 아니라 만드는 방식입니다. ORCA 터미널로 Claude Code와 Codex의 역할을 나눠, 계획 → 구현 → 리뷰 → 재검증을 문서로 주고받는 AI 협업 개발 환경을 설계했습니다.</p>
+        <p class="eyebrow"><span class="eyebrow-type" style="--tn: 13">04 / workflow</span><span class="cur-sm" aria-hidden="true"></span></p>
+        <h2>개발 워크플로</h2>
+        <p class="sub">Claude Code와 Codex의 역할을 나눠 계획 → 구현 → 리뷰를 문서로 주고받는 AI 협업 환경입니다.</p>
       </div>
-      <div class="wf-card glow">
-        <div class="wf-text">
-          <div class="tags">
-            <span class="tag">설계 · 구성</span>
-            <span class="tag">지침 2종 + Quick Command 6종</span>
-          </div>
-          <ul class="wf-list">
-            <li>세션끼리 대화가 공유되지 않으니, <code>.agent/*.md</code> 파일을 작업 계약으로 사용</li>
-            <li>완료 기준은 AI의 말이 아니라 실제 git diff와 테스트·빌드 결과</li>
-            <li>리뷰는 P0/P1/P2로 분류하고, 병합은 사람이 결정</li>
-          </ul>
-          <button type="button" id="wf-open" class="btn-vi">자세히 보기  $ man workflow</button>
-        </div>
-        <div class="wf-flow mono" role="img" aria-label="개발자에서 Claude Code, .agent 문서, Codex로 이어지는 흐름">
-          <div class="wf-node"><span>개발자</span><small>요구사항 · 승인</small></div>
-          <span class="wf-arrow" aria-hidden="true">→</span>
-          <div class="wf-node wf-ai"><span>Claude Code</span><small>탐색 · 설계 · 리뷰</small></div>
-          <span class="wf-arrow" aria-hidden="true">⇄</span>
-          <div class="wf-node wf-doc"><span>.agent/</span><small>plan · report · review</small></div>
-          <span class="wf-arrow" aria-hidden="true">⇄</span>
-          <div class="wf-node wf-ai"><span>Codex</span><small>구현 · 테스트 · 검증</small></div>
-        </div>
+      <div class="wf">
+        <ol class="wf-flow mono" aria-label="개발자, Claude Code, .agent 문서, Codex로 이어지는 흐름">
+          <li class="wf-node"><span>개발자</span><small>요구사항 · 승인</small></li>
+          <li class="wf-node wf-ai"><span>Claude Code</span><small>설계 · 리뷰</small></li>
+          <li class="wf-node wf-doc"><span>.agent/</span><small>plan · report · review</small></li>
+          <li class="wf-node wf-ai"><span>Codex</span><small>구현 · 테스트</small></li>
+        </ol>
+        <ul class="list wf-list">
+          <li class="row"><span class="row-k mono">01</span><span><code>.agent/*.md</code> 파일을 세션 간 작업 계약으로 사용</span></li>
+          <li class="row"><span class="row-k mono">02</span><span>완료 기준은 AI의 말이 아니라 git diff와 테스트 결과</span></li>
+          <li class="row"><span class="row-k mono">03</span><span>리뷰는 P0 / P1 / P2로 분류하고, 병합은 사람이 결정</span></li>
+        </ul>
+        <button type="button" id="wf-open" class="link-btn mono">자세히 보기 →</button>
       </div>
     </div>
   </section>
@@ -189,47 +187,29 @@
   <section id="certs" class="sec reveal" data-rv>
     <div class="container sec-inner">
       <div class="sec-head">
-        <p class="eyebrow"><span class="eyebrow-type" style="--tn: 19">04 / certifications</span><span class="cur-sm" aria-hidden="true"></span></p>
+        <p class="eyebrow"><span class="eyebrow-type" style="--tn: 19">05 / certifications</span><span class="cur-sm" aria-hidden="true"></span></p>
         <h2>자격증</h2>
-        <p class="sub">저를 데이터베이스로 설계해봤습니다. 오른쪽 테이블을 누르면 쿼리가 실행됩니다.</p>
       </div>
-      <div class="erd mono">
-        <div class="erd-owner">
-          <div class="erd-head">CHANHEE</div>
-          <div id="owner-cols"></div>
-        </div>
-        <div class="erd-link" aria-hidden="true"></div>
-        <div class="erd-right">
-          <div class="erd-spine" aria-hidden="true"></div>
-          <div id="erd-tables" class="erd-tables"></div>
-        </div>
-      </div>
-      <div class="query mono">
-        <div class="query-sql"><span class="k-accent">mysql&gt; </span><span id="query-sql" class="q-sql"></span></div>
-        <div class="query-body">
-          <table class="result"><thead><tr id="query-head"></tr></thead><tbody id="query-rows"></tbody></table>
-          <p id="query-foot" class="query-foot"></p>
-        </div>
-      </div>
+      <ul id="cert-list" class="list"></ul>
     </div>
   </section>
 
   <section id="timeline" class="sec reveal" data-rv>
     <div class="container sec-inner">
       <div class="sec-head">
-        <p class="eyebrow"><span class="eyebrow-type" style="--tn: 13">05 / timeline</span><span class="cur-sm" aria-hidden="true"></span></p>
-        <h2>활동 타임라인</h2>
+        <p class="eyebrow"><span class="eyebrow-type" style="--tn: 13">06 / timeline</span><span class="cur-sm" aria-hidden="true"></span></p>
+        <h2>활동</h2>
       </div>
-      <ol id="timeline-list" class="timeline"></ol>
+      <ol id="timeline-list" class="list"></ol>
     </div>
   </section>
 
   <section id="contact" class="sec reveal" data-rv>
     <div class="container sec-inner contact">
-      <p class="eyebrow"><span class="eyebrow-type" style="--tn: 12">06 / contact</span><span class="cur-sm" aria-hidden="true"></span></p>
+      <p class="eyebrow"><span class="eyebrow-type" style="--tn: 12">07 / contact</span><span class="cur-sm" aria-hidden="true"></span></p>
       <h2>함께 만들 것이 있다면 연락주세요.</h2>
       <div class="btn-row">
-        <a href="mailto:andy051127@gmail.com" class="btn btn-primary">andy051127@gmail.com</a>
+        <a href="mailto:andy051127@gmail.com" class="btn btn-primary btn-glow">andy051127@gmail.com</a>
         <a href="https://github.com/andy051127" class="btn btn-outline">GitHub</a>
         <a href="#top" class="btn btn-outline mono k-accent">↑ 터미널로 돌아가기</a>
       </div>
@@ -292,7 +272,7 @@
     <div class="globe" aria-hidden="true"><pre id="g-sky" class="g-sky"></pre><pre id="g-sea" class="g-sea"></pre><pre id="g-land" class="g-land"></pre></div>
     <p class="sec-msg">guest@chanhee:~$ <span>여기까지 찾아오셨네요. 반가워요!</span></p>
   </div>
-  <div class="sec-foot">q · Esc · 화면을 누르면 닫혀요</div>
+  <div class="sec-foot">Press q to quit</div>
   <div class="crt crt-soft" aria-hidden="true"></div>
 </div>
 
@@ -302,11 +282,11 @@
     <span class="vim-title">display — chanhee.jpg  (Esc 또는 닫기)</span>
     <button type="button" id="img-close" class="btn-ghost-sm">닫기 ✕</button>
   </div>
-  <div class="imgview-body"><img src="images/profile.jpg" alt="찬희 증명사진" width="640" height="800"></div>
+  <div class="imgview-body"><canvas id="img-dots" class="img-dots" role="img" aria-label="김찬희 사진을 점으로 표현한 이미지"></canvas></div>
   <div class="vim-status">
     <span class="vim-mode img-mode">IMAGE</span>
     <span class="vim-name">chanhee.jpg</span>
-    <span class="vim-pos">JPEG · 640×800 · 43KB</span>
+    <span class="vim-pos">DOT MATRIX · 72×90</span>
   </div>
 </div>
 

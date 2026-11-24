@@ -121,6 +121,24 @@
     }
   ];
 
+  /* 논문 — GUI 논문 섹션과 터미널 paper.txt / papers/ 가 같이 씀 */
+  const PAPER = {
+    "file": "hawe-kaicts-2026.pdf",
+    "pdf": "papers/hawe-kaicts-2026.pdf",
+    "size": 269404,
+    "title": "관계 맞춤형 AI 미션으로 소규모 그룹의 일상 공유와 관계 유지를 돕는 모바일 앱 개발",
+    "authors": ["김찬희", "이경환", "맹한수", "강우준", "안해리"],
+    "affil": "신구대학교 IT소프트웨어과 · 컴퓨터소프트웨어과",
+    "venue": "KAICTS 학술대회",
+    "date": "2026.11",
+    "abstract": [
+      "청년 고립 문제에 필요한 접촉의 계기를 만들기 위해, 관계 맞춤형 AI 미션으로 가벼운 소통을 유도하는 모바일 앱 HA`WE를 설계하고 구현했다.",
+      "미션 틀은 톰슨 샘플링 기반 멀티 암드 밴딧으로 고르고, LLM은 서버가 정한 문장 구조의 빈칸만 채운다.",
+      "사진-주제 적합도 평가(CLIP, ROC-AUC 0.958)와 온디바이스 그림 인식(158KB CNN, top-1 93.1%)으로 참여에 놀이 요소를 더했고, 얼굴은 기기 안에서 가린 뒤에만 업로드한다."
+    ],
+    "keywords": ["멀티 암드 밴딧", "LLM 미션 생성", "CLIP 적합도", "온디바이스 CNN", "얼굴 모자이크", "다국어 의미 검색"]
+  };
+
   const PROJECTS = [
     {
       "id": "hawe",
@@ -131,6 +149,7 @@
         "팀 Sapphire Developers",
         "KAICTS 학술대회 논문"
       ],
+      "brief": "먼저 답해야 그룹원의 답이 열리는 매일 미션 그룹 앱",
       "summary": "그룹마다 매일 미션이 열리고, 내가 먼저 답해야 그룹원의 답이 보이는 모바일 그룹 앱. LLM 미션 생성과 사진·그림 AI를 서버 검증과 폴백으로 감쌌습니다.",
       "stack": [
         "Spring Boot",
@@ -152,8 +171,8 @@
         "- 스택: Spring Boot · Java 25 · MyBatis · Flyway · MySQL(RDS) · Python FastAPI · ONNX · SwiftUI · Jetpack Compose",
         "",
         "## 문제 → 해결",
-        "소규모 그룹은 연락이 뜸해지고, 일상을 먼저 올리기가 부담스럽다.",
-        "→ 서버가 정해진 시각에 가벼운 미션을 열고, 제출해야만 서로의 답이 보이게 했다.",
+        "청년 고립 문제에서 출발했다. 혼자 지내는 청년이 늘면서 가까운 사람과도 연락이 뜸해지고, 일상을 먼저 꺼내기가 부담스러워진다.",
+        "→ 작은 그룹에 매일 정해진 시각 가벼운 미션을 열고, 내가 먼저 답해야 그룹원의 답이 보이게 해 부담 없이 일상을 나누도록 했다.",
         "",
         "## 아키텍처",
         "```",
@@ -162,7 +181,7 @@
         "        ▼",
         "Spring Boot ──> MyBatis ──> MySQL (RDS)",
         "   ├─ @Scheduled 미션 발행 ──> LLM (서버가 검증 · 폴백)",
-        "   ├─ 커밋 후 비동기 ──> Python 비전 서비스 (CLIP + ONNX)",
+        "   ├─ 커밋 후 비동기 ──> 비전 서비스 Lambda (VPC · CLIP + ONNX)",
         "   └─ 파일 저장 ──> S3 (presigned URL)",
         "```",
         "",
@@ -198,6 +217,7 @@
         "학교 EXPO",
         "하드웨어 + 서버리스"
       ],
+      "brief": "촬영부터 인화·QR·웨이팅까지 무인으로 도는 DIY 포토부스",
       "summary": "캐논 DSLR로 촬영하고 인화·QR 다운로드·문자 안내까지 사람 손 없이 이어지는 DIY 인생네컷 포토부스와 웨이팅 시스템입니다.",
       "stack": [
         "Python · FastAPI",
@@ -261,6 +281,7 @@
         "2026 관광데이터 활용 공모전",
         "팀 git push --force"
       ],
+      "brief": "자전거·관광 데이터로 AI가 한강 코스를 짜주는 앱",
       "summary": "흩어진 자전거 인프라와 관광 데이터를 엮어, AI 코치가 목적에 맞는 한강 자전거길 코스를 설계해주는 앱입니다.",
       "stack": [
         "Spring Boot",
@@ -319,6 +340,7 @@
         "캡스톤",
         "팀 Smokers"
       ],
+      "brief": "얼굴 방향으로 집중도를 재는 실시간 스터디 서비스",
       "summary": "브라우저가 직접 얼굴 방향을 분석해 집중도를 재고, 친구들과 실시간으로 함께 공부하는 스터디 웹 서비스입니다.",
       "stack": [
         "Spring Boot 3.5",
@@ -417,8 +439,8 @@
       "synopsis": "hawe --group <초대코드> --mission daily --submit-to-unlock",
       "meta": "팀 Sapphire Developers (4인) · 2026.09 ~ · 역할: 백엔드 아키텍처 설계, ERD 설계, API 구조 설계, 백엔드 API 구현, 비전 서비스 Lambda 구조 설계 · KAICTS 학술대회 논문",
       "desc": [
-        "소규모 그룹은 연락이 뜸해지고, 일상을 먼저 올리기가 부담스럽다.",
-        "서버가 정해진 시각에 가벼운 미션을 열고, 제출해야만 서로의 답이 보이게 했다."
+        "청년 고립 문제에서 출발했다. 혼자 지내는 청년이 늘면서 가까운 사람과도 연락이 뜸해지고, 일상을 먼저 꺼내기가 부담스러워진다.",
+        "작은 그룹에 매일 정해진 시각 가벼운 미션을 열고, 내가 먼저 답해야 그룹원의 답이 보이게 해 부담 없이 일상을 나누도록 했다."
       ],
       "arch": [
         {
@@ -426,59 +448,110 @@
           "hl": false,
           "items": [
             [
-              "iOS · SwiftUI",
-              ""
+              "모바일 앱",
+              "iOS (SwiftUI) · Android (Kotlin · Compose)"
             ],
             [
-              "Android · Compose",
-              "그림 분류는 기기 안"
+              "그림 인식",
+              "온디바이스 · 소형 CNN · LiteRT · Core ML"
+            ],
+            [
+              "얼굴 검출",
+              "온디바이스 · 모자이크 후 업로드 · ML Kit · Vision"
             ]
           ]
         },
         {
-          "label": "API",
+          "label": "VPC · PUBLIC",
           "hl": true,
           "items": [
             [
-              "Spring Boot",
-              "REST + JWT · MyBatis"
+              "EC2 · Docker · Spring Boot",
+              "Java 25 · Spring Security · JWT · MyBatis · Flyway"
             ],
             [
-              "@Scheduled",
-              "미션 자동 발행"
+              "미션 스케줄러 · 비동기 처리",
+              "룸 선택(편성) · 결과 재검증 · 커밋 후 비동기"
             ]
           ]
         },
         {
-          "label": "AI",
+          "label": "VPC · PRIVATE",
           "hl": true,
           "items": [
             [
-              "LLM",
-              "미션 문장 · 서버가 검증"
+              "비전 서비스 (Lambda)",
+              "ECR 컨테이너 · ONNX Runtime · CLIP 사진-주제 적합도 · 다국어 문장 임베딩"
             ],
             [
-              "비전 서비스",
-              "CLIP + ONNX"
+              "RDS · MySQL",
+              "JDBC · 그룹 · 미션 · 제출 · 댓글"
             ]
           ]
         },
         {
-          "label": "STORAGE",
+          "label": "OUTSIDE VPC",
           "hl": false,
           "items": [
             [
-              "MySQL (RDS)",
-              "Flyway"
+              "S3",
+              "사진 · 그림 파일 업로드"
             ],
             [
-              "S3",
-              "presigned URL"
+              "LLM 게이트웨이",
+              "Amazon Bedrock (Claude) · 톤 · 주제 → 미션 문장"
             ]
           ]
         }
       ],
-      "extra": null,
+      "extra": {
+        "label": "일일 미션 파이프라인",
+        "chain": [
+          "미션 생성 · LLM",
+          "제출 · 사진/그림",
+          "적합도 판정 · Lambda",
+          "열람 해제"
+        ],
+        "note": "앱 ⇄ EC2: HTTPS · REST · JWT / 푸시 · EC2 → Lambda: 커밋 후 비동기 호출 · EC2 ⇄ RDS: JDBC"
+      },
+      "shots": [
+        ["images/projects/hawe/1.png", "HA`WE 화면 1"],
+        ["images/projects/hawe/2.png", "HA`WE 화면 2"],
+        ["images/projects/hawe/3.png", "HA`WE 화면 3"]
+      ],
+      "lambda": {
+        "title": "비전 서비스를 Lambda로 분리한 이유",
+        "lead": "430MB 판정 모델을 EC2에 상주시키면 t3.small 메모리가 85%까지 찬다. 서버를 키우는 대신, 사진이 제출될 때만 판정을 Lambda에서 실행하도록 떼어냈다.",
+        "steps": [
+          ["온프레미스", "개발자 PC에서만 실행돼, 앱이 상시 접속할 수 없고 데이터가 흩어져 있던 출발점"],
+          ["클라우드 이전", "EC2 · RDS · S3로 옮겨 고정 주소로 언제든 접속하고, 기기 간 데이터를 공유"],
+          ["컨테이너화", "Docker · GHCR · GitHub Actions로 빌드와 배포를 자동화"],
+          ["판정 Lambda 분리", "430MB 판정 모델을 사진 제출 때만 실행해 EC2 상주 메모리를 없앰"]
+        ],
+        "mem": {
+          "label": "EC2 메모리 사용량 (t3.small, 가용 약 1.9GB)",
+          "total": 1900,
+          "rows": [
+            ["전환 전", [["OS", 320, "os"], ["API", 610, "api"], ["판정 서버", 690, "judge"]], "1.62GB (85%)"],
+            ["전환 후", [["OS", 320, "os"], ["API", 650, "api"]], "0.97GB (51%)"]
+          ]
+        },
+        "cost": {
+          "label": "사진 판정 서버 월 비용 (서울 리전 온디맨드)",
+          "max": 38,
+          "rows": [
+            ["A. EC2 증설", "t3.medium 4GB 1대에 함께 실행", 38],
+            ["B. 판정 전용 EC2", "t3.small 2GB 2대 (API · 판정)", 38],
+            ["C. Lambda 분리", "t3.small 1대 + Lambda + ECR", 19]
+          ],
+          "stats": [
+            ["-51%", "월 약 $19 절감 · 1년이면 약 $228 (A/B 대비)"],
+            ["약 15%", "Lambda 월 무료 한도 사용률 (5.9만 / 40만 GB-초)"],
+            ["약 $1", "무료 한도가 없어도 드는 Lambda 월 실행 비용"]
+          ],
+          "note": "사진 월 3,000건 가정 · t3.small $0.026/h, t3.medium $0.052/h, Lambda $0.0000166667/GB-초, ECR 약 $0.1 기준 · 공통 비용(RDS · S3 · 퍼블릭 IPv4) 제외 · 예상값이며 실측 후 갱신 예정"
+        }
+      },
       "options": [
         [
           "--server-driven-llm",
@@ -517,6 +590,10 @@
         [
           "github(1)",
           "https://github.com/Maenghansoo1/Sapphire"
+        ],
+        [
+          "paper.pdf",
+          "papers/hawe-kaicts-2026.pdf"
         ]
       ]
     },
@@ -947,7 +1024,7 @@
         ],
         [
           "스키마",
-          "Flyway V1~V4 — 적용된 파일은 수정 금지, 변경은 새 버전으로"
+          "Flyway"
         ],
         [
           "규모",
@@ -1115,7 +1192,7 @@
   };
 
   const MENU_ORDER = ['hawe', 'watchman', 'ridely', 'pikcha'];
-  const ABOUT = ["찬희 — Backend & Cloud Developer","신구대학교 컴퓨터소프트웨어과","","Spring Boot와 AWS로 설계부터 배포까지 동작하는 서버를 만듭니다.","LLM처럼 불확실한 부품은 서버 검증과 폴백으로 감싸고,","보안 정책·사설망 같은 현장 제약은 구조로 풉니다."];
+  const ABOUT = ["김찬희 — Backend & Cloud Developer","신구대학교 컴퓨터소프트웨어과","","여러가지 도구를 사용해 데이터베이스/서버를 설계하고,","클라우드 서비스를 통해 운영까지 합니다."];
 
   /* 한글은 2칸, 그 밖은 1칸으로 세서 터미널 칸을 맞춤 */
   function padW(s, n) {
@@ -1148,7 +1225,7 @@
   const $ = (id) => document.getElementById(id);
   const L = (text, kind, pre, preKind) => ({ text: text || '', kind: kind || 'out', pre: pre || '', preKind: preKind || 'out' });
   const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
-  const S = { cwd: '~', hist: [], hIdx: null, booted: false, erd: 'certification' };
+  const S = { cwd: '~', hist: [], hIdx: null, booted: false };
 
   const out = $('term-out');
   const promptRow = $('prompt-row');
@@ -1181,28 +1258,181 @@
       L('')
     ];
   }
-  function banner() {
-    const art = [
-      '  ____ _                 _               ',
-      ' / ___| |__   __ _ _ __ | |__   ___  ___ ',
-      "| |   | '_ \\ / _` | '_ \\| '_ \\ / _ \\/ _ \\",
-      '| |___| | | | (_| | | | | | | |  __/  __/',
-      ' \\____|_| |_|\\__,_|_| |_|_| |_|\\___|\\___|'
+  /* 터미널 로고: "Chanhee"를 5x7 픽셀 글꼴로 쌓은 3D 복셀이 Y축으로 회전. 누르면 빠르게 돈다 */
+  const GLYPH = {
+    C: ['.###.', '#...#', '#....', '#....', '#....', '#...#', '.###.'],
+    h: ['#....', '#....', '#.##.', '##..#', '#...#', '#...#', '#...#'],
+    a: ['.....', '.....', '.###.', '....#', '.####', '#...#', '.####'],
+    n: ['.....', '.....', '#.##.', '##..#', '#...#', '#...#', '#...#'],
+    e: ['.....', '.....', '.###.', '#...#', '#####', '#....', '.###.']
+  };
+  function logo3d(word) {
+    /* 80년대 폴리곤 느낌: 저해상도 버퍼에 직접 폴리곤을 래스터라이즈(안티에일리어싱 없음)
+       + 4단계 팔레트 + 4x4 Bayer 디더링, 화면에는 픽셀 그대로 확대 */
+    const wrap = el('div', 'logo3d');
+    const cv = el('canvas');
+    cv.setAttribute('role', 'img');
+    cv.setAttribute('aria-label', word);
+    cv.title = '누르면 회전';
+    wrap.appendChild(cv);
+    if (!cv.getContext) { wrap.textContent = word; return wrap; }
+    const ctx = cv.getContext('2d');
+
+    /* 복셀: 글자 픽셀마다 깊이 3칸 */
+    const DEPTH = 3;
+    const vox = [];
+    let cols = 0;
+    word.split('').forEach((ch) => {
+      const g = GLYPH[ch];
+      if (!g) return;
+      g.forEach((row, y) => row.split('').forEach((c, x) => {
+        if (c === '#') for (let z = 0; z < DEPTH; z++) vox.push([cols + x, y, z]);
+      }));
+      cols += 6;
+    });
+    const W = cols - 1, H = 7;
+    const occ = new Set(vox.map((v) => v.join(',')));
+    const has = (x, y, z) => occ.has(x + ',' + y + ',' + z);
+
+    /* 겉으로 드러나는 면만 폴리곤으로: [법선, 꼭짓점 4개, 재질(0 앞뒤 · 1 옆 · 2 위아래)] */
+    const FACES = [
+      [[1, 0, 0], [[1, -1, -1], [1, -1, 1], [1, 1, 1], [1, 1, -1]], 1],
+      [[-1, 0, 0], [[-1, -1, -1], [-1, 1, -1], [-1, 1, 1], [-1, -1, 1]], 1],
+      [[0, 1, 0], [[-1, 1, -1], [1, 1, -1], [1, 1, 1], [-1, 1, 1]], 2],
+      [[0, -1, 0], [[-1, -1, -1], [-1, -1, 1], [1, -1, 1], [1, -1, -1]], 2],
+      [[0, 0, 1], [[-1, -1, 1], [-1, 1, 1], [1, 1, 1], [1, -1, 1]], 0],
+      [[0, 0, -1], [[-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1]], 0]
     ];
-    return art.map((t) => ({ text: t, kind: 'ascii' })).concat([
+    const ox = (W - 1) / 2, oy = (H - 1) / 2, oz = (DEPTH - 1) / 2;
+    const quads = [];
+    vox.forEach((v) => FACES.forEach((f) => {
+      if (has(v[0] + f[0][0], v[1] + f[0][1], v[2] + f[0][2])) return;
+      const cx = v[0] - ox, cy = v[1] - oy, cz = v[2] - oz;
+      quads.push({ n: f[0], m: f[2], c: [cx + f[0][0] / 2, cy + f[0][1] / 2, cz + f[0][2] / 2], p: f[1].map((q) => [cx + q[0] / 2, cy + q[1] / 2, cz + q[2] / 2]) });
+    }));
+
+    /* 팔레트 (어두움 → 밝음), ImageData용 ABGR */
+    const rgb = (h) => 0xFF000000 | ((h & 0xFF) << 16) | (h & 0xFF00) | ((h >> 16) & 0xFF);
+    const RAMP = [
+      [0x2A2A2A, 0x6E6E6E, 0xB4B4B4, 0xFFFFFF].map(rgb),
+      [0x003A00, 0x00AA00, 0x33DD33, 0x55FF55].map(rgb),
+      [0x002A2A, 0x007A7A, 0x00AAAA, 0x55FFFF].map(rgb)
+    ];
+    const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map((b) => (b + 0.5) / 16 - 0.5);
+    const LIGHT = (() => { const l = [-0.3, -0.45, -0.85], n = Math.hypot(l[0], l[1], l[2]); return l.map((x) => x / n); })();
+    const still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const F = 120, BASE_TILT = 0.12;
+    let U = 3, LW = 0, LH = 0, img = null, buf = null;
+    let spin = 0, spinTo = 0, yaw = 0, pitch = BASE_TILT, yawTo = 0, pitchTo = BASE_TILT;
+    let ptr = false, last = 0, raf = 0, vis = true, t0 = 0;
+
+    function size() {
+      const avail = Math.max(220, (out.clientWidth || 600) - 40);
+      U = avail < 420 ? 3 : 4;
+      LW = (W + 7) * U; LH = 24 * U;
+      const P = Math.max(1, Math.min(3, Math.floor(avail / LW)));
+      cv.width = LW; cv.height = LH;
+      cv.style.width = (LW * P) + 'px'; cv.style.height = (LH * P) + 'px';
+      /* 회전할 때만 쓰는 위아래 여백은 레이아웃에서 빼서 빈 줄이 생기지 않게 */
+      cv.style.margin = (-6 * U * P) + 'px 0';
+      img = ctx.createImageData(LW, LH);
+      buf = new Uint32Array(img.data.buffer);
+    }
+    function fill(pts, ramp, shade) {
+      let y0 = Infinity, y1 = -Infinity;
+      pts.forEach((p) => { if (p[1] < y0) y0 = p[1]; if (p[1] > y1) y1 = p[1]; });
+      y0 = Math.max(0, Math.ceil(y0 - 0.5)); y1 = Math.min(LH - 1, Math.floor(y1 - 0.5));
+      for (let y = y0; y <= y1; y++) {
+        const yc = y + 0.5;
+        let xa = Infinity, xb = -Infinity;
+        for (let i = 0; i < 4; i++) {
+          const a = pts[i], b = pts[(i + 1) & 3];
+          if ((a[1] <= yc && b[1] > yc) || (b[1] <= yc && a[1] > yc)) {
+            const x = a[0] + (yc - a[1]) / (b[1] - a[1]) * (b[0] - a[0]);
+            if (x < xa) xa = x; if (x > xb) xb = x;
+          }
+        }
+        if (xa > xb) continue;
+        const xs = Math.max(0, Math.ceil(xa - 0.5)), xe = Math.min(LW - 1, Math.floor(xb - 0.5));
+        const row = y * LW, by = (y & 3) << 2;
+        for (let x = xs; x <= xe; x++) {
+          const lv = Math.max(0, Math.min(3, Math.floor(shade * 3.999 + BAYER[by | (x & 3)] * 0.9)));
+          buf[row + x] = ramp[lv];
+        }
+      }
+    }
+    function draw() {
+      buf.fill(0);
+      const a = spin + yaw, ca = Math.cos(a), sa = Math.sin(a), cp = Math.cos(pitch), sp = Math.sin(pitch);
+      const tf = (q) => {
+        const x1 = q[0] * ca - q[2] * sa, z1 = q[0] * sa + q[2] * ca;
+        return [x1, q[1] * cp - z1 * sp, q[1] * sp + z1 * cp];
+      };
+      const list = [];
+      quads.forEach((q) => {
+        const n = tf(q.n), c = tf(q.c);
+        if (n[0] * c[0] + n[1] * c[1] + n[2] * (c[2] + F) >= 0) return;
+        const pts = q.p.map((p) => { const t = tf(p), k = F / (F + t[2]); return [LW / 2 + t[0] * k * U, LH / 2 + t[1] * k * U]; });
+        const lam = Math.max(0, n[0] * LIGHT[0] + n[1] * LIGHT[1] + n[2] * LIGHT[2]);
+        list.push([c[2], pts, RAMP[q.m], Math.min(1, 0.18 + 0.82 * lam)]);
+      });
+      list.sort((p, q) => q[0] - p[0]);
+      list.forEach((f) => fill(f[1], f[2], f[3]));
+      ctx.putImageData(img, 0, 0);
+    }
+    function tick(t) {
+      raf = 0;
+      if (!cv.isConnected) return;
+      const dt = last ? Math.min(0.05, (t - last) / 1000) : 0;
+      last = t;
+      if (!t0) t0 = t;
+      if (!ptr) { yawTo = Math.sin((t - t0) / 1000 * 0.7) * 0.35; pitchTo = BASE_TILT + Math.sin((t - t0) / 1000 * 0.9) * 0.05; }
+      const e = Math.min(1, dt * 6);
+      yaw += (yawTo - yaw) * e; pitch += (pitchTo - pitch) * e;
+      spin += (spinTo - spin) * Math.min(1, dt * 3.2);
+      draw();
+      if (vis) raf = requestAnimationFrame(tick);
+    }
+    function start() { if (!raf && !still) { last = 0; raf = requestAnimationFrame(tick); } }
+    function onMove(e) {
+      if (!cv.isConnected) { window.removeEventListener('pointermove', onMove); return; }
+      const r = cv.getBoundingClientRect();
+      const dx = (e.clientX - (r.left + r.width / 2)) / (window.innerWidth / 2);
+      const dy = (e.clientY - (r.top + r.height / 2)) / (window.innerHeight / 2);
+      ptr = true;
+      yawTo = Math.max(-1, Math.min(1, dx)) * 0.7;
+      pitchTo = BASE_TILT + Math.max(-1, Math.min(1, dy)) * 0.15;
+    }
+    cv.addEventListener('click', () => {
+      spinTo = Math.round(spinTo / (Math.PI * 2)) * Math.PI * 2 + Math.PI * 2;
+      if (still) { spin = spinTo; draw(); return; }
+      start();
+    });
+    if (!still) window.addEventListener('pointermove', onMove, { passive: true });
+    window.addEventListener('resize', () => { if (cv.isConnected) { size(); draw(); } });
+    requestAnimationFrame(() => {
+      size(); draw(); start();
+      if ('IntersectionObserver' in window) new IntersectionObserver((en) => { vis = en[0].isIntersecting; if (vis) start(); }).observe(cv);
+    });
+    return wrap;
+  }
+
+  function banner() {
+    return [{ text: 'Chanhee', kind: 'logo3d' }].concat([
       L(''),
       L('Backend & Cloud Developer · 신구대학교 컴퓨터소프트웨어과', 'out', 'chanhee@shingu  ', 'accent'),
       L('Spring Boot · AWS · Docker · MySQL/PostgreSQL', 'out', 'stack           ', 'path'),
       L('HA`WE · Pik-Cha! · Ridely · Watchman', 'out', 'projects        ', 'path'),
       L('1 acquired · 2 in progress (Linux Master 1차 합격)', 'out', 'certs           ', 'path'),
       L(''),
-      L("'help' 를 입력하거나, 아래로 스크롤해 GUI 모드로 둘러보세요.", 'muted'),
+      L("Type 'help' to list commands.", 'muted'),
       L('')
     ]);
   }
 
   function lineEl(l) {
     if (l.kind === 'ascii') return el('div', 'ascii', l.text);
+    if (l.kind === 'logo3d') return logo3d(l.text);
     const d = el('div', 'line');
     if (l.pre) d.appendChild(el('span', 'k-' + l.preKind, l.pre));
     d.appendChild(el('span', 'k-' + l.kind, l.text));
@@ -1285,8 +1515,8 @@
             "- 스택: Spring Boot · Java 25 · MyBatis · Flyway · MySQL(RDS) · Python FastAPI · ONNX · SwiftUI · Jetpack Compose",
             "",
             "## 문제 → 해결",
-            "소규모 그룹은 연락이 뜸해지고, 일상을 먼저 올리기가 부담스럽다.",
-            "→ 서버가 정해진 시각에 가벼운 미션을 열고, 제출해야만 서로의 답이 보이게 했다.",
+            "청년 고립 문제에서 출발했다. 혼자 지내는 청년이 늘면서 가까운 사람과도 연락이 뜸해지고, 일상을 먼저 꺼내기가 부담스러워진다.",
+            "→ 작은 그룹에 매일 정해진 시각 가벼운 미션을 열고, 내가 먼저 답해야 그룹원의 답이 보이게 해 부담 없이 일상을 나누도록 했다.",
             "",
             "## 아키텍처",
             "```",
@@ -1295,7 +1525,7 @@
             "        ▼",
             "Spring Boot ──> MyBatis ──> MySQL (RDS)",
             "   ├─ @Scheduled 미션 발행 ──> LLM (서버가 검증 · 폴백)",
-            "   ├─ 커밋 후 비동기 ──> Python 비전 서비스 (CLIP + ONNX)",
+            "   ├─ 커밋 후 비동기 ──> 비전 서비스 Lambda (VPC · CLIP + ONNX)",
             "   └─ 파일 저장 ──> S3 (presigned URL)",
             "```",
             "",
@@ -1484,7 +1714,7 @@
       return {
         hawe: {
           img: '/_blob/818e7ba080f66dcc4aa810220bcbc632', w: 2064, h: 1045,
-          meta: [['DBMS', 'MariaDB'], ['접근', 'MyBatis (Controller → Service → DAO)'], ['스키마', 'Flyway V1~V4 — 적용된 파일은 수정 금지, 변경은 새 버전으로'], ['규모', '테이블 14개 · 사용자·그룹·미션·제출·소통·AI 영역']],
+          meta: [['DBMS', 'MariaDB'], ['접근', 'MyBatis (Controller → Service → DAO)'], ['스키마', 'Flyway'], ['규모', '테이블 14개 · 사용자·그룹·미션·제출·소통·AI 영역']],
           points: [
             ['하이브리드 답 저장', '집계하는 값(별점·밸런스 게임)은 컬럼, 미션 틀마다 모양이 다른 답은 JSON(answer_data). 새 틀이 생겨도 마이그레이션이 필요 없어요.'],
             ['규칙을 UNIQUE로 보장', '(group_id, mission_date, slot_no)로 중복 발행, (mission_id, user_id)로 중복 제출, 리액션은 (제출, 사용자, 스티커)로 중복을 DB가 막아요.'],
@@ -1530,7 +1760,7 @@
     }
     manData() {
       return {
-        "hawe": {"summary": "그룹마다 매일 미션이 열리고, 내가 먼저 답해야 그룹원의 답이 보이는 모바일 그룹 앱", "synopsis": "hawe --group <초대코드> --mission daily --submit-to-unlock", "meta": "팀 Sapphire Developers (4인) · 2026.09 ~ · 역할: 백엔드 아키텍처 설계, ERD 설계, API 구조 설계, 백엔드 API 구현, 비전 서비스 Lambda 구조 설계 · KAICTS 학술대회 논문", "desc": ["소규모 그룹은 연락이 뜸해지고, 일상을 먼저 올리기가 부담스럽다.", "서버가 정해진 시각에 가벼운 미션을 열고, 제출해야만 서로의 답이 보이게 했다."], "arch": [{"label": "CLIENT", "hl": false, "items": [["iOS · SwiftUI", ""], ["Android · Compose", "그림 분류는 기기 안"]]}, {"label": "API", "hl": true, "items": [["Spring Boot", "REST + JWT · MyBatis"], ["@Scheduled", "미션 자동 발행"]]}, {"label": "AI", "hl": true, "items": [["LLM", "미션 문장 · 서버가 검증"], ["비전 서비스", "CLIP + ONNX"]]}, {"label": "STORAGE", "hl": false, "items": [["MySQL (RDS)", "Flyway"], ["S3", "presigned URL"]]}], "extra": null, "options": [["--server-driven-llm", "틀·시각은 서버가 정하고 LLM은 문장만 채움. 길이·형식·유사도 재검증, 실패 시 고정 문장 폴백"], ["--locked", "\"제출해야 열람\"을 앱의 블러가 아니라 서버 423 Locked로 강제"], ["--async-ai", "AI 작업은 커밋 이후 별도 스레드로 분리 → 제출 응답이 AI를 기다리지 않음"], ["--privacy", "LLM에는 닉네임·제출 내용을 보내지 않음"]], "results": ["그림 모델: Quick, Draw! 테스트셋 top-1 93.1% · int8 모델 158KB", "사진–주제 적합도: ROC-AUC 0.958 (사진 177장 기준)", "ONNX fp16 전환: 설치 2.3GB → 0.7GB, 시작 36초 → 2초, 판정 변화 0"], "bugs": [{"code": "HTTP-400", "title": "비전 서비스 호출 실패", "cause": "Java HTTP 클라이언트의 h2c 업그레이드 요청을 uvicorn이 거절", "fix": "HTTP/1.1로 고정하고, 실제 클라이언트로 재현하는 회귀 테스트 추가"}], "notes": ["실사용자 데이터가 없어 참여율 향상은 주장하지 않음"], "links": [["github(1)", "https://github.com/Maenghansoo1/Sapphire"]]},
+        "hawe": {"summary": "그룹마다 매일 미션이 열리고, 내가 먼저 답해야 그룹원의 답이 보이는 모바일 그룹 앱", "synopsis": "hawe --group <초대코드> --mission daily --submit-to-unlock", "meta": "팀 Sapphire Developers (4인) · 2026.09 ~ · 역할: 백엔드 아키텍처 설계, ERD 설계, API 구조 설계, 백엔드 API 구현, 비전 서비스 Lambda 구조 설계 · KAICTS 학술대회 논문", "desc": ["청년 고립 문제에서 출발했다. 혼자 지내는 청년이 늘면서 가까운 사람과도 연락이 뜸해지고, 일상을 먼저 꺼내기가 부담스러워진다.", "작은 그룹에 매일 정해진 시각 가벼운 미션을 열고, 내가 먼저 답해야 그룹원의 답이 보이게 해 부담 없이 일상을 나누도록 했다."], "arch": [{"label": "CLIENT", "hl": false, "items": [["모바일 앱", "iOS (SwiftUI) · Android (Kotlin · Compose)"], ["그림 인식", "온디바이스 · 소형 CNN · LiteRT · Core ML"], ["얼굴 검출", "온디바이스 · 모자이크 후 업로드 · ML Kit · Vision"]]}, {"label": "VPC · PUBLIC", "hl": true, "items": [["EC2 · Docker · Spring Boot", "Java 25 · Spring Security · JWT · MyBatis · Flyway"], ["미션 스케줄러 · 비동기 처리", "룸 선택(편성) · 결과 재검증 · 커밋 후 비동기"]]}, {"label": "VPC · PRIVATE", "hl": true, "items": [["비전 서비스 (Lambda)", "ECR 컨테이너 · ONNX Runtime · CLIP 사진-주제 적합도 · 다국어 문장 임베딩"], ["RDS · MySQL", "JDBC · 그룹 · 미션 · 제출 · 댓글"]]}, {"label": "OUTSIDE VPC", "hl": false, "items": [["S3", "사진 · 그림 파일 업로드"], ["LLM 게이트웨이", "Amazon Bedrock (Claude) · 톤 · 주제 → 미션 문장"]]}], "extra": {"label": "일일 미션 파이프라인", "chain": ["미션 생성 · LLM", "제출 · 사진/그림", "적합도 판정 · Lambda", "열람 해제"], "note": "앱 ⇄ EC2: HTTPS · REST · JWT / 푸시 · EC2 → Lambda: 커밋 후 비동기 호출 · EC2 ⇄ RDS: JDBC"}, "options": [["--server-driven-llm", "틀·시각은 서버가 정하고 LLM은 문장만 채움. 길이·형식·유사도 재검증, 실패 시 고정 문장 폴백"], ["--locked", "\"제출해야 열람\"을 앱의 블러가 아니라 서버 423 Locked로 강제"], ["--async-ai", "AI 작업은 커밋 이후 별도 스레드로 분리 → 제출 응답이 AI를 기다리지 않음"], ["--privacy", "LLM에는 닉네임·제출 내용을 보내지 않음"]], "results": ["그림 모델: Quick, Draw! 테스트셋 top-1 93.1% · int8 모델 158KB", "사진–주제 적합도: ROC-AUC 0.958 (사진 177장 기준)", "ONNX fp16 전환: 설치 2.3GB → 0.7GB, 시작 36초 → 2초, 판정 변화 0"], "bugs": [{"code": "HTTP-400", "title": "비전 서비스 호출 실패", "cause": "Java HTTP 클라이언트의 h2c 업그레이드 요청을 uvicorn이 거절", "fix": "HTTP/1.1로 고정하고, 실제 클라이언트로 재현하는 회귀 테스트 추가"}], "notes": ["실사용자 데이터가 없어 참여율 향상은 주장하지 않음"], "links": [["github(1)", "https://github.com/Maenghansoo1/Sapphire"]]},
         "pikcha": {"summary": "DSLR로 찍고, 인화하고, 문자까지 — 사람 손 없이 흘러가는 인생네컷 포토부스 + 웨이팅 시스템", "synopsis": "pikcha --dslr canon-800d --print selphy-cp1500 --sms", "meta": "학교 EXPO · 2026.08 ~ 2026.11 (커밋 55개) · EXPO 2026.10.21 ~ 10.23 · 역할: 백엔드 Lambda, 로컬 프린터 서버, 프론트 API 연동, DynamoDB 설계", "desc": ["QR로 웨이팅 등록 → 순번 발급 → 부스에서 순번 입력 → 4컷 촬영", "→ 프레임 합성 → 업로드 → 자동 인화 → 완료 문자까지 사람 개입 없이 이어지게 만들었다."], "arch": [{"label": "CLIENT", "hl": false, "items": [["손님 폰", "웨이팅 웹 (S3)"], ["부스 PC", "FastAPI + EDSDK"]]}, {"label": "EDGE", "hl": true, "items": [["API Gateway", "단일 진입점"]]}, {"label": "COMPUTE", "hl": true, "items": [["Lambda ×5", "presign · print · waitlist …"]]}, {"label": "STORAGE", "hl": false, "items": [["DynamoDB", "세션 · 인쇄 큐 · 웨이팅"], ["S3", "사진 원본"]]}], "extra": {"label": "ON-SITE", "chain": ["프린트 워커", "Canon SELPHY", "SOLAPI 문자"], "note": "인쇄 큐를 5초마다 가져와 출력하고, 스풀 큐가 비면 완료 문자 발송"}, "options": [["--edsdk-worker", "EDSDK 전용 스레드 + 메시지 큐 펌핑으로 SDK의 스레드 제약 해결"], ["--presigned", "학교 보안 정책상 PC에 AWS 키를 둘 수 없어 Presigned URL로 업로드"], ["--pull-only", "사설망이라 통신은 항상 로컬 → AWS 방향 (프린터는 푸시 대신 폴링)"], ["--atomic-ticket", "DynamoDB 원자적 ADD로 웨이팅 순번 중복 발급 방지"], ["--mock", "카메라가 없으면 Mock 촬영으로 전환해 전체 파이프라인 테스트"]], "results": [], "bugs": [{"code": "RACE-01", "title": "처리 순서에 따라 세션 정보가 사라짐", "cause": "put_item이 먼저 기록된 이름·전화번호를 통째로 덮어씀", "fix": "update_item + if_not_exists로 기존 값을 지키며 상태만 채움"}, {"code": "PRINT-01", "title": "인쇄가 끝나기 전에 문자가 갈 수 있음", "cause": "인쇄 명령을 보낸 시점과 실제 출력 완료 시점이 다름", "fix": "Windows 스풀 큐가 완전히 빈 뒤에만 완료 보고 · 문자 발송, 중복 발송 플래그"}], "notes": ["웨이팅 번호와 세션이 DB에서 직접 연결되지 않아 문자 누락 가능 → 서버가 연결 관계를 기록하는 것이 개선안"], "links": [["github(1)", "https://github.com/andy051127/pik-cha"]]},
         "ridely": {"summary": "흩어진 자전거 인프라와 관광 데이터를 엮어 코스를 설계하는 AI 트레이너 \"Coach Ridely\"", "synopsis": "ridely --from <출발> --to <도착> --distance 12km --priority scenery", "meta": "2026 관광데이터 활용 공모전 (한국관광공사) · 2026.07 · 본선 진출 · 팀 git push --force · 역할: 프론트엔드, 백엔드 일부 리팩터링", "desc": ["급수대·수리소·따릉이·사고다발지·관광지 정보가 기관별로 흩어져 있다.", "공공데이터 5종 이상을 통합하고, \"12km, 풍경 위주, 물 마실 곳 있게\" 같은 목적 기반 코스를 만든다."], "arch": [{"label": "CLIENT", "hl": false, "items": [["Android", "Cordova"]]}, {"label": "EDGE", "hl": true, "items": [["CloudFront", ""]]}, {"label": "SERVER", "hl": true, "items": [["Spring Boot", "EC2 · 코스 파이프라인"]]}, {"label": "DATA", "hl": false, "items": [["PostgreSQL", "PostGIS"], ["LLM", "Bedrock · Gemini · LiteLLM"], ["공공 API", "ORS · Kakao · TourAPI · TAAS"]]}], "extra": {"label": "PIPELINE", "chain": ["검증", "PostGIS 후보", "LLM 경유지", "경로 생성", "거리 보정", "코치 코멘트"], "note": ""}, "options": [["--distrust-llm", "후보에 없는 ID(환각)는 재시도 후 규칙 기반 폴백, 폴백 결과는 \"FALLBACK\"으로 정직하게 표시"], ["--no-location-upload", "주변 인프라는 전체 목록을 받아 폰에서 필터링, 계약 테스트로 고정"], ["--llm-provider", "환경변수 하나로 LLM 공급자 전환 → 운영 중 권한 회수 일정에 코드 변경 없이 대응"], ["--iac", "Terraform으로 AWS 정의, PR마다 Testcontainers 통합 테스트, main 병합 시 자동 배포"]], "results": [], "bugs": [{"code": "DIST-01", "title": "목표 12km인데 코스가 6~7km", "cause": "후보 정렬·상한 해제 등 4번 시도가 실패, 데이터로 원인을 다시 정의", "fix": "거리 책임을 LLM에서 서비스 단계로 옮겨 PostGIS로 연장점 삽입 → 4건 중 3건 오차 +3~7%"}, {"code": "ELEV-01", "title": "고도 보정은 하지 않기로 결정", "cause": "6개 구간 실측 결과 평지에서 고도가 3~4배 과대 계상", "fix": "보정 대신 강도 판정에서 고도를 제외"}], "notes": [], "links": []},
         "watchman": {"summary": "브라우저가 직접 얼굴 방향을 분석해 집중도를 재고, 친구들과 함께 공부하는 스터디 웹 서비스", "synopsis": "watchman --calibrate 10s --grace 3s --room <초대코드>", "meta": "캡스톤 · 팀 Smokers (3인) · 2026.05 ~ (커밋 77개) · 역할: 백엔드 아키텍처 설계·제작, DB 설계 및 ERD 제작, 백엔드 API 제작", "desc": ["혼자 공부하면 집중 상태를 객관적으로 알기 어렵고, 동기 부여 수단이 부족하다.", "카메라 기반 집중 측정 + 그룹 실시간 공유 + 업적(게임화)으로 풀었다."], "arch": [{"label": "BROWSER", "hl": false, "items": [["MediaPipe", "얼굴 방향 분석"], ["WebRTC", "P2P 영상"]]}, {"label": "REALTIME", "hl": true, "items": [["WebSocket · STOMP", "입장 · 집중 · 채팅 · 시그널"]]}, {"label": "SERVER", "hl": true, "items": [["Spring Boot 3.5", "Controller → Service → Repository"]]}, {"label": "STORAGE", "hl": false, "items": [["MySQL (RDS)", "JdbcTemplate · 12 tables"]]}], "extra": null, "options": [["--client-side-vision", "얼굴 분석은 100% 브라우저에서 → 서버엔 영상 없이 집중 시간(초)만 저장"], ["--calibrate", "10초 캘리브레이션으로 사용자별 임계값, 3초 유예로 순간 고개 돌림 오탐 방지"], ["--raw-sql", "ORM 없이 SQL 직접 작성 (12개 테이블, 그룹 랭킹 집계)"], ["--achievements", "업적 30개: INSERT IGNORE + UNIQUE 키로 중복 지급 방지"]], "results": [], "bugs": [{"code": "RTC-01", "title": "연결 중 ICE candidate 유실", "cause": "remoteDescription 설정 전에 ICE candidate가 먼저 도착", "fix": "먼저 온 후보를 큐에 보관했다가 설정 후 일괄 적용"}, {"code": "LOOP-01", "title": "얼굴 감지 루프가 멈춤", "cause": "루프 중간 예외·조기 return으로 다음 프레임 예약이 빠짐", "fix": "requestAnimationFrame을 함수 최상단에서 먼저 재등록해 예외가 나도 루프 유지"}], "notes": [], "links": [["github(1)", "https://github.com/andy051127/watchman-springboot"]]},
@@ -1540,12 +1770,13 @@
     homeFiles() {
       const certs = ['STATUS   NAME                                       ISSUER                DATE'].concat(this.certRows().map((r) => (r[3] === 'ACQUIRED' ? '[ OK ]   ' : '[ .. ]   ') + this.padW(r[0], 42) + ' ' + this.padW(r[1], 21) + ' ' + r[2]));
       return {
-        about: ['찬희 — Backend & Cloud Developer', '신구대학교 컴퓨터소프트웨어과', '', 'Spring Boot와 AWS로 설계부터 배포까지 동작하는 서버를 만듭니다.', 'LLM처럼 불확실한 부품은 서버 검증과 폴백으로 감싸고,', '보안 정책·사설망 같은 현장 제약은 구조로 풉니다.'],
+        about: ['김찬희 — Backend & Cloud Developer', '신구대학교 컴퓨터소프트웨어과', '', '여러가지 도구를 사용해 데이터베이스/서버를 설계하고,', '클라우드 서비스를 통해 운영까지 합니다.'],
         stack: this.stackGroups().map((g) => g.title.toLowerCase().padEnd(16) + g.items.join(' · ')),
         certs: certs,
         contact: ['github   https://github.com/andy051127', 'email    andy051127@gmail.com'],
         workflow: this.workflow().md,
-        timeline: this.timelineData().map((t, i) => '* ' + t.hash + ' ' + (i === 0 ? '(HEAD -> main) ' : '') + t.date + '  ' + t.title)
+        timeline: this.timelineData().map((t, i) => '* ' + t.hash + ' ' + (i === 0 ? '(HEAD -> main) ' : '') + t.date + '  ' + t.title),
+        paper: ['TITLE     ' + PAPER.title, 'AUTHORS   ' + PAPER.authors.join(', '), 'VENUE     ' + PAPER.venue + ' · ' + PAPER.date, ''].concat(PAPER.abstract, ['', 'KEYWORDS  ' + PAPER.keywords.join(' · '), 'PDF       ~/papers/' + PAPER.file])
       };
     }
 
@@ -1572,21 +1803,14 @@
       ];
     }
     banner() {
-      const art = [
-        "  ____ _                 _               ",
-        " / ___| |__   __ _ _ __ | |__   ___  ___ ",
-        "| |   | '_ \\ / _` | '_ \\| '_ \\ / _ \\/ _ \\",
-        "| |___| | | | (_| | | | | | | |  __/  __/",
-        " \\____|_| |_|\\__,_|_| |_|_| |_|\\___|\\___|"
-      ];
-      return art.map((t) => ({ text: t, kind: 'ascii' })).concat([
+      return [{ text: 'Chanhee', kind: 'logo3d' }].concat([
         this.L(''),
         this.L('Backend & Cloud Developer · 신구대학교 컴퓨터소프트웨어과', 'out', 'chanhee@shingu  ', 'accent'),
         this.L('Spring Boot · AWS · Docker · MySQL/PostgreSQL', 'out', 'stack           ', 'path'),
         this.L('HA`WE · Pik-Cha! · Ridely · Watchman', 'out', 'projects        ', 'path'),
         this.L('1 acquired · 2 in progress (Linux Master 1차 합격)', 'out', 'certs           ', 'path'),
         this.L(''),
-        this.L("'help' 를 입력하거나, 아래로 스크롤해 GUI 모드로 둘러보세요.", 'muted'),
+        this.L("Type 'help' to list commands.", 'muted'),
         this.L('')
       ]);
     }
@@ -1944,7 +2168,7 @@
       put('/var/log/wtmp', nd('f', 0o664, 0, 43, { lines: [], kind: 'bin', size: 5376 })); put('/var/log/btmp', nd('f', 0o660, 0, 43, { lines: [], kind: 'bin', size: 0 }));
       put('/var/log/faillog', nd('f', 0o644, 0, 0, { lines: [], kind: 'bin', size: 3200 }));
       put('/var/log/journal', D(0o2755, 0, 999)); put('/var/log/private', D(0o700));
-      put('/var/www/html/index.html', F(['<!doctype html>', '<title>chanhee</title>', '<p>It works! 진짜 포트폴리오는 https://andy051127.github.io</p>']));
+      put('/var/www/html/index.html', F(['<!doctype html>', '<title>chanhee</title>', '<h1>It works!</h1>']));
 
       // /run, /proc, /sys
       dirs('/run', ['lock', 'log', 'mount', 'sshd', 'sudo', 'systemd', 'user']); put('/run/lock', D(0o1777)); put('/run/utmp', nd('f', 0o664, 0, 43, { lines: [], kind: 'bin', size: 768 }));
@@ -1959,14 +2183,17 @@
 
       // /root
       put('/root/.bashrc', F(skel['.bashrc'].slice(), 0o644)); put('/root/.profile', F(skel['.profile'].slice(), 0o644));
-      put('/root/.flag', F(['축하해요, root 권한까지 왔네요. 🎉', '이제 useradd · chmod · chown 같은 것도 마음껏 써보세요.', '(새로고침하면 모든 변경은 사라져요)'], 0o600));
+      put('/root/.flag', F(['flag{w3lc0me_t0_r00t}'], 0o600));
 
       // /home/chanhee — 포트폴리오 본체
       const home = put('/home/chanhee', D(0o755, 1000, 1000));
       const hf = (k) => () => S2.homeFiles()[k];
       Object.keys(skel).forEach((k) => { home.c[k] = F(skel[k].slice(), 0o644, 1000, 1000); });
       home.c['.secrets'] = F(['Hello World'], 0o644, 1000, 1000, { kind: 'secret', size: 1152 });
-      ['about', 'certs', 'contact', 'stack', 'timeline', 'workflow'].forEach((k) => { home.c[k + '.txt'] = F(hf(k), 0o644, 1000, 1000); });
+      ['about', 'certs', 'contact', 'paper', 'stack', 'timeline', 'workflow'].forEach((k) => { home.c[k + '.txt'] = F(hf(k), 0o644, 1000, 1000); });
+      const pp = D(0o755, 1000, 1000);
+      home.c.papers = pp;
+      pp.c[PAPER.file] = nd('f', 0o644, 1000, 1000, { lines: [], kind: 'pdf', size: PAPER.size });
       home.c['chanhee.jpg'] = nd('f', 0o644, 1000, 1000, { lines: [], kind: 'image', size: 43797 });
       const pj = D(0o755, 1000, 1000);
       home.c.projects = pj;
@@ -2077,7 +2304,7 @@
       if (!r.node) return null;
       const n = r.node;
       return {
-        type: n.t === 'd' ? 'dir' : (n.kind === 'image' ? 'image' : (n.kind === 'secret' ? 'secret' : 'file')),
+        type: n.t === 'd' ? 'dir' : (n.kind === 'image' ? 'image' : (n.kind === 'pdf' ? 'pdf' : (n.kind === 'secret' ? 'secret' : 'file'))),
         name: r.name, id: r.path, path: r.path, node: n, size: this.sizeOf(n),
         lines: n.t === 'd' ? [] : this.linesOf(n), project: n.kind === 'project' ? n.project : null
       };
@@ -2257,6 +2484,7 @@
           if (n.t === 'd') return { err: label + ': ' + f + ': 디렉터리입니다' };
           if (!this.can(n, 'r')) return { err: label + ': ' + f + ': 허가 거부' };
           if (n.kind === 'image') return { err: label + ': ' + f + ': 바이너리 파일입니다. 보려면 display ' + f };
+          if (n.kind === 'pdf') return { err: label + ': ' + f + ': 바이너리 파일입니다. 보려면 xdg-open ' + f };
           if (n.kind === 'bin' || (n.kind === 'dev' && /random/.test(r.path || ''))) return { err: label + ': ' + f + ': 바이너리 파일이라 화면에 표시하지 않습니다' };
           acc = acc.concat(this.linesOf(n));
         }
@@ -2336,7 +2564,7 @@
           const abs = this.absPath(t, cwd);
           const r = this.lookup(abs);
           if (!r.node) return fail('bash: cd: ' + t + ': ' + this.errMsg(r.err));
-          if (r.node.t !== 'd') return fail('bash: cd: ' + t + ': 디렉터리가 아닙니다', '파일은 cat ' + t + ' 로 열어보세요.');
+          if (r.node.t !== 'd') return fail('bash: cd: ' + t + ': 디렉터리가 아닙니다');
           if (!this.can(r.node, 'x')) return fail('bash: cd: ' + t + ': 허가 거부');
           return { plain: [], cwd: r.path };
         }
@@ -2365,6 +2593,7 @@
             else if (n.t === 'c') d = 'character special (' + n.major + '/' + n.minor + ')';
             else if (n.t === 'b') d = 'block special (' + n.major + '/' + n.minor + ')';
             else if (n.kind === 'image') d = 'JPEG image data, JFIF standard 1.01, progressive, 640x800';
+            else if (n.kind === 'pdf') d = 'PDF document, version 1.7, 2 page(s)';
             else if (n.kind === 'secret') d = 'data';
             else if (n.kind === 'bin') d = (n.m & 0o4000 ? 'setuid ' : '') + 'ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, stripped';
             else if (!this.can(n, 'r')) d = 'regular file, no read permission';
@@ -2642,20 +2871,20 @@
           return {
             plain: [],
             pending: this.askPw('Password: ', (pw) => {
-              if (!this.pwOk(tu, pw)) return { out: [L('su: Authentication failure', 'err')].concat(tu.uid === 0 ? [L('root 비밀번호는 알려드릴 수 없어요. 대신 sudo su - 를 써보세요.', 'muted')] : []) };
+              if (!this.pwOk(tu, pw)) return { out: [L('su: Authentication failure', 'err')] };
               return { out: [], switchTo: { uid: tu.uid, login } };
             })
           };
         }
         case 'exit': case 'logout': {
           if (this.sys().stack.length > 1) return { plain: [], logout: true };
-          return fail(name === 'logout' ? 'bash: logout: 로그인 셸이 아닙니다: `exit\' 를 쓰세요' : '로그아웃할 수 없습니다. 아직 볼 프로젝트가 남았어요.');
+          return fail(name === 'logout' ? 'bash: logout: 로그인 셸이 아닙니다: `exit\' 를 쓰세요' : 'logout');
         }
         case 'useradd': case 'adduser': case 'addgroup': case 'groupadd': {
           const me = this.me();
           const S = this.sys();
           if (me.uid !== 0) {
-            if (name === 'adduser' || name === 'addgroup') return fail(name + ': Only root may add a user or group to the system.', 'sudo ' + str + ' 처럼 앞에 sudo 를 붙여보세요.');
+            if (name === 'adduser' || name === 'addgroup') return fail(name + ': Only root may add a user or group to the system.', null);
             return fail(name + ': Permission denied.', name + ': cannot lock /etc/' + (name === 'groupadd' ? 'group' : 'passwd') + '; try again later.');
           }
           const opt = (k) => { const j = args.indexOf(k); return j >= 0 ? args[j + 1] : null; };
@@ -2788,33 +3017,29 @@
         case 'hostname': return ok(['chanhee']);
         case 'apt': case 'apt-get': case 'yum': case 'pip': case 'npm': case 'dpkg': {
           if (this.me().uid !== 0 && name.indexOf('apt') === 0 && /^(install|remove|update|upgrade|purge)$/.test(rest[0] || '')) return fail('E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: 허가 거부)', 'E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?');
-          return fail('E: 이 포트폴리오는 인터넷에 연결돼 있지 않아 패키지를 설치할 수 없어요.');
+          if (name.indexOf('apt') === 0) return fail("Err:1 http://deb.debian.org/debian bookworm InRelease", "  Temporary failure resolving 'deb.debian.org'");
+          return fail('bash: ' + name + ': command not found');
         }
         case 'help': {
-          const row = (c, d) => L(d, 'out', '  ' + c.padEnd(22), 'path');
+          const key = (c, d) => L(d, 'bright', ' ' + c.padEnd(24), 'accent');
+          const defs = ['adduser [-m] name', 'cat [file ...]', 'cd [dir]', 'chgrp group file ...', 'chmod mode file ...', 'chown owner file ...', 'clear', 'cp src dest', 'date', 'display image', 'xdg-open file', 'echo [-n] [arg ...]', 'exit', 'git log', 'grep word [file]', 'groupadd name', 'head [-n N] [file]', 'help', 'history', 'id [user]', 'ls [-la] [dir]', 'man project', 'mkdir dir ...', 'mv src dest', 'neofetch', 'passwd [user]', 'pwd', 'rm [-rf] file ...', 'sort [file]', 'startx', 'su [-] [user]', 'sudo command', 'tail [-n N] [file]', 'tee file', 'touch file ...', 'tree', 'uname -a', 'usermod opts user', 'vi file', 'wc [-l] [file]', 'whoami'];
+          const cols = [];
+          for (let i = 0; i < defs.length; i += 2) cols.push(L((' ' + defs[i]).padEnd(36) + (defs[i + 1] ? ' ' + defs[i + 1] : '')));
           return ok(null, [
-            L('GNU bash 5.2 — chanhee-portfolio · 사용할 수 있는 명령어', 'accent'),
-            row('ls [-la] [dir]', '파일 목록'), row('cd <dir> · pwd', '이동 · 현재 위치'),
-            row('cat <file>', '파일 내용 보기          예) cat about.txt'),
-            row('head / tail [-n N]', '앞 · 뒤 N줄             예) head -n 2 stack.txt'),
-            row('grep <word> <file>', '검색                    예) cat stack.txt | grep AWS'),
-            row('wc -l <file> · tree', '줄 수 · 전체 구조'),
-            row('man <project>', '프로젝트 매뉴얼 보기   예) man pikcha'),
-            row('vi <file>', 'vim으로 원문 보기       예) vi pikcha.txt'),
-            row('man workflow', 'AI 협업 개발 워크플로 문서'),
-            row('display <image>', '이미지 보기             예) display chanhee.jpg'),
-            row('git log', '활동 기록'), row('neofetch · uname -a', '시스템 정보'),
-            row('startx', 'GUI 모드로 전환 (아래로 스크롤)'), row('history · clear', '입력 기록 · 화면 지우기'),
-            L(''), L('리눅스 흉내 (Debian 12 · 새로고침하면 처음으로)', 'accent'),
-            row('sudo su - · exit', '관리자(root)로 · 돌아오기'),
-            row('mkdir touch rm cp mv', '파일 만들기·지우기   예) touch /tmp/hi'),
-            row('chmod chown chgrp', '권한·소유자 바꾸기   예) chmod 600 /tmp/hi'),
-            row('adduser · passwd', '사용자 만들기        예) sudo adduser bob'),
-            row('usermod · groupadd', '그룹                 예) sudo usermod -aG sudo bob'),
-            row('su - <user> · id', '사용자 바꾸기 · 확인'),
-            row('echo > file · tee', '파일에 쓰기          예) echo hi > /tmp/hi'),
-            L(''), L('처음이라면: ls → cat about.txt → man pikcha', 'muted'), L('Tab 자동완성, ↑↓ 이전 명령어.', 'muted')
-          ]);
+            L('GNU bash, version 5.2.15(1)-release (x86_64-pc-linux-gnu)'),
+            L("These shell commands are defined internally.  Type `help' to see this list."),
+            L("Use `man project' to read a project manual, `cat about.txt' to start."),
+            L('')
+          ].concat(cols, [
+            L(''),
+            key('cat about.txt', '소개'),
+            key('ls projects', '프로젝트 목록  →  man <이름> 으로 열기   예) man pikcha'),
+            key('man workflow', 'AI 협업 개발 워크플로'),
+            key('cat certs.txt', '자격증'),
+            key('cat paper.txt', '논문 요약 (KAICTS 2026)  →  PDF: xdg-open papers/' + PAPER.file),
+            key('startx', 'GUI 모드로 전환 (아래로 스크롤)'),
+            key('ls -la', '숨김 파일까지 전체 목록')
+          ]));
         }
         case 'cat': case 'less': case 'more': {
           if (!piped && this.isSecret(rest, cwd)) return openSecret();
@@ -2847,27 +3072,32 @@
         }
         case 'sort': { const r = readInput(rest, 'sort'); return r.err ? fail(r.err) : ok(r.lines.slice().sort()); }
         case 'vi': case 'vim': case 'nvim': case 'view': case 'open': {
-          if (!rest[0]) return fail('사용법: vi <파일>   예) vi pikcha', 'ls projects 로 열 수 있는 프로젝트를 확인하세요.');
+          if (!rest[0]) return fail('사용법: vi <파일>');
           const r = this.resolve(rest[0], cwd);
-          if (!r) return fail('"' + rest[0] + '" [새 파일] — 읽기 전용 포트폴리오라 새 파일을 만들 수 없어요.');
-          if (r.type === 'dir') return fail('"' + rest[0] + '" 는 디렉터리입니다', 'ls ' + rest[0] + ' 로 목록을 보세요.');
-          if (r.type === 'image') return { plain: [], rich: [L('"' + r.name + '" 은 이미지라 이미지 뷰어로 엽니다.', 'muted')], img: true };
+          if (!r) return fail('"' + rest[0] + '" E212: Can\'t open file for writing');
+          if (r.type === 'dir') return fail('"' + rest[0] + '" 는 디렉터리입니다');
+          if (r.type === 'image') return { plain: [], rich: [], img: true };
+          if (r.type === 'pdf') return fail('"' + rest[0] + '" 바이너리 파일이라 열지 않습니다', 'xdg-open ' + rest[0]);
           if (!this.can(r.node, 'r')) return fail('"' + rest[0] + '" [허가 거부]');
           if (r.type === 'secret') return openSecret();
           if (r.node.kind === 'bin') return fail('"' + rest[0] + '" 바이너리 파일이라 열지 않습니다');
           return { plain: [], rich: [L('"' + r.name + '" [readonly] ' + r.lines.length + 'L', 'muted')], vim: { name: r.name, lines: r.lines } };
         }
-        case 'display': case 'xdg-open': case 'feh': case 'eog': {
-          if (!rest[0]) return fail('사용법: display <이미지>   예) display chanhee.jpg');
+        case 'display': case 'xdg-open': case 'feh': case 'eog': case 'evince': case 'okular': {
+          if (!rest[0]) return fail('사용법: ' + name + ' <파일>');
           const r = this.resolve(rest[0], cwd);
           if (!r) return fail(name + ": '" + rest[0] + "': 그런 파일이 없습니다");
-          if (r.type !== 'image') return fail(name + ': ' + rest[0] + ': 이미지 파일이 아닙니다', r.type === 'file' ? 'cat ' + rest[0] + ' 로 읽어보세요.' : null);
-          return { plain: [], rich: [L('Opening chanhee.jpg (640x800) ...', 'muted')], img: true };
+          if (r.type === 'pdf') {
+            if (!this.can(r.node, 'r')) return fail(name + ': ' + rest[0] + ': 허가 거부');
+            return { plain: [], rich: [L('Opening ' + r.name + ' ...', 'muted')], pdf: true };
+          }
+          if (r.type !== 'image') return fail(name + ': ' + rest[0] + ': 이미지 파일이 아닙니다');
+          return { plain: [], rich: [L('Opening chanhee.jpg (72x90 dots) ...', 'muted')], img: true };
         }
-        case 'nano': case 'emacs': case 'code': return fail(name + ': 이 시스템의 에디터는 vi 뿐입니다.', '예) vi pikcha');
+        case 'nano': case 'emacs': case 'code': return fail('bash: ' + name + ': command not found');
         case 'man': {
           const docs = { ls: 'ls — 디렉터리 내용 보기. -l 자세히, -a 숨김 파일 포함', cat: 'cat — 파일 내용 출력', head: 'head — 앞 N줄 출력 (-n N)', tail: 'tail — 뒤 N줄 출력 (-n N)', grep: 'grep — 패턴과 일치하는 줄 출력 (-i 대소문자 무시)', vi: 'vi — 화면 편집기. 여기서는 읽기 전용으로 프로젝트를 엽니다', startx: 'startx — X 서버를 시작합니다. 여기서는 GUI 모드로 이동합니다' };
-          if (!rest[0]) return fail('어떤 매뉴얼을 원하세요? 예) man ls');
+          if (!rest[0]) return fail('What manual page do you want?', "For example, try 'man man'.");
           if (docs[rest[0]]) return ok([docs[rest[0]]]);
           if (/^(workflow|orca)$/i.test(rest[0])) return { plain: [], rich: [L('Formatting workflow(7), please wait...', 'muted')], man: 'workflow' };
           const r0 = this.resolve(rest[0], cwd);
@@ -2876,7 +3106,7 @@
           return fail(rest[0] + ' 에 대한 매뉴얼 항목이 없습니다');
         }
         case 'git': {
-          if (rest[0] !== 'log') return fail('git: 지금은 log 만 지원합니다.', '예) git log');
+          if (rest[0] !== 'log') return fail("git: '" + rest[0] + "' is not a git command. See 'git --help'.");
           return ok(this.homeFiles().timeline);
         }
         case 'neofetch': return ok(null, this.banner());
@@ -2885,16 +3115,17 @@
         case 'echo': return ok([rest.join(' ').replace(/^['"]|['"]$/g, '')]);
         case 'history': return ok(hist.concat([str]).map((h, i) => String(i + 1).padStart(5) + '  ' + h));
         case 'clear': return { plain: [], clear: true };
-        case 'startx': return { plain: [], rich: [L('Starting X.Org X Server 21.1 ...', 'muted'), L('Started GUI session. 아래로 이동합니다.', 'out', '[  OK  ] ', 'accent')], startx: true };
+        case 'startx': return { plain: [], rich: [L('Starting X.Org X Server 21.1 ...', 'muted'), L('Started GUI session.', 'out', '[  OK  ] ', 'accent')], startx: true };
         default: {
           const r = this.resolve(name, cwd);
           let hint = null;
-          if (r && r.project) hint = '혹시 vi ' + name + ' ?';
-          else if (r && r.type === 'image') hint = '혹시 display ' + name + ' ?';
-          else if (r && r.type === 'file') hint = '혹시 cat ' + r.name + ' ?';
-          else if (/^(about|certs|contact|stack|timeline)$/.test(name)) hint = '혹시 cat ' + name + '.txt ?';
-          else if (name === 'projects') hint = '혹시 ls projects ?';
-          return fail('bash: ' + name + ': command not found', hint || "'help' 를 입력해보세요");
+          if (r && r.project) hint = 'did you mean: vi ' + name;
+          else if (r && r.type === 'image') hint = 'did you mean: display ' + name;
+          else if (r && r.type === 'file') hint = 'did you mean: cat ' + r.name;
+          else if (/^(about|certs|contact|paper|stack|timeline)$/.test(name)) hint = 'did you mean: cat ' + name + '.txt';
+          else if (name === 'projects') hint = 'did you mean: ls projects';
+          else if (r && r.type === 'pdf') hint = 'did you mean: xdg-open ' + name;
+          return fail('bash: ' + name + ': command not found', hint);
         }
       }
     }
@@ -2926,7 +3157,7 @@
           const out = [];
           if (res.lecture) {
             S.lectured[this.me().name] = true;
-            ['', 'We trust you have received the usual lecture from the local System', 'Administrator. It usually boils down to these three things:', '', '    #1) Respect the privacy of others.', '    #2) Think before you type.', '    #3) With great power comes great responsibility.', '', ''].concat(this.me().name === 'guest' ? ['(포트폴리오용 guest 계정이라 비밀번호는 아무거나 입력해도 돼요)', ''] : []).forEach((t) => out.push(this.L(t, t.indexOf('(') === 0 ? 'muted' : 'out')));
+            ['', 'We trust you have received the usual lecture from the local System', 'Administrator. It usually boils down to these three things:', '', '    #1) Respect the privacy of others.', '    #2) Think before you type.', '    #3) With great power comes great responsibility.', '', ''].forEach((t) => out.push(this.L(t)));
           }
           return { out, cwd, pending: this.sudoPrompt(line0, cwd, hist) };
         }
@@ -2950,7 +3181,7 @@
         if (e) return { out: [this.L('bash: ' + redir.file + ': ' + this.errMsg(e), 'err')], cwd };
         out = [];
       }
-      return { out, cwd: single && res.cwd ? res.cwd : cwd, vim: single ? res.vim : null, man: single && res.man, img: single && res.img, secret: single && res.secret, startx: single && res.startx, clear: single && res.clear, switchTo: single && res.switchTo, logout: single && res.logout };
+      return { out, cwd: single && res.cwd ? res.cwd : cwd, vim: single ? res.vim : null, man: single && res.man, img: single && res.img, pdf: single && res.pdf, secret: single && res.secret, startx: single && res.startx, clear: single && res.clear, switchTo: single && res.switchTo, logout: single && res.logout };
     }
     powerOff() {
       if (this.sxTimer) clearTimeout(this.sxTimer);
@@ -3011,13 +3242,14 @@
       if (res.vim) { next.vim = res.vim; next.vimCmd = ''; next.vimMsg = ''; this.returnFocus = true; }
       if (res.man) { next.man = res.man; next.manBug = 0; next.manCmd = ''; next.manMsg = ''; this.returnFocus = true; this.pushRoute(res.man); }
       if (res.img) { next.img = true; this.returnFocus = true; }
+      if (res.pdf) next.pdf = true;
       if (res.secret) { next.secret = true; this.returnFocus = true; }
       this.setState(next);
       if (res.startx) this.powerOff();
     }
     completions(v) {
       const parts = v.split(/\s+/);
-      const cmds = ['help', 'ls', 'cd', 'pwd', 'cat', 'head', 'tail', 'grep', 'wc', 'tree', 'file', 'stat', 'vi', 'vim', 'man', 'git', 'neofetch', 'uname', 'whoami', 'id', 'groups', 'who', 'history', 'clear', 'startx', 'echo', 'date', 'sort', 'display', 'mkdir', 'rmdir', 'touch', 'rm', 'cp', 'mv', 'ln', 'chmod', 'chown', 'chgrp', 'tee', 'su', 'sudo', 'exit', 'useradd', 'adduser', 'userdel', 'deluser', 'usermod', 'groupadd', 'groupdel', 'gpasswd', 'passwd', 'hostname'];
+      const cmds = ['help', 'ls', 'cd', 'pwd', 'cat', 'head', 'tail', 'grep', 'wc', 'tree', 'file', 'stat', 'vi', 'vim', 'man', 'git', 'neofetch', 'uname', 'whoami', 'id', 'groups', 'who', 'history', 'clear', 'startx', 'echo', 'date', 'sort', 'display', 'xdg-open', 'evince', 'mkdir', 'rmdir', 'touch', 'rm', 'cp', 'mv', 'ln', 'chmod', 'chown', 'chgrp', 'tee', 'su', 'sudo', 'exit', 'useradd', 'adduser', 'userdel', 'deluser', 'usermod', 'groupadd', 'groupdel', 'gpasswd', 'passwd', 'hostname'];
       if (parts.length === 1) return cmds.filter((x) => x.startsWith(parts[0]) && x !== parts[0]);
       const last = parts[parts.length - 1];
       const head = parts.slice(0, -1).join(' ') + ' ';
@@ -3314,6 +3546,7 @@
     if (st.vim) { const v = st.vim; eng.state.vim = null; openVim(v.name, v.lines, true); }
     if (st.man) { const m = st.man; eng.state.man = null; openMan(m, true); }
     if (st.img) { eng.state.img = false; openImg(true); }
+    if (st.pdf) { eng.state.pdf = false; window.open(PAPER.pdf, '_blank', 'noopener'); }
     if (st.secret) { eng.state.secret = false; openSecret(true); }
     updatePrompt();
   }
@@ -3570,13 +3803,75 @@
     s.appendChild(el('h2', null, title));
     return s;
   }
+  /* man 상세: Lambda 분리 근거 (전환 과정 · 메모리 · 비용) */
+  function lambdaBlock(lb) {
+    const box = el('div', 'man-ind lb');
+    box.appendChild(el('h3', 'lb-title', lb.title));
+    box.appendChild(el('p', 'lb-lead', lb.lead));
+    const steps = el('ol', 'lb-steps');
+    lb.steps.forEach((st, i) => {
+      const li = el('li', 'lb-step' + (i === lb.steps.length - 1 ? ' on' : ''));
+      li.appendChild(el('span', 'lb-n', String(i + 1)));
+      li.appendChild(el('b', null, st[0]));
+      li.appendChild(el('small', null, st[1]));
+      steps.appendChild(li);
+    });
+    box.appendChild(steps);
+
+    const mem = el('div', 'lb-chart');
+    mem.appendChild(el('p', 'lb-lbl', lb.mem.label));
+    lb.mem.rows.forEach((r, ri) => {
+      const row = el('div', 'lb-row');
+      row.appendChild(el('span', 'lb-k', r[0]));
+      const bar = el('div', 'lb-bar');
+      r[1].forEach((seg) => {
+        const sg = el('span', 'lb-seg lb-' + seg[2], seg[0] + ' ' + seg[1] + 'MB');
+        sg.style.width = (seg[1] / lb.mem.total * 100) + '%';
+        bar.appendChild(sg);
+      });
+      row.appendChild(bar);
+      row.appendChild(el('span', 'lb-v' + (ri === 0 ? ' bad' : ' good'), r[2]));
+      mem.appendChild(row);
+    });
+    box.appendChild(mem);
+
+    const cost = el('div', 'lb-chart');
+    cost.appendChild(el('p', 'lb-lbl', lb.cost.label));
+    lb.cost.rows.forEach((r, i) => {
+      const last = i === lb.cost.rows.length - 1;
+      const row = el('div', 'lb-row lb-cost');
+      const k = el('span', 'lb-k');
+      k.appendChild(el('b', null, r[0]));
+      k.appendChild(el('small', null, r[1]));
+      row.appendChild(k);
+      const bar = el('div', 'lb-bar');
+      const sg = el('span', 'lb-seg ' + (last ? 'lb-win' : 'lb-os'));
+      sg.style.width = (r[2] / lb.cost.max * 100) + '%';
+      bar.appendChild(sg);
+      row.appendChild(bar);
+      row.appendChild(el('span', 'lb-v' + (last ? ' good' : ''), '$' + r[2]));
+      cost.appendChild(row);
+    });
+    const stats = el('div', 'lb-stats');
+    lb.cost.stats.forEach((x) => {
+      const st = el('div', 'lb-stat');
+      st.appendChild(el('strong', null, x[0]));
+      st.appendChild(el('span', null, x[1]));
+      stats.appendChild(st);
+    });
+    cost.appendChild(stats);
+    cost.appendChild(el('p', 'lb-note', lb.cost.note));
+    box.appendChild(cost);
+    return box;
+  }
+
   function renderMan() {
     const m = MAN[manId];
     const id = manId;
     manBody.textContent = '';
     $('man-hdr-l').textContent = id.toUpperCase() + '(1)';
     $('man-hdr-r').textContent = id.toUpperCase() + '(1)';
-    $('man-foot-l').textContent = 'Manual page ' + id + '(1) · q 를 입력하면 닫혀요';
+    $('man-foot-l').textContent = 'Manual page ' + id + '(1) line 1 (press q to quit)';
     man.setAttribute('aria-label', id.toUpperCase() + ' 프로젝트 매뉴얼');
 
     let s = sec('NAME');
@@ -3596,6 +3891,22 @@
     const de = el('div', 'man-ind man-desc');
     m.desc.forEach((t) => de.appendChild(el('p', null, t)));
     s.appendChild(de); manBody.appendChild(s);
+
+    if (m.shots) {
+      s = sec('SCREENSHOTS');
+      const g = el('div', 'man-ind man-shots');
+      m.shots.forEach((sh) => {
+        const f = el('figure', 'man-shot');
+        const im = el('img');
+        im.alt = sh[1]; im.loading = 'lazy';
+        im.addEventListener('error', () => { f.classList.add('empty'); im.remove(); });
+        im.src = sh[0];
+        f.appendChild(im);
+        f.appendChild(el('figcaption', null, sh[0].split('/').pop()));
+        g.appendChild(f);
+      });
+      s.appendChild(g); manBody.appendChild(s);
+    }
 
     s = sec('ARCHITECTURE');
     const ar = el('div', 'man-ind man-arch');
@@ -3631,7 +3942,9 @@
       if (m.extra.note) ch.appendChild(el('span', 'man-note', m.extra.note));
       ar.appendChild(ch);
     }
-    s.appendChild(ar); manBody.appendChild(s);
+    s.appendChild(ar);
+    if (m.lambda) s.appendChild(lambdaBlock(m.lambda));
+    manBody.appendChild(s);
 
     const db = DB[id];
     if (db) {
@@ -3685,7 +3998,7 @@
 
     if (m.bugs.length) {
       s = sec('BUGS');
-      s.appendChild(el('p', 'man-ind man-gray', '만나서 잡은 버그들. 눌러서 펼쳐보세요.'));
+      s.appendChild(el('p', 'man-ind man-gray', '만나서 잡은 버그들.'));
       const wrap = el('div', 'man-ind man-bugs');
       m.bugs.forEach((bg, i) => {
         const open = manBug === i;
@@ -3836,6 +4149,7 @@
     imgReturn = fromTerminal ? input : document.activeElement;
     imgView.hidden = false;
     document.body.style.overflow = 'hidden';
+    if (imgDots) { imgDots.size(); imgDots.play(); }
     imgClose.focus();
   }
   function closeImg() {
@@ -3853,118 +4167,241 @@
   /* =====================================================================
    * 9. GUI 렌더링
    * ===================================================================== */
-  STACK.forEach((g) => {
-    const card = el('div', 'card glow');
-    card.appendChild(el('h3', null, g.title));
-    const chips = el('div', 'chips');
-    g.items.forEach((x) => chips.appendChild(el('span', 'chip', x)));
-    card.appendChild(chips);
-    $('stack-grid').appendChild(card);
-  });
-
-  PROJECTS.forEach((p) => {
-    const a = el('article', 'proj glow');
-    const tags = el('div', 'tags');
-    if (p.featured) tags.appendChild(el('span', 'tag tag-featured', '대표 프로젝트'));
-    p.tags.forEach((t) => tags.appendChild(el('span', 'tag', t)));
-    a.appendChild(tags);
-    a.appendChild(el('h3', null, p.name));
-    a.appendChild(el('p', 'proj-summary', p.summary));
-    const chips = el('div', 'mini-chips');
-    p.stack.forEach((s) => chips.appendChild(el('span', 'mini-chip', s)));
-    a.appendChild(chips);
-    a.appendChild(el('p', 'proj-meta', p.meta));
-    const b = el('button', 'btn-vi', '자세히 보기  $ man ' + p.id);
-    b.type = 'button';
-    b.addEventListener('click', () => openMan(p.id, false));
-    a.appendChild(b);
-    $('project-grid').appendChild(a);
-  });
-
-  const keyCls = (k) => (k === 'PK' ? 'key-pk' : k === 'FK' ? 'key-fk' : '');
-  [['PK', 'id', 'INT'], ['', 'name', 'VARCHAR'], ['', 'school', 'VARCHAR'], ['', 'role', 'VARCHAR']].forEach((c) => {
-    const row = el('div', 'erd-col');
-    row.appendChild(el('span', 'key ' + keyCls(c[0]), c[0]));
-    row.appendChild(el('span', 'name', c[1]));
-    row.appendChild(el('span', 'type', c[2]));
-    $('owner-cols').appendChild(row);
-  });
-  const TABLES = [
-    { id: 'certification', title: 'CERTIFICATION', cols: [['PK', 'id'], ['FK', 'owner_id'], ['', 'name'], ['', 'issuer'], ['', 'acquired_at'], ['', 'status']] },
-    { id: 'skill', title: 'SKILL', cols: [['PK', 'id'], ['FK', 'owner_id'], ['', 'category'], ['', 'name']] },
-    { id: 'project', title: 'PROJECT', cols: [['PK', 'id'], ['FK', 'owner_id'], ['', 'name'], ['', 'role'], ['', 'period']] }
-  ];
-  const crowFoot = '<svg width="48" height="24" viewBox="0 0 48 24" fill="none" stroke="#3A4552" stroke-width="2" aria-hidden="true"><path d="M0 12h48M36 12l12-9M36 12l12 9"/></svg>';
-  const tableBtns = {};
-  TABLES.forEach((t) => {
-    const row = el('div', 'erd-row');
-    row.insertAdjacentHTML('beforeend', crowFoot);
-    const b = el('button', 'erd-table glow');
-    b.type = 'button';
-    const head = el('span', 'erd-table-head');
-    head.appendChild(el('span', null, t.title));
-    head.appendChild(el('span', 'hint'));
-    b.appendChild(head);
-    const cols = el('span', 'erd-table-cols');
-    t.cols.forEach((c) => {
-      const s = el('span');
-      if (c[0]) s.appendChild(el('span', keyCls(c[0]), c[0] + ' '));
-      s.appendChild(document.createTextNode(c[1]));
-      cols.appendChild(s);
-    });
-    b.appendChild(cols);
-    b.addEventListener('click', () => { S.erd = t.id; renderErd(); });
-    row.appendChild(b);
-    tableBtns[t.id] = b;
-    $('erd-tables').appendChild(row);
-  });
-  function renderErd() {
-    TABLES.forEach((t) => {
-      const on = S.erd === t.id;
-      tableBtns[t.id].setAttribute('aria-pressed', on ? 'true' : 'false');
-      tableBtns[t.id].querySelector('.hint').textContent = on ? '● 실행 중' : 'SELECT ▸';
-    });
-    let q;
-    if (S.erd === 'skill') {
-      q = { sql: 'SELECT category, GROUP_CONCAT(name) AS skills\nFROM skill WHERE owner_id = 1 GROUP BY category;', headers: ['category', 'skills'], rows: STACK.map((g) => [g.title, g.items.join(', ')]) };
-    } else if (S.erd === 'project') {
-      q = { sql: 'SELECT name, role, period\nFROM project WHERE owner_id = 1 ORDER BY period DESC;', headers: ['name', 'role', 'period'], rows: PROJECTS.map((p) => [p.name, p.role, p.period]) };
-    } else {
-      q = { sql: 'SELECT name, issuer, acquired_at, status\nFROM certification WHERE owner_id = 1;', headers: ['name', 'issuer', 'acquired_at', 'status'], rows: CERTS };
-    }
-    $('query-sql').textContent = q.sql;
-    const head = $('query-head');
-    head.textContent = '';
-    q.headers.forEach((h) => { const th = el('th', null, h); th.scope = 'col'; head.appendChild(th); });
-    const body = $('query-rows');
-    body.textContent = '';
-    q.rows.forEach((r) => {
-      const tr = el('tr');
-      r.forEach((v) => tr.appendChild(el('td', v === 'ACQUIRED' ? 'st-ok' : (v === 'IN_PROGRESS' || v === 'PASSED_1ST') ? 'st-prog' : '', v)));
-      body.appendChild(tr);
-    });
-    $('query-foot').textContent = q.rows.length + ' rows in set (0.01 sec)';
+  /* 기술 로고 — simple-icons(CDN) 마스크 + 브랜드 색. 로고가 없는 항목은 작은 점으로 대체 */
+  const ICON_BASE = 'https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/';
+  const LOGOS = {
+    'Java': [['openjdk', '#ED8B00']],
+    'Spring Boot': [['springboot', '#6DB33F']],
+    'Spring Security · JWT': [['springsecurity', '#6DB33F'], ['jsonwebtokens', '#D63AFF']],
+    'Python · FastAPI': [['python', '#3776AB'], ['fastapi', '#009688']],
+    'AWS Lambda': [['awslambda', '#FF9900']],
+    'API Gateway': [['amazonapigateway', '#FF4F8B']],
+    'S3': [['amazons3', '#569A31']],
+    'EC2 · RDS': [['amazonec2', '#FF9900'], ['amazonrds', '#527FFF']],
+    'Terraform': [['terraform', '#844FBA']],
+    'MySQL': [['mysql', '#4479A1']],
+    'MariaDB': [['mariadb', '#9FB5C9']],
+    'PostgreSQL · PostGIS': [['postgresql', '#4169E1']],
+    'DynamoDB': [['amazondynamodb', '#4053D6']],
+    'Flyway': [['flyway', '#CC0200']],
+    'LLM API · Tool use': [['anthropic', '#D4A27F']],
+    'Spring AI': [['spring', '#6DB33F']],
+    'CLIP · ONNX Runtime': [['onnx', '#9EA7B0']],
+    'MediaPipe': [['mediapipe', '#0097A7']],
+    'TFLite': [['tensorflow', '#FF6F00']],
+    'GitHub Actions': [['githubactions', '#2088FF']],
+    'Docker': [['docker', '#2496ED']],
+    'Claude Code · Codex': [['claude', '#D97757'], ['openai', '#E6EDF3']]
+  };
+  function logoEl(slug, color, label) {
+    const i = el('span', 'tech-logo');
+    const u = 'url(' + ICON_BASE + slug + '.svg)';
+    i.style.setProperty('--c', color);
+    i.style.webkitMaskImage = u; i.style.maskImage = u;
+    i.title = label;
+    i.setAttribute('aria-hidden', 'true');
+    return i;
   }
-  renderErd();
 
-  TIMELINE.forEach((t, i) => {
-    const li = el('li', 'tl-item' + (i === 0 ? ' head' : ''));
-    const rail = el('div', 'tl-rail');
-    rail.appendChild(el('span', 'tl-dot'));
-    rail.appendChild(el('span', 'tl-line'));
-    li.appendChild(rail);
-    const body = el('div', 'tl-body');
-    const date = el('span', 'tl-date');
-    date.appendChild(el('span', 'tl-hash', t.hash));
-    date.appendChild(document.createTextNode('  ' + t.date));
-    body.appendChild(date);
-    body.appendChild(el('strong', 'tl-title', t.title));
-    body.appendChild(el('span', 'tl-desc', t.desc));
-    li.appendChild(body);
-    $('timeline-list').appendChild(li);
+  STACK.forEach((g) => {
+    const r = el('div', 'row row-stack');
+    r.appendChild(el('span', 'row-k', g.title));
+    const body = el('div', 'stack-body');
+    const items = el('ul', 'stack-items');
+    g.items.forEach((x) => items.appendChild(el('li', 'stack-item', x)));
+    body.appendChild(items);
+    const logos = el('div', 'stack-logos');
+    const seen = {};
+    g.items.forEach((x) => (LOGOS[x] || []).forEach((l) => {
+      if (seen[l[0]]) return;
+      seen[l[0]] = true;
+      logos.appendChild(logoEl(l[0], l[1], x));
+    }));
+    if (logos.childNodes.length) body.appendChild(logos);
+    r.appendChild(body);
+    $('stack-grid').appendChild(r);
+  });
+
+  PROJECTS.forEach((p, i) => {
+    const r = el('button', 'row proj-row');
+    r.type = 'button';
+    r.setAttribute('aria-label', p.name + ' — ' + p.brief + ' (자세히 보기)');
+    r.appendChild(el('span', 'row-k mono', String(i + 1).padStart(2, '0')));
+    const t = el('span', 'pr-title');
+    t.appendChild(el('span', 'pr-name', p.name));
+    if (p.featured) t.appendChild(el('span', 'badge', '대표'));
+    r.appendChild(t);
+    const d = el('span', 'pr-desc');
+    d.appendChild(el('span', 'pr-brief', p.brief));
+    d.appendChild(el('span', 'pr-stack', p.stack.slice(0, 3).join(' · ')));
+    r.appendChild(d);
+    r.appendChild(el('span', 'row-date', p.period));
+    r.appendChild(el('span', 'pr-arrow', '→'));
+    r.addEventListener('click', () => openMan(p.id, false));
+    $('project-grid').appendChild(r);
+  });
+
+  (function renderPaper() {
+    const box = $('paper-card');
+    const head = el('div', 'pp-head');
+    head.appendChild(el('span', 'badge', PAPER.venue));
+    head.appendChild(el('span', 'row-date', PAPER.date));
+    box.appendChild(head);
+    box.appendChild(el('h3', 'pp-title', PAPER.title));
+    const au = el('p', 'pp-authors');
+    PAPER.authors.forEach((a, i) => {
+      if (i) au.appendChild(document.createTextNode(', '));
+      au.appendChild(el(i === 0 ? 'strong' : 'span', null, a));
+    });
+    au.appendChild(el('span', 'pp-affil', ' · ' + PAPER.affil));
+    box.appendChild(au);
+    const ab = el('div', 'pp-abstract');
+    PAPER.abstract.forEach((t) => ab.appendChild(el('p', null, t)));
+    box.appendChild(ab);
+    const kw = el('ul', 'stack-items pp-kw');
+    PAPER.keywords.forEach((k) => kw.appendChild(el('li', 'stack-item', k)));
+    box.appendChild(kw);
+    const act = el('div', 'pp-actions');
+    const view = el('a', 'btn btn-primary btn-glow', 'PDF 보기');
+    view.href = PAPER.pdf; view.target = '_blank'; view.rel = 'noopener';
+    const dl = el('a', 'btn btn-outline', '다운로드');
+    dl.href = PAPER.pdf; dl.setAttribute('download', PAPER.file);
+    act.appendChild(view); act.appendChild(dl);
+    act.appendChild(el('span', 'pp-cmd mono', '$ cat paper.txt'));
+    box.appendChild(act);
+  })();
+
+  const CERT_ST = { ACQUIRED: ['취득', 'st-ok'], PASSED_1ST: ['1차 합격', 'st-prog'], IN_PROGRESS: ['준비 중', 'st-todo'] };
+  CERTS.forEach((c) => {
+    const r = el('li', 'row cert-row');
+    const st = CERT_ST[c[3]] || [c[3], ''];
+    r.appendChild(el('span', 'badge-st ' + st[1], st[0]));
+    const t = el('span', 'cert-main');
+    t.appendChild(el('span', 'cert-name', c[0]));
+    t.appendChild(el('span', 'cert-issuer', c[1]));
+    r.appendChild(t);
+    r.appendChild(el('span', 'row-date', c[2].replace(/^1차 합격 · /, '').replace(/ 응시 예정$/, ' 예정')));
+    $('cert-list').appendChild(r);
+  });
+
+  TIMELINE.forEach((t) => {
+    const r = el('li', 'row tl-row');
+    r.appendChild(el('span', 'row-k mono', t.date));
+    const b = el('span', 'tl-main');
+    b.appendChild(el('span', 'tl-title', t.title));
+    if (t.desc && t.desc !== 'init') b.appendChild(el('span', 'tl-desc', t.desc));
+    r.appendChild(b);
+    $('timeline-list').appendChild(r);
   });
 
   $('wf-open').addEventListener('click', () => openMan('workflow', false));
+
+  /* 프로필: 증명사진을 도트 매트릭스로 (images/profile.jpg 에서 미리 계산한 밝기 0~6, 0 = 배경) */
+  const PORTRAIT = { cols: 72, rows: 90, data: '000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001111121111111120000000000000000000000000000000000000000000000000000002111111111121111111130000000000000000000000000000000000000000000000000311111111121111111111112000000000000000000000000000000000000000000000003121111111111111111111221200000000000000000000000000000000000000000000021121111111111111111111121110000000000000000000000000000000000000000000211111121111111112111111112112000000000000000000000000000000000000000003111111111111111111111112111211000000000000000000000000000000000000000001111111111111111111111111211221100000000000000000000000000000000000000011111111111111111111111211221222100000000000000000000000000000000000000011111111111111111111111121121222110000000000000000000000000000000000000011111111111111111111111122121211210000000000000000000000000000000000000011111111111111111111112112122121210000000000000000000000000000000000000211212111111111111111111211222121210000000000000000000000000000000000000211111111111211112212221122212221110000000000000000000000000000000000000111111111112221222221212122211211110000000000000000000000000000000000000111111111111111323321211112111111110000000000000000000000000000000000000111111111111121223322221111111112110000000000000000000000000000000000000111111111111121323332221111111111120000000000000000000000000000000000000211111111111221323442111111111111100000000000000000000000000000000000000011111111111111324542111111111111100000000000000000000000000000000000000021111111111111334544432211213111200000000000000000000000000000000000000001111111123422345555555534546311500000000000000000000000000000000000000002111112344553346655543445566513600000000000000000000000000000000000000002135433231134346665421432456514200000000000000000000000000000000000000001145542352344446666444556656526300000000000000000000000000000000000000042155445445455446656645666556626400000000000000000000000000000000000000004255455555555446666665666656625400000000000000000000000000000000000000005255455555655456666666666666635500000000000000000000000000000000000000004255455555655456655666666666545500000000000000000000000000000000000000004245455556554456655666666656555500000000000000000000000000000000000000004445455555554555666566666656555000000000000000000000000000000000000000005444445555544435545565666655555000000000000000000000000000000000000000005444444555543222323665556665560000000000000000000000000000000000000000000444444455544455566666555555500000000000000000000000000000000000000000000004444455555556666555556555000000000000000000000000000000000000000000000005444454455555556665555555000000000000000000000000000000000000000000000000444444433223333334555555000000000000000000000000000000000000000000000000444444322233333344555555000000000000000000000000000000000000000000000000544444454455555665555550000000000000000000000000000000000000000000000000034444444444455555555550000000000000000000000000000000000000000000000000053444444444445555555550000000000000000000000000000000000000000000000000004344444444555555555400000000000000000000000000000000000000000000000000004344444445555555544540000000000000000000000000000000000000000000000000031433444455555555444611300000000000000000000000000000000000000000000000012433334444444543445621120000000000000000000000000000000000000000000000112433333333433334455621112000000000000000000000000000000000000000000002111444433333333444555621111000000000000000000000000000000000000000000001111444433333344444555621111100000000000000000000000000000000000000000011111344444433444445555621112110000000000000000000000000000000000000000111112344444444444555555521112112000000000000000000000000000000000000001111111334444444445555555532111211100000000000000000000000000000000000011111111234444444445555555443111111111200000000000000000000000000000021111111111234444444455555555453111111111111300000000000000000000000002111111111111334444444555555555563111111111111111000000000000000000000111111111111111434444555555555555662111111111111111112000000000000000011111111111111111454455555555555556661111111111111112111113000000000021111111111111111111166555555555555666631211111111111111111111100000002111111111111111111111126666655555566666611111111111111111111111100000211111111111111111111111114666666666666666311211111111111111111111100000111111111111111111111111111666666666666665111111111111111111111111100002111111111111111111111111111366666666666661111111111111111111111111100002111111111111111111111111111156666666666621111111111111111111111111100002111111111111111111111111111126666666666411111111111111111111112111100002111111111111111111111111111113666666665111111111111111121111111111100002111111111111111111111111111111256666651111111111111111111111111111100002111111111111111111111111111111114666621111111111111111111111111111100002111111111111111111111111111111111366211111111111111111111111111111100002111111111111111111111111111111111143111111111111111111111111111111100002111111111111111111111111111111111111111111111111111111111111111111100002111111111111111111111111111111111111111111111111111111111111111111100002111111111111111111111111111111111111111111111111111111111111111111100002111111111111111111111111111111111111111111111111111111111111111111100002111111111111111111111111111111111111111111111111111111111111111111100002111111111111111111111111111111111111111111111111111111111111111111100002111111111111111111111111111111111111111111111111111111111111111111100002111111111111111111111111111111111111111111111111111111111111111111120002111111111111111111111111111111111111111111111111111111111111111111120002111111111111111111111111111111111111111111111111111111111111111111110002111111111111111111111111111111111111111111111111111111111111111111110002111111111111111111111111111111111111111111111111111111111111111111110002111111111111111111111111111111111111111111111111111111111111111111110002111111111111111111111111111111111111111111111111111111111111111111110002111111111111111111111111111111111111112222222222223333333300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000' };
+  /* 도트 사진 그리기: GUI 프로필과 터미널 display 뷰어가 같이 씀 */
+  function dotPortrait(cv) {
+    if (!cv || !cv.getContext) return null;
+    const ctx = cv.getContext('2d');
+    const P = PORTRAIT;
+    const R = [0, 0.16, 0.22, 0.29, 0.36, 0.43, 0.5];
+    const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#4ADE80';
+    const ar = parseInt(accent.slice(1, 3), 16), ag = parseInt(accent.slice(3, 5), 16), ab = parseInt(accent.slice(5, 7), 16);
+    const still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let w = 0, h = 0, cell = 0, dpr = 1, shown = 0, mx = -1e4, my = -1e4, raf = 0, t0 = 0;
+    function size() {
+      dpr = window.devicePixelRatio || 1;
+      w = cv.clientWidth; h = w * P.rows / P.cols; cell = w / P.cols;
+      if (!w) return;
+      cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+      draw();
+    }
+    function draw() {
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+      const hot = cell * 9;
+      for (let y = 0; y < shown && y < P.rows; y++) {
+        for (let x = 0; x < P.cols; x++) {
+          const l = P.data.charCodeAt(y * P.cols + x) - 48;
+          if (!l) continue;
+          const cx = (x + 0.5) * cell, cy = (y + 0.5) * cell;
+          const dd = Math.hypot(cx - mx, cy - my);
+          const k = dd < hot ? 1 - dd / hot : 0;
+          const g = 55 + l * 32;
+          ctx.fillStyle = 'rgb(' + Math.round(g + (ar - g) * k) + ',' + Math.round(g + 4 + (ag - g - 4) * k) + ',' + Math.round(g + 10 + (ab - g - 10) * k) + ')';
+          ctx.beginPath();
+          ctx.arc(cx, cy, cell * (R[l] + k * 0.12), 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+    function scan(t) {
+      if (!t0) t0 = t;
+      shown = Math.min(P.rows, Math.ceil((t - t0) / 1100 * P.rows));
+      draw();
+      if (shown < P.rows) raf = requestAnimationFrame(scan); else raf = 0;
+    }
+    function queue() { if (!raf) raf = requestAnimationFrame(() => { raf = 0; draw(); }); }
+    cv.addEventListener('pointermove', (e) => { const r = cv.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; if (shown >= P.rows) queue(); });
+    cv.addEventListener('pointerleave', () => { mx = my = -1e4; if (shown >= P.rows) queue(); });
+    window.addEventListener('resize', size);
+    size();
+    return {
+      size,
+      play() {
+        if (raf) cancelAnimationFrame(raf);
+        raf = 0; t0 = 0; mx = my = -1e4;
+        if (still) { shown = P.rows; draw(); return; }
+        shown = 0; draw();
+        raf = requestAnimationFrame(scan);
+      }
+    };
+  }
+  const guiDots = dotPortrait($('portrait'));
+  if (guiDots) {
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((en) => { if (en[0].isIntersecting) { io.disconnect(); guiDots.play(); } }, { threshold: 0.3 });
+      io.observe($('portrait'));
+    } else guiDots.play();
+  }
+  const imgDots = dotPortrait($('img-dots'));
+
+  /* 목록 줄마다 순서값(--i): 섹션이 보이면 위에서부터 차례로 등장 */
+  document.querySelectorAll('#gui .list, .wf-flow').forEach((l) => {
+    Array.prototype.forEach.call(l.children, (c, i) => c.style.setProperty('--i', Math.min(i, 8)));
+  });
+
+  /* 마우스를 따라 움직이는 스포트라이트 (프로젝트 줄 · 워크플로 노드 · 버튼) */
+  $('gui').addEventListener('pointermove', (e) => {
+    const t = e.target.closest && e.target.closest('.proj-row, .wf-node, .btn');
+    if (!t) return;
+    const r = t.getBoundingClientRect();
+    t.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+    t.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  });
+
+  /* 스크롤 진행 바 + 현재 섹션 메뉴 표시 */
+  const navWrap = document.querySelector('.nav-wrap');
+  const navLinks = Array.prototype.filter.call(document.querySelectorAll('.nav-links a'), (a) => /^#[a-z]+$/.test(a.getAttribute('href')) && a.getAttribute('href') !== '#top');
+  const spySecs = navLinks.map((a) => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  let spyRaf = 0, lastY = window.scrollY, fadeT = 0;
+  function onGuiScroll() {
+    spyRaf = 0;
+    const y = window.scrollY;
+    if (Math.abs(y - lastY) > 1) {
+      navWrap.classList.add('scrolling');
+      clearTimeout(fadeT);
+      fadeT = setTimeout(() => navWrap.classList.remove('scrolling'), 380);
+    }
+    lastY = y;
+    const g = gui.getBoundingClientRect();
+    const span = Math.max(1, g.height - window.innerHeight);
+    navWrap.style.setProperty('--sp', Math.min(1, Math.max(0, -g.top / span)).toFixed(4));
+    let cur = null;
+    spySecs.forEach((sec) => { if (sec.getBoundingClientRect().top <= window.innerHeight * 0.35) cur = sec.id; });
+    navLinks.forEach((a) => a.classList.toggle('on', a.getAttribute('href') === '#' + cur));
+  }
+  window.addEventListener('scroll', () => { if (!spyRaf) spyRaf = requestAnimationFrame(onGuiScroll); }, { passive: true });
+  onGuiScroll();
 
   /* 섹션이 화면에 들어오면 등장 효과 */
   const rvEls = document.querySelectorAll('[data-rv]');
