@@ -98,6 +98,9 @@
   <div class="crt" aria-hidden="true"></div>
 </section>
 
+<!-- 터미널 ↔ GUI 구분 -->
+<div class="mode-divider" aria-hidden="true"><span class="md-line"></span><span class="md-label">GUI MODE</span><span class="md-line"></span></div>
+
 <!-- ===================== 2. GUI 모드 ===================== -->
 <div id="gui">
   <header class="nav-wrap">
@@ -144,7 +147,6 @@
       <div class="sec-head">
         <p class="eyebrow"><span class="eyebrow-type" style="--tn: 13">02 / projects</span><span class="cur-sm" aria-hidden="true"></span></p>
         <h2>프로젝트</h2>
-        <p class="sub">누르면 아키텍처와 트러블슈팅을 볼 수 있습니다.</p>
       </div>
       <div id="project-grid" class="list"></div>
     </div>
@@ -165,7 +167,7 @@
       <div class="sec-head">
         <p class="eyebrow"><span class="eyebrow-type" style="--tn: 13">04 / workflow</span><span class="cur-sm" aria-hidden="true"></span></p>
         <h2>개발 워크플로</h2>
-        <p class="sub">Claude Code와 Codex의 역할을 나눠 계획 → 구현 → 리뷰를 문서로 주고받는 AI 협업 환경입니다.</p>
+        <p class="sub">ORCA 터미널로 Claude Code와 Codex의 역할을 나눠, 계획 → 구현 → 리뷰 → 재검증을 문서로 주고받아 협업하는 AI Agent Workflow를 설계하였습니다.</p>
       </div>
       <div class="wf">
         <ol class="wf-flow mono" aria-label="개발자, Claude Code, .agent 문서, Codex로 이어지는 흐름">
@@ -260,6 +262,14 @@
 </div>
 
 <!-- ===================== ~/.secrets ===================== -->
+<!-- ===================== 미니게임 ===================== -->
+<div id="gameview" class="gameview" role="dialog" aria-modal="true" aria-label="미니게임" tabindex="-1" hidden>
+  <div class="sec-hdr"><span id="game-title" class="sec-title">/usr/games</span><button type="button" id="game-close" class="sec-close">q 닫기</button></div>
+  <div class="game-stage"><canvas id="game-cv" class="game-cv" width="320" height="200" aria-label="게임 화면"></canvas></div>
+  <div class="sec-foot">← → 이동 · SPACE 발사/시작 · P 일시정지 · Q 종료 · 마우스/터치로도 조작</div>
+  <div class="crt crt-soft" aria-hidden="true"></div>
+</div>
+
 <div id="secview" class="secview" role="dialog" aria-modal="true" aria-label="~/.secrets — Hello World" hidden>
   <div class="sec-hdr"><span class="sec-title">~/.secrets</span><button type="button" id="sec-close" class="sec-close">q 닫기</button></div>
   <div class="sec-stage">

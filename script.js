@@ -1387,7 +1387,7 @@
       last = t;
       if (!t0) t0 = t;
       if (!ptr) { yawTo = Math.sin((t - t0) / 1000 * 0.7) * 0.35; pitchTo = BASE_TILT + Math.sin((t - t0) / 1000 * 0.9) * 0.05; }
-      const e = Math.min(1, dt * 6);
+      const e = Math.min(1, dt * 4);
       yaw += (yawTo - yaw) * e; pitch += (pitchTo - pitch) * e;
       spin += (spinTo - spin) * Math.min(1, dt * 3.2);
       draw();
@@ -1400,8 +1400,8 @@
       const dx = (e.clientX - (r.left + r.width / 2)) / (window.innerWidth / 2);
       const dy = (e.clientY - (r.top + r.height / 2)) / (window.innerHeight / 2);
       ptr = true;
-      yawTo = Math.max(-1, Math.min(1, dx)) * 0.7;
-      pitchTo = BASE_TILT + Math.max(-1, Math.min(1, dy)) * 0.15;
+      yawTo = Math.max(-1, Math.min(1, dx)) * 0.4;
+      pitchTo = BASE_TILT + Math.max(-1, Math.min(1, dy)) * 0.08;
     }
     cv.addEventListener('click', () => {
       spinTo = Math.round(spinTo / (Math.PI * 2)) * Math.PI * 2 + Math.PI * 2;
@@ -2149,6 +2149,7 @@
       put('/usr/bin/sudo', BIN(0o4755)); put('/usr/bin/su', BIN(0o4755)); put('/usr/bin/passwd', BIN(0o4755)); put('/usr/bin/gpasswd', BIN(0o4755));
       put('/usr/bin/chsh', BIN(0o4755)); put('/usr/bin/newgrp', BIN(0o4755)); put('/usr/bin/mount', BIN(0o4755)); put('/usr/bin/umount', BIN(0o4755));
       ['adduser', 'addgroup', 'chpasswd', 'cron', 'deluser', 'delgroup', 'fdisk', 'groupadd', 'groupdel', 'groupmod', 'ip', 'iptables', 'mkfs.ext4', 'reboot', 'shutdown', 'sshd', 'useradd', 'userdel', 'usermod', 'visudo'].forEach((n) => put('/usr/sbin/' + n, BIN()));
+      ['breakout', 'invaders'].forEach((n) => put('/usr/games/' + n, BIN()));
       put('/usr/lib/os-release', F(['PRETTY_NAME="Debian GNU/Linux 12 (bookworm)"', 'NAME="Debian GNU/Linux"', 'VERSION_ID="12"', 'VERSION="12 (bookworm)"', 'VERSION_CODENAME=bookworm', 'ID=debian', 'HOME_URL="https://www.debian.org/"', 'SUPPORT_URL="https://www.debian.org/support"', 'BUG_REPORT_URL="https://bugs.debian.org/"']));
       dirs('/usr/lib', ['apt', 'dpkg', 'locale', 'modules', 'openssh', 'python3', 'sudo', 'systemd', 'udev', 'x86_64-linux-gnu']);
       put('/usr/lib64/ld-linux-x86-64.so.2', LN('/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2'));
@@ -3022,7 +3023,7 @@
         }
         case 'help': {
           const key = (c, d) => L(d, 'bright', ' ' + c.padEnd(24), 'accent');
-          const defs = ['adduser [-m] name', 'cat [file ...]', 'cd [dir]', 'chgrp group file ...', 'chmod mode file ...', 'chown owner file ...', 'clear', 'cp src dest', 'date', 'display image', 'xdg-open file', 'echo [-n] [arg ...]', 'exit', 'git log', 'grep word [file]', 'groupadd name', 'head [-n N] [file]', 'help', 'history', 'id [user]', 'ls [-la] [dir]', 'man project', 'mkdir dir ...', 'mv src dest', 'neofetch', 'passwd [user]', 'pwd', 'rm [-rf] file ...', 'sort [file]', 'startx', 'su [-] [user]', 'sudo command', 'tail [-n N] [file]', 'tee file', 'touch file ...', 'tree', 'uname -a', 'usermod opts user', 'vi file', 'wc [-l] [file]', 'whoami'];
+          const defs = ['adduser [-m] name', 'cat [file ...]', 'cd [dir]', 'chgrp group file ...', 'chmod mode file ...', 'chown owner file ...', 'clear', 'cp src dest', 'date', 'breakout', 'display image', 'games', 'invaders', 'xdg-open file', 'echo [-n] [arg ...]', 'exit', 'git log', 'grep word [file]', 'groupadd name', 'head [-n N] [file]', 'help', 'history', 'id [user]', 'ls [-la] [dir]', 'man project', 'mkdir dir ...', 'mv src dest', 'neofetch', 'passwd [user]', 'pwd', 'rm [-rf] file ...', 'sort [file]', 'startx', 'su [-] [user]', 'sudo command', 'tail [-n N] [file]', 'tee file', 'touch file ...', 'tree', 'uname -a', 'usermod opts user', 'vi file', 'wc [-l] [file]', 'whoami'];
           const cols = [];
           for (let i = 0; i < defs.length; i += 2) cols.push(L((' ' + defs[i]).padEnd(36) + (defs[i + 1] ? ' ' + defs[i + 1] : '')));
           return ok(null, [
@@ -3038,6 +3039,7 @@
             key('cat certs.txt', '자격증'),
             key('cat paper.txt', '논문 요약 (KAICTS 2026)  →  PDF: xdg-open papers/' + PAPER.file),
             key('startx', 'GUI 모드로 전환 (아래로 스크롤)'),
+            key('breakout · invaders', '미니게임: 벽돌깨기 · 외계인 슈팅'),
             key('ls -la', '숨김 파일까지 전체 목록')
           ]));
         }
@@ -3115,6 +3117,9 @@
         case 'echo': return ok([rest.join(' ').replace(/^['"]|['"]$/g, '')]);
         case 'history': return ok(hist.concat([str]).map((h, i) => String(i + 1).padStart(5) + '  ' + h));
         case 'clear': return { plain: [], clear: true };
+        case 'breakout': case 'arkanoid': return { plain: [], rich: [L('Loading /usr/games/breakout ...', 'muted')], game: 'breakout' };
+        case 'invaders': case 'space-invaders': return { plain: [], rich: [L('Loading /usr/games/invaders ...', 'muted')], game: 'invaders' };
+        case 'games': return ok(['breakout    벽돌깨기', 'invaders    외계인 슈팅']);
         case 'startx': return { plain: [], rich: [L('Starting X.Org X Server 21.1 ...', 'muted'), L('Started GUI session.', 'out', '[  OK  ] ', 'accent')], startx: true };
         default: {
           const r = this.resolve(name, cwd);
@@ -3181,7 +3186,7 @@
         if (e) return { out: [this.L('bash: ' + redir.file + ': ' + this.errMsg(e), 'err')], cwd };
         out = [];
       }
-      return { out, cwd: single && res.cwd ? res.cwd : cwd, vim: single ? res.vim : null, man: single && res.man, img: single && res.img, pdf: single && res.pdf, secret: single && res.secret, startx: single && res.startx, clear: single && res.clear, switchTo: single && res.switchTo, logout: single && res.logout };
+      return { out, cwd: single && res.cwd ? res.cwd : cwd, vim: single ? res.vim : null, man: single && res.man, img: single && res.img, pdf: single && res.pdf, game: single && res.game, secret: single && res.secret, startx: single && res.startx, clear: single && res.clear, switchTo: single && res.switchTo, logout: single && res.logout };
     }
     powerOff() {
       if (this.sxTimer) clearTimeout(this.sxTimer);
@@ -3243,13 +3248,14 @@
       if (res.man) { next.man = res.man; next.manBug = 0; next.manCmd = ''; next.manMsg = ''; this.returnFocus = true; this.pushRoute(res.man); }
       if (res.img) { next.img = true; this.returnFocus = true; }
       if (res.pdf) next.pdf = true;
+      if (res.game) next.game = res.game;
       if (res.secret) { next.secret = true; this.returnFocus = true; }
       this.setState(next);
       if (res.startx) this.powerOff();
     }
     completions(v) {
       const parts = v.split(/\s+/);
-      const cmds = ['help', 'ls', 'cd', 'pwd', 'cat', 'head', 'tail', 'grep', 'wc', 'tree', 'file', 'stat', 'vi', 'vim', 'man', 'git', 'neofetch', 'uname', 'whoami', 'id', 'groups', 'who', 'history', 'clear', 'startx', 'echo', 'date', 'sort', 'display', 'xdg-open', 'evince', 'mkdir', 'rmdir', 'touch', 'rm', 'cp', 'mv', 'ln', 'chmod', 'chown', 'chgrp', 'tee', 'su', 'sudo', 'exit', 'useradd', 'adduser', 'userdel', 'deluser', 'usermod', 'groupadd', 'groupdel', 'gpasswd', 'passwd', 'hostname'];
+      const cmds = ['help', 'ls', 'cd', 'pwd', 'cat', 'head', 'tail', 'grep', 'wc', 'tree', 'file', 'stat', 'vi', 'vim', 'man', 'git', 'neofetch', 'uname', 'whoami', 'id', 'groups', 'who', 'history', 'clear', 'startx', 'echo', 'date', 'sort', 'display', 'xdg-open', 'evince', 'breakout', 'invaders', 'games', 'mkdir', 'rmdir', 'touch', 'rm', 'cp', 'mv', 'ln', 'chmod', 'chown', 'chgrp', 'tee', 'su', 'sudo', 'exit', 'useradd', 'adduser', 'userdel', 'deluser', 'usermod', 'groupadd', 'groupdel', 'gpasswd', 'passwd', 'hostname'];
       if (parts.length === 1) return cmds.filter((x) => x.startsWith(parts[0]) && x !== parts[0]);
       const last = parts[parts.length - 1];
       const head = parts.slice(0, -1).join(' ') + ' ';
@@ -3546,6 +3552,7 @@
     if (st.vim) { const v = st.vim; eng.state.vim = null; openVim(v.name, v.lines, true); }
     if (st.man) { const m = st.man; eng.state.man = null; openMan(m, true); }
     if (st.img) { eng.state.img = false; openImg(true); }
+    if (st.game) { const gname = st.game; eng.state.game = null; openGame(gname); }
     if (st.pdf) { eng.state.pdf = false; window.open(PAPER.pdf, '_blank', 'noopener'); }
     if (st.secret) { eng.state.secret = false; openSecret(true); }
     updatePrompt();
@@ -4118,6 +4125,286 @@
   });
 
   /* ----- ~/.secrets : Hello World + 도는 지구 ----- */
+  /* =====================================================================
+   * 미니게임 (breakout · invaders) — 320x200 저해상도 캔버스를 픽셀 그대로 확대
+   * ===================================================================== */
+  const gameView = $('gameview');
+  const gameCv = $('game-cv');
+  const gameCtx = gameCv.getContext('2d');
+  const GW = 320, GH = 200;
+  const GC = { bg: '#000000', white: '#FFFFFF', gray: '#AAAAAA', dim: '#555555', green: '#55FF55', cyan: '#55FFFF', yellow: '#FFFF55', red: '#FF5555', magenta: '#FF55FF', blue: '#5555FF' };
+  let game = null, gameRaf = 0, gameLast = 0;
+  const keys = {};
+  const hiKey = (n) => 'chanhee-hi-' + n;
+  function loadHi(n) { try { return parseInt(localStorage.getItem(hiKey(n)), 10) || 0; } catch (e) { return 0; } }
+  function saveHi(n, v) { try { localStorage.setItem(hiKey(n), String(v)); } catch (e) { /* 저장 못 해도 게임은 계속 */ } }
+  const hits = (a, b) => a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+  function gText(t, x, y, col, size, align) {
+    gameCtx.fillStyle = col || GC.white;
+    gameCtx.font = (size || 10) + "px 'VT323', monospace";
+    gameCtx.textAlign = align || 'left';
+    gameCtx.textBaseline = 'top';
+    gameCtx.fillText(t, x, y);
+  }
+  function gSprite(rows, x, y, col, px) {
+    gameCtx.fillStyle = col;
+    const p = px || 1;
+    rows.forEach((r, j) => { for (let i = 0; i < r.length; i++) if (r[i] === '#') gameCtx.fillRect(x + i * p, y + j * p, p, p); });
+  }
+  function hud(g) {
+    gText('SCORE ' + String(g.score).padStart(5, '0'), 6, 3, GC.white);
+    gText('HI ' + String(Math.max(g.hi, g.score)).padStart(5, '0'), GW / 2, 3, GC.yellow, 10, 'center');
+    gText('LV ' + g.level + '  ' + '♥'.repeat(Math.max(0, g.lives)), GW - 6, 3, GC.red, 10, 'right');
+    gameCtx.fillStyle = GC.dim; gameCtx.fillRect(0, 15, GW, 1);
+  }
+  function gBanner(g, title, sub) {
+    gameCtx.fillStyle = 'rgba(0,0,0,.7)'; gameCtx.fillRect(40, 78, GW - 80, 52);
+    gameCtx.strokeStyle = GC.cyan; gameCtx.strokeRect(40.5, 78.5, GW - 81, 51);
+    gText(title, GW / 2, 84, GC.cyan, 20, 'center');
+    if (sub && Math.floor(g.t * 2) % 2 === 0) gText(sub, GW / 2, 110, GC.white, 10, 'center');
+  }
+  function endIfBest(g) { if (g.score > g.hi) { g.hi = g.score; saveHi(g.name, g.hi); } }
+
+  /* ---------- 1. 벽돌깨기 ---------- */
+  function newBreakout() {
+    const g = { name: 'breakout', title: 'BREAKOUT', score: 0, lives: 3, level: 1, hi: loadHi('breakout'), state: 'ready', t: 0, px: GW / 2 - 20, pw: 40 };
+    g.layout = () => {
+      g.bricks = [];
+      const colors = [GC.red, GC.magenta, GC.yellow, GC.green, GC.cyan, GC.blue];
+      const rows = Math.min(6, 3 + g.level);
+      for (let r = 0; r < rows; r++) for (let c = 0; c < 10; c++) g.bricks.push({ x: 10 + c * 30, y: 28 + r * 10, w: 28, h: 8, col: colors[r % colors.length], pts: (rows - r) * 10 });
+      g.reset();
+    };
+    g.reset = () => { g.ball = { x: g.px + g.pw / 2 - 1.5, y: 180, w: 3, h: 3, vx: 0, vy: 0 }; g.stuck = true; };
+    g.launch = () => {
+      if (!g.stuck) return;
+      const sp = 110 + g.level * 15;
+      g.ball.vx = (Math.random() < 0.5 ? -1 : 1) * sp * 0.55; g.ball.vy = -sp * 0.85; g.stuck = false;
+    };
+    g.action = () => {
+      if (g.state === 'ready' || g.state === 'over') { if (g.state === 'over') Object.assign(g, { score: 0, lives: 3, level: 1 }); g.layout(); g.state = 'play'; g.launch(); }
+      else if (g.state === 'clear') { g.level++; g.layout(); g.state = 'play'; g.launch(); }
+      else if (g.state === 'play') g.launch();
+    };
+    g.update = (dt) => {
+      g.t += dt;
+      const sp = 220 * dt;
+      if (keys.left) g.px -= sp;
+      if (keys.right) g.px += sp;
+      if (g.aim != null) g.px += (g.aim - g.pw / 2 - g.px) * Math.min(1, dt * 18);
+      g.px = Math.max(2, Math.min(GW - g.pw - 2, g.px));
+      const b = g.ball;
+      if (g.state !== 'play') return;
+      if (g.stuck) { b.x = g.px + g.pw / 2 - 1.5; b.y = 180; return; }
+      const steps = Math.ceil(Math.hypot(b.vx, b.vy) * dt / 2);
+      for (let k = 0; k < steps; k++) {
+        b.x += b.vx * dt / steps; b.y += b.vy * dt / steps;
+        if (b.x < 2) { b.x = 2; b.vx = Math.abs(b.vx); }
+        if (b.x + b.w > GW - 2) { b.x = GW - 2 - b.w; b.vx = -Math.abs(b.vx); }
+        if (b.y < 17) { b.y = 17; b.vy = Math.abs(b.vy); }
+        const pad = { x: g.px, y: 184, w: g.pw, h: 4 };
+        if (b.vy > 0 && hits(b, pad)) {
+          const rel = (b.x + b.w / 2 - (g.px + g.pw / 2)) / (g.pw / 2);
+          const spd = Math.hypot(b.vx, b.vy) * 1.01;
+          const ang = rel * 1.05;
+          b.vx = spd * Math.sin(ang); b.vy = -Math.abs(spd * Math.cos(ang)); b.y = pad.y - b.h;
+        }
+        for (let i = 0; i < g.bricks.length; i++) {
+          const br = g.bricks[i];
+          if (!hits(b, br)) continue;
+          const ox = Math.min(b.x + b.w - br.x, br.x + br.w - b.x), oy = Math.min(b.y + b.h - br.y, br.y + br.h - b.y);
+          if (ox < oy) b.vx = -b.vx; else b.vy = -b.vy;
+          g.bricks.splice(i, 1);
+          g.score += br.pts;
+          break;
+        }
+      }
+      if (b.y > GH) {
+        g.lives--;
+        if (g.lives <= 0) { g.state = 'over'; endIfBest(g); } else g.reset();
+      }
+      if (!g.bricks.length) { g.state = 'clear'; endIfBest(g); }
+    };
+    g.draw = () => {
+      g.bricks.forEach((br) => {
+        gameCtx.fillStyle = br.col; gameCtx.fillRect(br.x, br.y, br.w, br.h);
+        gameCtx.fillStyle = 'rgba(255,255,255,.45)'; gameCtx.fillRect(br.x, br.y, br.w, 1);
+        gameCtx.fillStyle = 'rgba(0,0,0,.35)'; gameCtx.fillRect(br.x, br.y + br.h - 1, br.w, 1);
+      });
+      gameCtx.fillStyle = GC.cyan; gameCtx.fillRect(Math.round(g.px), 184, g.pw, 4);
+      gameCtx.fillStyle = GC.white; gameCtx.fillRect(Math.round(g.px) + 2, 184, g.pw - 4, 1);
+      gameCtx.fillStyle = GC.white; gameCtx.fillRect(Math.round(g.ball.x), Math.round(g.ball.y), 3, 3);
+      hud(g);
+      if (g.state === 'ready') gBanner(g, 'BREAKOUT', 'PRESS SPACE / TAP');
+      else if (g.state === 'over') gBanner(g, 'GAME OVER', 'SPACE TO RETRY · Q TO QUIT');
+      else if (g.state === 'clear') gBanner(g, 'LEVEL ' + g.level + ' CLEAR', 'SPACE FOR NEXT LEVEL');
+      else if (g.stuck) gText('SPACE / TAP TO LAUNCH', GW / 2, 160, GC.gray, 10, 'center');
+    };
+    g.bricks = []; g.layout();
+    return g;
+  }
+
+  /* ---------- 2. 외계인 슈팅 ---------- */
+  const ALIEN = [
+    [['..#.....#..', '...#...#...', '..#######..', '.##.###.##.', '###########', '#.#######.#', '#.#.....#.#', '...##.##...'],
+     ['..#.....#..', '#..#...#..#', '#.#######.#', '###.###.###', '###########', '.#########.', '..#.....#..', '.#.......#.']],
+    [['....####....', '.##########.', '############', '###..##..###', '############', '...##..##...', '..##.##.##..', '##........##'],
+     ['....####....', '.##########.', '############', '###..##..###', '############', '..###..###..', '.##..##..##.', '..##....##..']],
+    [['...##...', '..####..', '.######.', '##.##.##', '########', '..#..#..', '.#.##.#.', '#.#..#.#'],
+     ['...##...', '..####..', '.######.', '##.##.##', '########', '.#.##.#.', '#......#', '.#....#.']]
+  ];
+  const SHIP = ['.....#.....', '....###....', '....###....', '.#########.', '###########', '###########'];
+  function newInvaders() {
+    const g = { name: 'invaders', title: 'INVADERS', score: 0, lives: 3, level: 1, hi: loadHi('invaders'), state: 'ready', t: 0, sx: GW / 2 - 5.5 };
+    g.wave = () => {
+      g.aliens = [];
+      const types = [2, 1, 1, 0, 0], cols = [GC.magenta, GC.cyan, GC.cyan, GC.green, GC.green], pts = [30, 20, 20, 10, 10];
+      for (let r = 0; r < 5; r++) for (let c = 0; c < 9; c++) g.aliens.push({ x: 36 + c * 24, y: 26 + r * 15 + Math.min(4, g.level - 1) * 4, w: 12, h: 8, type: types[r], col: cols[r], pts: pts[r] });
+      g.dir = 1; g.step = 0; g.frame = 0; g.shots = []; g.bombs = []; g.cool = 0; g.boom = []; g.dead = 0;
+    };
+    g.action = () => {
+      if (g.state === 'ready' || g.state === 'over') { if (g.state === 'over') Object.assign(g, { score: 0, lives: 3, level: 1 }); g.wave(); g.state = 'play'; }
+      else if (g.state === 'clear') { g.level++; g.wave(); g.state = 'play'; }
+      else if (g.state === 'play') g.fire();
+    };
+    g.fire = () => {
+      if (g.cool > 0 || g.dead > 0 || g.shots.length >= 2) return;
+      g.shots.push({ x: g.sx + 5, y: 178, w: 1, h: 5 }); g.cool = 0.32;
+    };
+    g.update = (dt) => {
+      g.t += dt;
+      if (g.state !== 'play') return;
+      g.cool = Math.max(0, g.cool - dt);
+      if (g.dead > 0) { g.dead -= dt; if (g.dead <= 0) { if (g.lives <= 0) { g.state = 'over'; endIfBest(g); } else g.bombs = []; } }
+      else {
+        const sp = 140 * dt;
+        if (keys.left) g.sx -= sp;
+        if (keys.right) g.sx += sp;
+        if (g.aim != null) g.sx += (g.aim - 5.5 - g.sx) * Math.min(1, dt * 14);
+        g.sx = Math.max(2, Math.min(GW - 13, g.sx));
+        if (keys.fire || g.autofire) g.fire();
+      }
+      /* 편대 이동: 남은 수가 적을수록 빨라짐 */
+      const n = g.aliens.length;
+      g.step += dt;
+      const interval = Math.max(0.06, (0.05 + n / 45 * 0.65) / (1 + (g.level - 1) * 0.15));
+      if (g.step >= interval) {
+        g.step = 0; g.frame ^= 1;
+        let minX = GW, maxX = 0;
+        g.aliens.forEach((a) => { minX = Math.min(minX, a.x); maxX = Math.max(maxX, a.x + a.w); });
+        if ((g.dir > 0 && maxX + 4 > GW - 4) || (g.dir < 0 && minX - 4 < 4)) { g.dir = -g.dir; g.aliens.forEach((a) => { a.y += 6; }); }
+        else g.aliens.forEach((a) => { a.x += 4 * g.dir; });
+      }
+      /* 맨 아래 외계인만 폭탄 */
+      if (g.dead <= 0 && Math.random() < dt * (0.9 + g.level * 0.35)) {
+        const bottom = {};
+        g.aliens.forEach((a) => { const k = Math.round(a.x / 4); if (!bottom[k] || bottom[k].y < a.y) bottom[k] = a; });
+        const list = Object.keys(bottom).map((k) => bottom[k]);
+        if (list.length) { const a = list[Math.floor(Math.random() * list.length)]; g.bombs.push({ x: a.x + a.w / 2, y: a.y + a.h, w: 2, h: 5 }); }
+      }
+      g.shots.forEach((sh) => { sh.y -= 240 * dt; });
+      g.bombs.forEach((bm) => { bm.y += (80 + g.level * 8) * dt; });
+      g.shots = g.shots.filter((sh) => {
+        if (sh.y < 16) return false;
+        for (let i = 0; i < g.aliens.length; i++) {
+          const a = g.aliens[i];
+          if (hits(sh, a)) { g.aliens.splice(i, 1); g.score += a.pts; g.boom.push({ x: a.x, y: a.y, t: 0.25 }); return false; }
+        }
+        return true;
+      });
+      const ship = { x: g.sx, y: 180, w: 11, h: 6 };
+      g.bombs = g.bombs.filter((bm) => {
+        if (bm.y > GH) return false;
+        if (g.dead <= 0 && hits(bm, ship)) { g.lives--; g.dead = 1.1; g.boom.push({ x: g.sx, y: 178, t: 0.6 }); return false; }
+        return true;
+      });
+      g.boom.forEach((b) => { b.t -= dt; });
+      g.boom = g.boom.filter((b) => b.t > 0);
+      if (g.aliens.some((a) => a.y + a.h >= 176)) { g.lives = 0; g.dead = 0.01; }
+      if (!g.aliens.length) { g.state = 'clear'; endIfBest(g); }
+    };
+    g.draw = () => {
+      g.aliens.forEach((a) => gSprite(ALIEN[a.type][g.frame], a.x + (a.type === 2 ? 2 : a.type === 1 ? -0.5 : 0), a.y, a.col));
+      g.shots.forEach((sh) => { gameCtx.fillStyle = GC.white; gameCtx.fillRect(Math.round(sh.x), Math.round(sh.y), 1, 5); });
+      g.bombs.forEach((bm) => { gameCtx.fillStyle = (Math.floor(g.t * 12) % 2) ? GC.yellow : GC.red; gameCtx.fillRect(Math.round(bm.x), Math.round(bm.y), 2, 5); });
+      g.boom.forEach((b) => gSprite(['#..#..#', '.#.#.#.', '..###..', '###.###', '..###..', '.#.#.#.', '#..#..#'], Math.round(b.x) + 2, Math.round(b.y), GC.yellow));
+      if (g.dead <= 0 || Math.floor(g.t * 10) % 2) gSprite(SHIP, Math.round(g.sx), 180, GC.green);
+      gameCtx.fillStyle = GC.green; gameCtx.fillRect(0, 190, GW, 1);
+      hud(g);
+      if (g.state === 'ready') gBanner(g, 'INVADERS', 'PRESS SPACE / TAP');
+      else if (g.state === 'over') gBanner(g, 'GAME OVER', 'SPACE TO RETRY · Q TO QUIT');
+      else if (g.state === 'clear') gBanner(g, 'WAVE ' + g.level + ' CLEAR', 'SPACE FOR NEXT WAVE');
+    };
+    g.aliens = []; g.wave();
+    return g;
+  }
+
+  function gameFrame(t) {
+    gameRaf = 0;
+    if (!game) return;
+    const dt = gameLast ? Math.min(0.05, (t - gameLast) / 1000) : 0;
+    gameLast = t;
+    if (!game.paused) game.update(dt);
+    gameCtx.fillStyle = GC.bg; gameCtx.fillRect(0, 0, GW, GH);
+    game.draw();
+    if (game.paused) gBanner(game, 'PAUSED', 'P TO RESUME');
+    gameRaf = requestAnimationFrame(gameFrame);
+  }
+  function fitGame() {
+    const st = gameCv.parentElement;
+    const k = Math.max(1, Math.floor(Math.min(st.clientWidth / GW, st.clientHeight / GH) * 4) / 4);
+    gameCv.style.width = (GW * k) + 'px'; gameCv.style.height = (GH * k) + 'px';
+  }
+  function openGame(name) {
+    game = name === 'invaders' ? newInvaders() : newBreakout();
+    $('game-title').textContent = '/usr/games/' + game.name;
+    gameView.hidden = false;
+    document.body.style.overflow = 'hidden';
+    fitGame();
+    gameLast = 0;
+    if (!gameRaf) gameRaf = requestAnimationFrame(gameFrame);
+    gameView.focus();
+  }
+  function closeGame() {
+    if (gameView.hidden) return;
+    if (game) endIfBest(game);
+    game = null;
+    if (gameRaf) cancelAnimationFrame(gameRaf);
+    gameRaf = 0;
+    Object.keys(keys).forEach((k) => { keys[k] = false; });
+    gameView.hidden = true;
+    document.body.style.overflow = '';
+    input.focus({ preventScroll: true });
+  }
+  const KEYMAP = { ArrowLeft: 'left', a: 'left', A: 'left', ArrowRight: 'right', d: 'right', D: 'right', ' ': 'fire' };
+  gameView.addEventListener('keydown', (e) => {
+    if (!game) return;
+    if (e.key === 'Escape' || e.key === 'q' || e.key === 'Q') { e.preventDefault(); closeGame(); return; }
+    if (e.key === 'Tab') { e.preventDefault(); return; }
+    if (e.key === 'p' || e.key === 'P') { if (game.state === 'play') game.paused = !game.paused; return; }
+    const k = KEYMAP[e.key];
+    if (!k && e.key !== 'Enter') return;
+    e.preventDefault();
+    game.aim = null;
+    if (k) keys[k] = true;
+    if ((e.key === ' ' || e.key === 'Enter') && !e.repeat && !game.paused) game.action();
+  });
+  gameView.addEventListener('keyup', (e) => { const k = KEYMAP[e.key]; if (k) keys[k] = false; });
+  const aimAt = (e) => { const r = gameCv.getBoundingClientRect(); return (e.clientX - r.left) / r.width * GW; };
+  gameCv.addEventListener('pointermove', (e) => { if (game && (e.pointerType === 'mouse' || e.buttons)) game.aim = aimAt(e); });
+  gameCv.addEventListener('pointerdown', (e) => {
+    if (!game) return;
+    e.preventDefault();
+    game.aim = aimAt(e);
+    if (game.paused) { game.paused = false; return; }
+    game.action();
+    if (game.name === 'invaders' && e.pointerType !== 'mouse') game.autofire = true;
+  });
+  window.addEventListener('pointerup', () => { if (game) game.autofire = false; });
+  $('game-close').addEventListener('click', closeGame);
+  window.addEventListener('resize', () => { if (!gameView.hidden) fitGame(); });
+  window.addEventListener('blur', () => { Object.keys(keys).forEach((k) => { keys[k] = false; }); if (game && game.state === 'play') game.paused = true; });
+
   const secView = $('secview');
   const secClose = $('sec-close');
   eng.gLand = $('g-land'); eng.gSea = $('g-sea'); eng.gSky = $('g-sky');
@@ -4243,6 +4530,7 @@
 
   (function renderPaper() {
     const box = $('paper-card');
+    if (!box) return;
     const head = el('div', 'pp-head');
     head.appendChild(el('span', 'badge', PAPER.venue));
     head.appendChild(el('span', 'row-date', PAPER.date));
@@ -4325,7 +4613,8 @@
           if (!l) continue;
           const cx = (x + 0.5) * cell, cy = (y + 0.5) * cell;
           const dd = Math.hypot(cx - mx, cy - my);
-          const k = dd < hot ? 1 - dd / hot : 0;
+          /* 밝은 점(얼굴 · 흰 티셔츠)일수록 초록 효과를 약하게: 어두운 점 100% → 가장 밝은 점 약 30% */
+          const k = (dd < hot ? 1 - dd / hot : 0) * Math.min(1, 1.15 - l * 0.14);
           const g = 55 + l * 32;
           ctx.fillStyle = 'rgb(' + Math.round(g + (ar - g) * k) + ',' + Math.round(g + 4 + (ag - g - 4) * k) + ',' + Math.round(g + 10 + (ab - g - 10) * k) + ')';
           ctx.beginPath();
@@ -4387,7 +4676,7 @@
   function onGuiScroll() {
     spyRaf = 0;
     const y = window.scrollY;
-    if (Math.abs(y - lastY) > 1) {
+    if (Math.abs(y - lastY) > 1 && gui.getBoundingClientRect().top < 0) {
       navWrap.classList.add('scrolling');
       clearTimeout(fadeT);
       fadeT = setTimeout(() => navWrap.classList.remove('scrolling'), 380);
